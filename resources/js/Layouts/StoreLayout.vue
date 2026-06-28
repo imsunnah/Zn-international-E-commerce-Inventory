@@ -1,21 +1,21 @@
 <template>
-    <div class="min-h-screen flex flex-col font-sans bg-[#f8fafc] text-slate-800">
-        <!-- Premium Header -->
-        <header class="bg-white/70 backdrop-blur-2xl sticky top-0 z-50 border-b border-slate-100/50 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_4px_6px_-2px_rgba(0,0,0,0.05)]">
+    <div class="min-h-screen flex flex-col font-sans bg-slate-50 text-slate-900">
+        <!-- Minimal Header -->
+        <header class="bg-white sticky top-0 z-50 border-b border-slate-200 shadow-sm">
             <!-- Top Header -->
-            <div class="max-w-[1700px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4 md:gap-8">
+            <div class="max-w-[1500px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4 md:gap-8">
                 <!-- Logo -->
                 <Link href="/" class="flex items-center flex-shrink-0 gap-3 group">
                     <img
                         v-if="siteLogo"
                         :src="siteLogo"
                         :alt="siteName"
-                        class="h-9 md:h-11 w-auto object-contain transition-transform group-hover:scale-105 duration-700"
+                        class="h-9 md:h-11 w-auto object-contain transition-transform group-hover:scale-105 duration-300"
                     />
-                    <div v-else class="w-10 h-10 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-emerald-500/20 border border-white/20 transform group-hover:rotate-6 transition-transform">
+                    <div v-else class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-sm">
                         Z
                     </div>
-                    <span class="text-xl md:text-2xl font-black text-slate-900 tracking-tighter uppercase italic leading-none mt-1 hidden sm:inline-block">
+                    <span class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight leading-none mt-1 hidden sm:inline-block">
                         {{ siteName }}
                     </span>
                 </Link>
@@ -25,19 +25,19 @@
                     <input
                         v-model="searchQuery"
                         type="text"
-                        placeholder="Search Components, Laptops..."
-                        class="w-full pl-6 pr-14 py-3.5 bg-slate-50 border border-slate-100 rounded-[20px] focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500/50 transition-all outline-none text-sm font-bold placeholder:text-slate-400"
+                        placeholder="Search products, brands..."
+                        class="w-full pl-6 pr-14 py-3 bg-slate-100 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-sm font-medium placeholder:text-slate-400"
                         @keyup.enter="handleSearch"
                     />
-                    <button @click="handleSearch" class="absolute right-2 top-2 w-10 h-10 bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-emerald-600 transition-all shadow-lg active:scale-95">
-                        <Search class="w-4.5 h-4.5" />
+                    <button @click="handleSearch" class="absolute right-2 top-1.5 w-9 h-9 bg-slate-900 text-white rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors shadow-sm">
+                        <Search class="w-4 h-4" />
                     </button>
                 </div>
 
                 <!-- Action Tools -->
-                <div class="flex items-center gap-2 md:gap-6">
+                <div class="flex items-center gap-2 md:gap-4">
                     <!-- Search (Mobile Toggle) -->
-                    <button @click="isMobileSearchOpen = !isMobileSearchOpen" class="md:hidden p-3 text-slate-600 hover:text-emerald-600 transition-colors rounded-xl bg-slate-50 border border-slate-100">
+                    <button @click="isMobileSearchOpen = !isMobileSearchOpen" class="md:hidden p-2.5 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors border border-slate-200">
                         <Search class="w-5 h-5" />
                     </button>
 
@@ -45,30 +45,30 @@
                     <Link
                         v-if="currentUser"
                         :href="accountHref"
-                        class="flex items-center gap-2.5 px-5 py-2.5 text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-xl transition-all hover:bg-emerald-600 hover:text-white"
+                        class="flex items-center gap-2 px-4 py-2.5 text-slate-700 bg-white border border-slate-200 rounded-xl transition-colors hover:bg-slate-50"
                     >
-                        <User class="w-4 h-4" />
-                        <span class="hidden lg:inline text-[10px] font-black uppercase tracking-widest truncate max-w-[100px]">{{ currentUser.name }}</span>
+                        <User class="w-4 h-4 text-emerald-600" />
+                        <span class="hidden lg:inline text-xs font-semibold truncate max-w-[120px]">{{ currentUser.name }}</span>
                     </Link>
                     <button
                         v-else
                         @click="openAuthModal('login')"
-                        class="flex items-center gap-2.5 px-5 py-2.5 text-slate-600 hover:text-white hover:bg-emerald-600 transition-all rounded-xl border border-slate-100 hover:border-emerald-600 font-black uppercase tracking-widest text-[10px]"
+                        class="flex items-center gap-2 px-4 py-2.5 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 transition-colors rounded-xl border border-slate-200 font-semibold text-xs"
                     >
                         <User class="w-4 h-4" />
                         <span class="hidden lg:inline">Sign In</span>
                     </button>
 
                     <!-- Cart -->
-                    <button @click="isCartOpen = true" class="relative p-3.5 bg-slate-900 text-white rounded-2xl hover:bg-emerald-600 transition-all shadow-xl active:scale-95 group/cart">
-                        <ShoppingBag class="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        <span class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-emerald-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white shadow-lg animate-pulse">
+                    <button @click="isCartOpen = true" class="relative p-3 bg-slate-900 text-white rounded-xl hover:bg-emerald-600 transition-colors shadow-sm group/cart">
+                        <ShoppingBag class="w-5 h-5 group-hover:scale-105 transition-transform" />
+                        <span v-if="cartCount > 0" class="absolute -top-2 -right-2 w-5 h-5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                             {{ cartCount }}
                         </span>
                     </button>
 
                     <!-- Mobile Menu Toggle -->
-                    <button @click="isMobileMenuOpen = true" class="md:hidden p-2.5 bg-white border border-slate-100 text-slate-600 rounded-xl hover:text-emerald-600 transition-all">
+                    <button @click="isMobileMenuOpen = true" class="md:hidden p-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl hover:text-emerald-600 hover:bg-slate-50 transition-colors">
                         <Menu class="w-5 h-5" />
                     </button>
                 </div>
@@ -76,66 +76,66 @@
 
             <!-- Mobile Search Bar (Expandable) -->
             <Transition v-bind="fadeSlideTransition">
-                <div v-if="isMobileSearchOpen" class="md:hidden px-4 pb-4 bg-white border-t border-slate-50">
+                <div v-if="isMobileSearchOpen" class="md:hidden px-4 pb-4 bg-white border-t border-slate-100">
                     <div class="relative mt-2">
                         <input
                             v-model="searchQuery"
                             type="text"
                             placeholder="Search..."
-                            class="w-full pl-6 pr-12 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 transition-all outline-none text-sm font-bold"
+                            class="w-full pl-5 pr-12 py-2.5 bg-slate-100 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-sm font-medium"
                             @keyup.enter="handleSearch(); isMobileSearchOpen = false"
                         />
-                        <button @click="handleSearch(); isMobileSearchOpen = false" class="absolute right-2 top-2 w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center">
+                        <button @click="handleSearch(); isMobileSearchOpen = false" class="absolute right-1.5 top-1.5 w-8 h-8 bg-emerald-600 text-white rounded-lg flex items-center justify-center">
                             <Search class="w-4 h-4" />
                         </button>
                     </div>
                 </div>
             </Transition>
 
-            <!-- Navigation (Desktop) -->
-            <nav class="bg-[#002013] shadow-2xl relative hidden md:block">
-                <div class="max-w-[1500px] mx-auto flex items-center h-14 px-4">
-                    <Link href="/" class="px-6 py-4 text-emerald-500 text-[11px] font-black uppercase tracking-widest hover:bg-white/5 transition-all flex items-center gap-2 relative after:absolute after:bottom-0 after:left-0 after:h-1 after:w-full after:bg-emerald-500">
+            <!-- Navigation (Desktop) - Clean Light Mode -->
+            <nav class="bg-white border-t border-slate-100 relative hidden md:block shadow-[0_4px_6px_-1px_rgba(0,0,0,0.02)]">
+                <div class="max-w-[1500px] mx-auto flex items-center h-12 px-4">
+                    <Link href="/" class="px-5 py-3 text-emerald-600 text-xs font-semibold hover:bg-slate-50 transition-colors flex items-center gap-2">
                         <Monitor class="w-4 h-4" /> Home
                     </Link>
 
-                    <button v-if="hasPrevCategories" @click="prevCategories" class="px-3 text-slate-400 hover:text-emerald-500 transition-all">
+                    <button v-if="hasPrevCategories" @click="prevCategories" class="px-3 text-slate-400 hover:text-emerald-600 transition-colors">
                         <ChevronLeft class="w-4 h-4" />
                     </button>
 
-                    <!-- Categories -->
+                    <!-- Categories (Clean Minimal) -->
                     <div v-for="category in visibleCategories" :key="category.id" class="relative group/category h-full flex">
                         <Link
                             :href="`/shop?category=${category.slug}`"
-                            class="px-5 text-slate-300 text-[10px] font-black uppercase tracking-[0.15em] hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+                            class="px-5 text-slate-600 text-xs font-medium hover:text-emerald-600 hover:bg-slate-50 transition-colors flex items-center gap-2"
                         >
                             {{ category.name }}
-                            <ChevronDown v-if="categoryHasChildren(category)" class="w-3 h-3 opacity-40 group-hover/category:rotate-180 transition-transform" />
+                            <ChevronDown v-if="categoryHasChildren(category)" class="w-3 h-3 text-slate-400 group-hover/category:text-emerald-600 transition-colors" />
                         </Link>
 
                         <div
                             v-if="categoryHasChildren(category)"
-                            class="absolute left-0 top-full bg-slate-900 p-2 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-300 z-[60] min-w-[240px] rounded-xl border border-white/5 mt-1"
+                            class="absolute left-0 top-full bg-white p-2 shadow-xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[240px] rounded-xl border border-slate-200 mt-0"
                         >
-                            <!-- Two-level: sub-categories, each optionally expanding to brands -->
+                            <!-- Two-level -->
                             <template v-if="category.sub_categories?.length">
                                 <div v-for="sub in category.sub_categories" :key="sub.id" class="relative group/sub">
                                     <Link
                                         :href="`/shop?sub_category=${sub.slug}`"
-                                        class="flex items-center justify-between px-6 py-3 hover:bg-white/5 text-[10px] font-black text-slate-300 hover:text-emerald-500 uppercase tracking-widest rounded-lg"
+                                        class="flex items-center justify-between px-5 py-2.5 hover:bg-slate-50 text-xs font-medium text-slate-700 hover:text-emerald-600 rounded-lg transition-colors"
                                     >
                                         {{ sub.name }}
-                                        <ChevronRight v-if="sub.brands?.length" class="w-3 h-3 opacity-40" />
+                                        <ChevronRight v-if="sub.brands?.length" class="w-3 h-3 text-slate-400" />
                                     </Link>
                                     <div
                                         v-if="sub.brands?.length"
-                                        class="absolute left-full top-0 bg-slate-900 p-2 rounded-xl border border-white/5 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 min-w-[200px]"
+                                        class="absolute left-full top-0 bg-white p-2 rounded-xl border border-slate-200 shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px]"
                                     >
                                         <Link
                                             v-for="brand in sub.brands"
                                             :key="brand.id"
                                             :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                            class="block px-6 py-3 text-[9px] font-black text-slate-400 hover:text-white uppercase tracking-widest hover:bg-white/5 rounded-lg"
+                                            class="block px-5 py-2.5 text-xs font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors"
                                         >
                                             {{ brand.name }}
                                         </Link>
@@ -143,13 +143,13 @@
                                 </div>
                             </template>
 
-                            <!-- One-level: category links straight to brands -->
+                            <!-- One-level -->
                             <template v-else>
                                 <Link
                                     v-for="brand in category.brands"
                                     :key="brand.id"
                                     :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                                    class="block px-6 py-3 text-[10px] font-black text-slate-300 hover:text-emerald-500 uppercase tracking-widest hover:bg-white/5 rounded-lg"
+                                    class="block px-5 py-2.5 text-xs font-medium text-slate-700 hover:text-emerald-600 hover:bg-slate-50 rounded-lg transition-colors"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -157,12 +157,12 @@
                         </div>
                     </div>
 
-                    <button v-if="hasNextCategories" @click="nextCategories" class="px-3 text-slate-400 hover:text-emerald-500 transition-all">
+                    <button v-if="hasNextCategories" @click="nextCategories" class="px-3 text-slate-400 hover:text-emerald-600 transition-colors">
                         <ChevronRight class="w-4 h-4" />
                     </button>
 
-                    <Link href="/shop?type=combo" class="ml-auto h-full px-6 flex items-center gap-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all">
-                        <Zap class="w-4 h-4 text-yellow-300" /> PC BUILDER
+                    <Link href="/shop?type=combo" class="ml-auto h-full px-5 flex items-center gap-2 bg-emerald-50 text-emerald-700 text-xs font-bold hover:bg-emerald-100 transition-colors border-l border-emerald-100">
+                        <Zap class="w-4 h-4 text-emerald-500" /> PC BUILDER
                     </Link>
                 </div>
             </nav>
@@ -170,36 +170,35 @@
 
         <!-- Mobile Side Menu -->
         <Transition v-bind="fadeTransition">
-            <div v-if="isMobileMenuOpen" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100]" @click="isMobileMenuOpen = false"></div>
+            <div v-if="isMobileMenuOpen" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100]" @click="isMobileMenuOpen = false"></div>
         </Transition>
         <Transition v-bind="slideTransition">
-            <div v-if="isMobileMenuOpen" class="fixed top-0 right-0 h-full w-[320px] bg-white z-[110] shadow-[0_0_50px_rgba(0,0,0,0.2)] flex flex-col">
-                <div class="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                    <h2 class="text-sm font-black text-slate-800 uppercase tracking-[0.2em] italic">Systems Navigator</h2>
-                    <button @click="isMobileMenuOpen = false" class="p-2.5 bg-white rounded-xl text-slate-400 hover:text-rose-500 transition-all border border-slate-100 shadow-sm active:scale-90">
-                        <X class="w-5 h-5" />
+            <div v-if="isMobileMenuOpen" class="fixed top-0 right-0 h-full w-[300px] bg-white z-[110] shadow-2xl flex flex-col">
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                    <h2 class="text-sm font-bold text-slate-900">Menu</h2>
+                    <button @click="isMobileMenuOpen = false" class="p-2 bg-white rounded-lg text-slate-500 hover:text-slate-900 transition-colors border border-slate-200">
+                        <X class="w-4 h-4" />
                     </button>
                 </div>
-                <div class="flex-grow overflow-y-auto p-8 space-y-3 custom-scrollbar">
-                    <Link href="/" class="flex items-center gap-4 px-5 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20" @click="isMobileMenuOpen = false">
-                        <Monitor class="w-4 h-4" /> Main Terminal
+                <div class="flex-grow overflow-y-auto p-6 space-y-2 custom-scrollbar">
+                    <Link href="/" class="flex items-center gap-3 px-4 py-3 bg-emerald-50 text-emerald-700 rounded-xl font-semibold text-sm" @click="isMobileMenuOpen = false">
+                        <Monitor class="w-4 h-4" /> Home
                     </Link>
-                    <Link href="/shop?type=combo" class="flex items-center gap-4 px-5 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg" @click="isMobileMenuOpen = false">
-                        <Zap class="w-4 h-4 text-yellow-400" /> PC Architect
+                    <Link href="/shop?type=combo" class="flex items-center gap-3 px-4 py-3 bg-slate-100 text-slate-800 rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors" @click="isMobileMenuOpen = false">
+                        <Zap class="w-4 h-4 text-slate-600" /> PC Builder
                     </Link>
-                    <div class="pt-8 pb-3 flex items-center gap-3">
-                        <span class="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">Inventory Nodes</span>
-                        <div class="h-px flex-grow bg-slate-100"></div>
+                    <div class="pt-6 pb-2">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories</span>
                     </div>
                     <Link
                         v-for="category in allCategories"
                         :key="category.id"
                         :href="`/shop?category=${category.slug}`"
-                        class="flex items-center justify-between px-5 py-4 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50/50 transition-all rounded-2xl text-[11px] font-black uppercase tracking-wide group"
+                        class="flex items-center justify-between px-4 py-3 text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition-colors rounded-xl text-sm font-medium group"
                         @click="isMobileMenuOpen = false"
                     >
                         {{ category.name }}
-                        <ChevronRight class="w-4 h-4 opacity-20 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                        <ChevronRight class="w-4 h-4 text-slate-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
                     </Link>
                 </div>
             </div>
@@ -207,28 +206,28 @@
 
         <!-- Page Content -->
         <main class="flex-grow">
+            <!-- Global Admin-Like Gradient Background Element (Optional, very subtle) -->
+            <div class="fixed top-0 left-0 right-0 h-40 bg-gradient-to-b from-white to-transparent pointer-events-none z-0 opacity-50"></div>
             <slot />
         </main>
 
-        <!-- Toast Notifications -->
+        <!-- Toast Notifications (Cleaned up) -->
         <Teleport to="body">
-            <div class="fixed top-6 right-6 z-[9999] flex flex-col gap-4 pointer-events-none" style="min-width: 320px; max-width: 380px">
+            <div class="fixed top-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none" style="min-width: 300px; max-width: 360px">
                 <TransitionGroup name="toast">
-                    <div v-for="toast in toasts" :key="toast.id" class="flex items-start gap-4 glass p-5 pointer-events-auto rounded-[24px] border border-white/50 shadow-2xl">
+                    <div v-for="toast in toasts" :key="toast.id" class="flex items-start gap-4 bg-white p-4 pointer-events-auto rounded-xl border border-slate-200 shadow-xl">
                         <div
-                            class="flex-shrink-0 w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg"
-                            :class="toast.type === 'success' ? 'bg-emerald-600 text-white shadow-green-500/20' : 'bg-rose-600 text-white shadow-red-500/20'"
+                            class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                            :class="toast.type === 'success' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'"
                         >
-                            <CheckCircle v-if="toast.type === 'success'" class="w-5 h-5" />
-                            <XCircle v-else class="w-5 h-5" />
+                            <CheckCircle v-if="toast.type === 'success'" class="w-4 h-4" />
+                            <XCircle v-else class="w-4 h-4" />
                         </div>
-                        <div class="flex-1 min-w-0 pt-1">
-                            <p class="text-[10px] font-black uppercase tracking-widest mb-1" :class="toast.type === 'success' ? 'text-emerald-600' : 'text-rose-600'">
-                                {{ toast.type === "success" ? "Success" : "Notification" }}
-                            </p>
-                            <p class="text-xs font-bold text-slate-700 leading-snug">{{ toast.message }}</p>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-bold text-slate-900">{{ toast.type === "success" ? "Success" : "Notification" }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5 leading-snug">{{ toast.message }}</p>
                         </div>
-                        <button @click="removeToast(toast.id)" class="bg-slate-100/50 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition-colors">
+                        <button @click="removeToast(toast.id)" class="text-slate-400 hover:text-slate-600 transition-colors">
                             <X class="w-4 h-4" />
                         </button>
                     </div>
@@ -236,57 +235,48 @@
             </div>
         </Teleport>
 
-        <!-- Premium Footer -->
-        <footer class="bg-[#000a08] text-white pt-32 pb-16 border-t border-white/5 relative overflow-hidden">
-            <div class="absolute inset-0 pointer-events-none opacity-20">
-                <div class="absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-[150px]"></div>
-                <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-emerald-900/20 rounded-full blur-[150px]"></div>
-            </div>
-
-            <div class="max-w-[1700px] mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 relative z-10">
-                <div class="space-y-8">
+        <!-- Clean Professional Footer -->
+        <footer class="bg-white border-t border-slate-200 text-slate-600 pt-16 pb-8 relative z-10">
+            <div class="max-w-[1500px] mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div class="space-y-6">
                     <Link href="/" class="flex items-center gap-3">
-                        <img v-if="siteLogo" :src="siteLogo" :alt="siteName" class="h-12 w-auto object-contain brightness-0 invert" />
+                        <img v-if="siteLogo" :src="siteLogo" :alt="siteName" class="h-10 w-auto object-contain" />
                         <div v-else class="flex items-center gap-3">
-                            <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-black text-3xl shadow-xl shadow-emerald-500/10">Z</div>
-                            <span class="text-2xl font-black text-white tracking-tighter uppercase italic leading-none">{{ siteName }}</span>
+                            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-sm">Z</div>
+                            <span class="text-2xl font-bold text-slate-900 tracking-tight leading-none">{{ siteName }}</span>
                         </div>
                     </Link>
-                    <p class="text-[12px] font-medium text-slate-400 leading-relaxed tracking-wide pr-10">
-                        {{ settings.footer_about || 'Engineered for absolute performance. Providing the core infrastructure for your digital victory.' }}
+                    <p class="text-sm font-medium text-slate-500 leading-relaxed pr-6">
+                        {{ settings.footer_about || 'Your trusted source for original printers, ink, laptops, and professional IT solutions.' }}
                     </p>
-                    <div class="flex items-center gap-5 pt-4">
+                    <div class="flex items-center gap-3 pt-2">
                         <a
                             v-if="settings.social_facebook"
                             :href="settings.social_facebook"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald-600 hover:border-emerald-600 transition-all text-white shadow-2xl group active:scale-90"
+                            class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-slate-400"
                         >
-                            <Facebook class="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <Facebook class="w-4 h-4" />
                         </a>
                         <a
                             v-if="settings.social_instagram"
                             :href="settings.social_instagram"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-gradient-to-tr from-rose-500 to-amber-500 hover:border-transparent transition-all text-white shadow-2xl group active:scale-90"
+                            class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center hover:bg-emerald-50 hover:text-emerald-600 transition-colors text-slate-400"
                         >
-                            <Instagram class="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            <Instagram class="w-4 h-4" />
                         </a>
                     </div>
                 </div>
 
-                <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-12">
-                    <div v-for="(pages, groupName) in groupedPages" :key="groupName" class="space-y-10">
-                        <div class="inline-block relative">
-                            <h4 class="text-[11px] font-black text-emerald-500 uppercase tracking-[0.5em] mb-3">{{ groupName }}</h4>
-                            <div class="absolute -bottom-1 left-0 w-8 h-[2px] bg-emerald-500 rounded-full"></div>
-                        </div>
-                        <ul class="space-y-5 text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em]">
+                <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div v-for="(pages, groupName) in groupedPages" :key="groupName" class="space-y-6">
+                        <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">{{ groupName }}</h4>
+                        <ul class="space-y-4 text-sm font-medium text-slate-500">
                             <li v-for="page in pages" :key="page.id">
-                                <Link :href="`/pages/${page.slug}`" class="hover:text-emerald-400 hover:translate-x-2 transition-all inline-flex items-center gap-2 group">
-                                    <div class="w-1 h-1 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <Link :href="`/pages/${page.slug}`" class="hover:text-emerald-600 transition-colors inline-block">
                                     {{ pageTitle(page) }}
                                 </Link>
                             </li>
@@ -294,31 +284,28 @@
                     </div>
                 </div>
 
-                <div class="space-y-12">
-                    <div class="inline-block relative">
-                        <h4 class="text-[11px] font-black text-emerald-500 uppercase tracking-[0.5em] mb-3">Strategic Base</h4>
-                        <div class="absolute -bottom-1 left-0 w-8 h-[2px] bg-emerald-500 rounded-full"></div>
-                    </div>
-                    <div class="space-y-8">
-                        <div class="flex items-start gap-5">
-                            <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg glow-emerald">
-                                <MapPin class="w-5 h-5 text-emerald-400" />
+                <div class="space-y-6">
+                    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Contact & Support</h4>
+                    <div class="space-y-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center shrink-0">
+                                <MapPin class="w-4 h-4 text-slate-500" />
                             </div>
-                            <span class="text-[11px] font-bold text-slate-300 leading-relaxed tracking-wider pt-1">{{ settings.footer_address }}</span>
+                            <span class="text-sm font-medium text-slate-500 leading-relaxed pt-1">{{ settings.footer_address }}</span>
                         </div>
-                        <div class="flex items-center gap-5">
-                            <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg hover:bg-emerald-600 transition-colors cursor-pointer group">
-                                <Phone class="w-5 h-5 text-emerald-400 group-hover:text-white" />
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center shrink-0">
+                                <Phone class="w-4 h-4 text-slate-500" />
                             </div>
-                            <span class="text-[12px] font-black text-white tracking-[0.2em]">{{ settings.footer_phone }}</span>
+                            <span class="text-sm font-bold text-slate-700">{{ settings.footer_phone }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="max-w-[1700px] mx-auto px-4 md:px-8 mt-32 pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.6em] transition-colors hover:text-emerald-500">&copy; 2026 {{ siteName }} • ZN ADVANCED SYSTEMS</p>
-                <span class="text-[10px] text-slate-600 font-black uppercase tracking-widest">v4.0.0 Stable</span>
+            <div class="max-w-[1500px] mx-auto px-4 md:px-8 mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-xs text-slate-500 font-medium">&copy; {{ new Date().getFullYear() }} {{ siteName }}. All rights reserved.</p>
+                <span class="text-xs text-slate-400 font-medium">Developed by admin systems</span>
             </div>
         </footer>
 
@@ -333,7 +320,7 @@ import { Link, router, usePage } from "@inertiajs/vue3";
 import {
     Search, X, Phone, MapPin, ShoppingBag, User,
     ChevronLeft, ChevronDown, ChevronRight, Zap,
-    Facebook, Instagram, Monitor, Menu,
+    Facebook, Instagram, Monitor, Menu, CheckCircle, XCircle
 } from "lucide-vue-next";
 import { useCart } from "@/Composables/useCart";
 import { useToast } from "@/Composables/useToast";
@@ -342,14 +329,14 @@ import AuthModal from "@/Components/AuthModal.vue";
 
 const page = usePage();
 const settings = computed(() => page.props.settings || {});
-const siteName = computed(() => settings.value.site_name || "ZN International");
+const siteName = computed(() => settings.value.site_name || "Store");
 const siteLogo = computed(() => settings.value.site_logo || null);
 const locale = computed(() => page.props.locale);
 
 const currentUser = computed(() => page.props.auth?.user || null);
 const accountHref = computed(() => (currentUser.value?.role === "admin" ? "/admin/dashboard" : "/customer/orders"));
 
-// --- Categories + nav pagination ---------------------------------------
+// --- Categories + nav pagination ---
 const CATEGORY_PAGE_SIZE = 8;
 const categoryStartIndex = ref(0);
 
@@ -369,7 +356,7 @@ const prevCategories = () => {
 
 const categoryHasChildren = (category) => !!(category.sub_categories?.length || category.brands?.length);
 
-// --- Footer page groups ---------------------------------------------------
+// --- Footer page groups ---
 const groupedPages = computed(() => {
     const pages = page.props.activePages || [];
     return pages.reduce((groups, p) => {
@@ -381,7 +368,7 @@ const groupedPages = computed(() => {
 
 const pageTitle = (footerPage) => (locale.value === "bn" ? footerPage.title_bn : footerPage.title_en);
 
-// --- Cart / toast / modals --------------------------------------------------
+// --- Cart / toast / modals ---
 const { cartCount, isCartOpen } = useCart();
 const { toasts, removeToast } = useToast();
 
@@ -402,28 +389,28 @@ const handleSearch = () => {
     }
 };
 
-// --- Transition presets -----------------------------------------------------
+// --- Transitions ---
 const fadeTransition = {
-    enterActiveClass: "transition duration-500 ease-out",
+    enterActiveClass: "transition duration-300 ease-out",
     enterFromClass: "opacity-0",
     enterToClass: "opacity-100",
-    leaveActiveClass: "transition duration-400 ease-in",
+    leaveActiveClass: "transition duration-200 ease-in",
     leaveFromClass: "opacity-100",
     leaveToClass: "opacity-0",
 };
 const fadeSlideTransition = {
-    enterActiveClass: "transition duration-300 ease-out",
-    enterFromClass: "opacity-0 -translate-y-4",
+    enterActiveClass: "transition duration-200 ease-out",
+    enterFromClass: "opacity-0 -translate-y-2",
     enterToClass: "opacity-100 translate-y-0",
-    leaveActiveClass: "transition duration-200 ease-in",
+    leaveActiveClass: "transition duration-150 ease-in",
     leaveFromClass: "opacity-100 translate-y-0",
-    leaveToClass: "opacity-0 -translate-y-4",
+    leaveToClass: "opacity-0 -translate-y-2",
 };
 const slideTransition = {
-    enterActiveClass: "transition duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
+    enterActiveClass: "transition duration-300 ease-out",
     enterFromClass: "translate-x-full",
     enterToClass: "translate-x-0",
-    leaveActiveClass: "transition duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
+    leaveActiveClass: "transition duration-200 ease-in",
     leaveFromClass: "translate-x-0",
     leaveToClass: "translate-x-full",
 };
@@ -440,7 +427,7 @@ const slideTransition = {
     background: #cbd5e1;
     border-radius: 10px;
 }
-.toast-enter-active { transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.toast-leave-active { transition: all 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045); }
-.toast-enter-from, .toast-leave-to { opacity: 0; transform: translateX(50px) scale(0.9); }
+.toast-enter-active { transition: all 0.3s ease-out; }
+.toast-leave-active { transition: all 0.2s ease-in; }
+.toast-enter-from, .toast-leave-to { opacity: 0; transform: translateY(-10px); }
 </style>
