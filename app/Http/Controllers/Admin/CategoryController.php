@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+
+class CategoryController extends Controller
+{
+    public function index()
+    {
+        $categories = Category::with(['brands:id'])->withCount(['subCategories', 'brands'])->latest()->paginate(10);
+        
+        return Inertia::render('Admin/Category/Index', [
+            'categories' => $categories,
+            'allBrands' => \App\Models\Brand::where('is_active', true)->orderBy('name_en')->get()
+        ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Admin/Category/Create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name_en' => 'required|string|max:255',
+            'name_bn' => 'nullable|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_bn' => 'nullable|string',
+            'is_active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name_en']);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads/gallery', 'public');
+            $validated['image'] = '/storage/' . $path;
+        }
+
+        Category::create($validated);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
+    }
+
+    public function edit(Category $category)
+    {
+        return Inertia::render('Admin/Category/Edit', [
+            'category' => $category
+        ]);
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name_en' => 'required|string|max:255',
+            'name_bn' => 'nullable|string|max:255',
+            'description_en' => 'nullable|string',
+            'description_bn' => 'nullable|string',
+            'is_active' => 'boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['name_en']);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('uploads/gallery', 'public');
+            $validated['image'] = '/storage/' . $path;
+        } else {
+            // Remove image from validated data so it doesn't overwrite existing image with null
+            unset($validated['image']);
+        }
+
+        $category->update($validated);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
+    }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+    }
+
+    public function toggleActive(Category $category)
+    {
+        $category->update(['is_active' => !$category->is_active]);
+        return redirect()->back()->with('success', 'Category status updated successfully.');
+    }
+
+    public function attachBrands(Request $request, Category $category)
+    {
+        $request->validate([
+            'brand_ids' => 'required|array',
+            'brand_ids.*' => 'exists:brands,id'
+        ]);
+
+        $category->brands()->sync($request->brand_ids);
+
+        return redirect()->back()->with('success', 'Brands associated successfully.');
+    }
+
+    public function quickAddSubCategory(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name_en' => 'required|string|max:255',
+            'name_bn' => 'nullable|string|max:255',
+        ]);
+
+        $validated['category_id'] = $category->id;
+        $validated['slug'] = Str::slug($validated['name_en']);
+        $validated['is_active'] = true;
+
+        \App\Models\SubCategory::create($validated);
+
+        return redirect()->back()->with('success', 'Sub-category added successfully.');
+    }
+}

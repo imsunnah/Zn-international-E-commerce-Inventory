@@ -1,0 +1,106 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.vue';
+
+@theme {
+    --font-sans: 'Inter', 'Hind Siliguri', 'Noto Sans Bangla', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* Paragon Brand Colors */
+    --color-primary-50: #e6f6ee;
+    --color-primary-100: #ccecdf;
+    --color-primary-200: #99d9be;
+    --color-primary-300: #66c69e;
+    --color-primary-400: #33b37d;
+    --color-primary-500: #00a651; /* Paragon Green */
+    --color-primary-600: #008541;
+    --color-primary-700: #006431;
+    --color-primary-800: #004220;
+    --color-primary-900: #002110;
+
+    --color-accent-500: #e12e2e; /* Paragon Red */
+    --color-accent-600: #b42525;
+    
+    --color-dark-bg: #001a0e; /* Deep Black/Green */
+    --color-footer-bg: #002013; /* Dark Forest Green */
+    
+    --color-highlight: #00a651; 
+    
+    /* Premium Neutrals */
+    --color-premium-slate: #0a0f12;
+    --color-premium-glass: rgba(255, 255, 255, 0.03);
+    --color-premium-border: rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+    :lang(bn) {
+        font-family: 'Hind Siliguri', 'Noto Sans Bangla', sans-serif !important;
+    }
+
+    body {
+        background-color: #f8fafc;
+        color: var(--color-gray-900);
+        @apply antialiased selection:bg-emerald-500 selection:text-white;
+    }
+    
+    a {
+        @apply transition-all duration-500;
+    }
+}
+
+@layer utilities {
+    .glass {
+        @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-2xl;
+    }
+    
+    .glass-dark {
+        @apply bg-black/60 backdrop-blur-2xl border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)];
+    }
+
+    .glass-green {
+        @apply bg-[#00a651]/5 backdrop-blur-xl border border-[#00a651]/10 bg-gradient-to-br from-[#00a651]/10 to-transparent;
+    }
+
+    .glass-premium {
+        @apply bg-white/5 backdrop-blur-3xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)];
+    }
+
+    .glow-emerald {
+        box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.3);
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .text-gradient-premium {
+        @apply text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-400 to-emerald-600;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(16, 185, 129, 0.2);
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(16, 185, 129, 0.5);
+    }
+
+    .text-gradient-green {
+        @apply text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-[#00a651] to-slate-900;
+    }
+}
