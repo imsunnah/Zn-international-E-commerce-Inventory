@@ -40,6 +40,11 @@ class HandleInertiaRequests extends Middleware
         $translationsPath = base_path("lang/{$locale}.json");
         $translations = file_exists($translationsPath) ? json_decode(file_get_contents($translationsPath), true) : [];
 
+        // Safely query DB — returns empty defaults if tables don't exist yet (fresh deploy)
+        $safeQuery = function($callback, $default = null) {
+            try { return $callback(); } catch (\Throwable $e) { return $default ?? collect(); }
+        };
+
         return [
             ...parent::share($request),
             'locale' => $locale,
@@ -47,7 +52,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'categories' => \App\Models\Category::with([
+            'categories' => $safeQuery(fn() => \App\Models\Category::with([
                 'subCategories' => function($q) {
                     $q->where('is_active', true)->whereNull('parent_id')
                       ->with(['brands', 'children' => function($sq) { 
@@ -55,24 +60,24 @@ class HandleInertiaRequests extends Middleware
                       }]);
                 },
                 'brands'
-            ])->where('is_active', true)->get(),
-            'activePages' => \App\Models\Page::where('is_active', true)->select('id', 'title_en', 'title_bn', 'slug', 'group')->get(),
+            ])->where('is_active', true)->get()),
+            'activePages' => $safeQuery(fn() => \App\Models\Page::where('is_active', true)->select('id', 'title_en', 'title_bn', 'slug', 'group')->get()),
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
-            'pendingOrdersCount' => $request->user() && $request->user()->role === 'admin' 
+            'pendingOrdersCount' => $safeQuery(fn() => $request->user() && $request->user()->role === 'admin' 
                 ? \App\Models\Order::where('status', 'pending')->count() 
-                : 0,
-            'unreadChatCount' => $request->user() && $request->user()->role === 'admin'
+                : 0, 0),
+            'unreadChatCount' => $safeQuery(fn() => $request->user() && $request->user()->role === 'admin'
                 ? \App\Models\CustomerMessage::whereIn('id', function($query) {
                     $query->selectRaw('max(id)')
                         ->from('customer_messages')
                         ->groupBy('user_id');
                 })->where('is_from_admin', false)->count()
-                : 0,
-            'notices' => \App\Models\Notice::where('is_active', true)->latest()->get(),
-            'settings' => \App\Models\Setting::all()->pluck('value', 'key'),
+                : 0, 0),
+            'notices' => $safeQuery(fn() => \App\Models\Notice::where('is_active', true)->latest()->get()),
+            'settings' => $safeQuery(fn() => \App\Models\Setting::all()->pluck('value', 'key')),
         ];
     }
 }
