@@ -42,8 +42,9 @@ Route::get('/setup-production', function () {
         };
         $copyDir($storagePublic, $publicStorage);
         
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-        return 'Production setup completed: All images successfully moved to physical public/storage! Cache cleared.';
+        return 'Production setup completed: Migrations run! All images successfully moved to physical public/storage! Cache cleared.';
     } catch (\Throwable $e) {
         return 'Error during setup: ' . $e->getMessage();
     }
