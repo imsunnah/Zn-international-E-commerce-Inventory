@@ -426,63 +426,24 @@
                     </div>
                 </div>
 
-                <!-- Brand cards track — wide landscape cards, logo dominant -->
+                <!-- Brand cards track — images only -->
                 <div
                     id="brand-container"
                     class="flex overflow-x-auto scroll-smooth no-scrollbar gap-4 pb-2"
                 >
-                    <Link
-                        v-for="brand in brands"
-                        :key="brand.id"
-                        :href="`/shop?brand=${brand.slug}`"
-                        class="group flex-shrink-0 w-[170px] md:w-[190px] flex flex-col rounded-2xl border border-slate-100 bg-white hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-600/6 transition-all duration-250 overflow-hidden"
-                    >
-                        <!-- Logo zone — large, clean white stage -->
-                        <div
-                            class="h-[110px] md:h-[120px] w-full bg-white flex items-center justify-center px-5 overflow-hidden border-b border-slate-100 group-hover:bg-emerald-50/30 group-hover:border-emerald-100 transition-all duration-250"
+                    <template v-for="brand in brands" :key="brand.id">
+                        <Link
+                            v-if="brand.image"
+                            :href="`/shop?brand=${brand.slug}`"
+                            class="group flex-shrink-0 w-[140px] md:w-[160px] h-[90px] md:h-[100px] flex items-center justify-center px-5 rounded-2xl border border-slate-100 bg-white hover:border-emerald-300 hover:bg-emerald-50/30 hover:shadow-xl hover:shadow-emerald-600/5 transition-all duration-250 overflow-hidden"
                         >
                             <img
-                                v-if="brand.image"
                                 :src="brand.image"
                                 :alt="brand.name"
-                                class="max-w-[130px] max-h-[75px] md:max-h-[85px] w-auto object-contain mix-blend-multiply opacity-65 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105"
+                                class="max-w-full max-h-[60px] md:max-h-[70px] w-auto object-contain mix-blend-multiply opacity-65 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105"
                             />
-                            <div
-                                v-else
-                                class="flex flex-col items-center gap-1"
-                            >
-                                <span
-                                    class="text-4xl font-black text-slate-200 group-hover:text-emerald-400 transition-colors tracking-tighter leading-none"
-                                >
-                                    {{
-                                        brand.name.substring(0, 2).toUpperCase()
-                                    }}
-                                </span>
-                            </div>
-                        </div>
-                        <!-- Brand info zone -->
-                        <div
-                            class="px-4 py-3 bg-white group-hover:bg-emerald-50/20 transition-colors"
-                        >
-                            <p
-                                class="text-[13px] font-bold text-slate-800 group-hover:text-emerald-700 transition-colors leading-snug line-clamp-1"
-                            >
-                                {{ brand.name }}
-                            </p>
-                            <p
-                                class="text-[11px] text-slate-400 group-hover:text-emerald-500 transition-colors mt-0.5 font-medium flex items-center gap-1"
-                            >
-                                <span>{{
-                                    brand.product_count
-                                        ? `${brand.product_count}+ products`
-                                        : "View all products"
-                                }}</span>
-                                <ArrowRight
-                                    class="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-                                />
-                            </p>
-                        </div>
-                    </Link>
+                        </Link>
+                    </template>
                 </div>
             </div>
         </section>
