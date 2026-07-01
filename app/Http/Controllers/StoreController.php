@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use App\Mail\OrderCreated;
+use App\Models\Notice;
 use Illuminate\Support\Facades\Mail;
 
 class StoreController extends Controller
@@ -24,6 +25,7 @@ class StoreController extends Controller
         $featuredCategories = Category::withCount('products')->orderBy('products_count', 'desc')->take(8)->get();
         $brands = \App\Models\Brand::where('is_active', true)->take(12)->get();
         $reviews = Review::where('is_active', true)->latest()->take(9)->get();
+        $notice = Notice::where('is_active', true)->latest()->take(9)->get();
 
         $categorySections = Category::with([
             'products' => function ($query) {
@@ -40,6 +42,8 @@ class StoreController extends Controller
             'brands'             => $brands,
             'categorySections'   => $categorySections,
             'reviews'            => $reviews,
+            'notice'            => $notice,
+
         ]);
     }
 
@@ -80,9 +84,9 @@ class StoreController extends Controller
         }
 
         if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name_en', 'like', '%' . $request->search . '%')
-                  ->orWhere('name_bn', 'like', '%' . $request->search . '%');
+                    ->orWhere('name_bn', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -104,7 +108,7 @@ class StoreController extends Controller
         $brandsQuery = \App\Models\Brand::where('is_active', true)->orderBy(app()->getLocale() === 'bn' ? 'name_bn' : 'name_en', 'asc');
         if ($request->has('category') && $request->category) {
             $categoriesList = explode(',', $request->category);
-            $brandsQuery->where(function($q) use ($categoriesList) {
+            $brandsQuery->where(function ($q) use ($categoriesList) {
                 $q->whereHas('categories', function ($sq) use ($categoriesList) {
                     $sq->whereIn('slug', $categoriesList);
                 })->orDoesntHave('categories');
@@ -126,9 +130,9 @@ class StoreController extends Controller
             ->whereNotNull('discount_type');
 
         if ($request->has('search')) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('name_en', 'like', '%' . $request->search . '%')
-                  ->orWhere('name_bn', 'like', '%' . $request->search . '%');
+                    ->orWhere('name_bn', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -201,7 +205,7 @@ class StoreController extends Controller
     public function checkout(Request $request)
     {
         $cart = $this->getCart();
-        
+
         if (!$cart || $cart->items->count() === 0) {
             return redirect()->route('cart');
         }

@@ -1,349 +1,637 @@
 <template>
     <AdminLayout>
-        <div class="mb-8 flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <!-- Sticky/Top Header Section -->
+        <div
+            class="mb-6 flex justify-between items-center bg-white p-4 rounded-xl border border-slate-100 shadow-sm"
+        >
             <div>
-                <h1 class="text-2xl font-bold text-[#003366]">Site Settings</h1>
-                <p class="text-sm text-slate-500">Update logo, sliders, and contact details</p>
+                <h1 class="text-xl font-bold text-[#003366]">Site Settings</h1>
+                <p class="text-xs text-slate-400">
+                    Update branding, configuration, and details
+                </p>
             </div>
-            <button @click="saveSettings" :disabled="form.processing" class="bg-[#FF6600] text-white px-6 py-2.5 rounded-lg hover:bg-orange-600 transition-all font-bold text-sm flex items-center shadow-md disabled:opacity-50">
-                <Save class="w-4 h-4 mr-2" /> {{ form.processing ? 'Saving...' : 'Save Changes' }}
+            <button
+                @click="saveSettings"
+                :disabled="form.processing"
+                class="bg-[#FF6600] text-white px-5 py-2 rounded-lg hover:bg-orange-600 transition-all font-semibold text-xs flex items-center shadow-sm disabled:opacity-50"
+            >
+                <Save class="w-4 h-4 mr-1.5" />
+                {{ form.processing ? "Saving..." : "Save Changes" }}
             </button>
         </div>
 
-        <div v-if="$page.props.flash?.success" class="mb-6 bg-green-500 text-white p-4 rounded-lg shadow-md flex items-center justify-between">
+        <!-- Notification Message -->
+        <div
+            v-if="$page.props.flash?.success"
+            class="mb-4 bg-green-600 text-white p-3 rounded-lg flex items-center justify-between text-xs font-semibold shadow-sm"
+        >
             <div class="flex items-center space-x-2">
-                <CheckCircle class="w-5 h-5" />
-                <span class="text-sm font-bold">{{ $page.props.flash.success }}</span>
+                <CheckCircle class="w-4 h-4" />
+                <span>{{ $page.props.flash.success }}</span>
             </div>
-            <button @click="$page.props.flash.success = null" class="opacity-50 hover:opacity-100"><X class="w-4 h-4" /></button>
+            <button
+                @click="$page.props.flash.success = null"
+                class="opacity-70 hover:opacity-100"
+            >
+                <X class="w-4 h-4" />
+            </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- General Settings -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
-                <div class="flex items-center space-x-3 mb-6 border-b pb-4">
-                    <SettingsIcon class="w-5 h-5 text-[#003366]" />
-                    <h2 class="text-lg font-bold text-slate-900">General Branding</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Section: General Branding -->
+            <div
+                class="bg-white rounded-xl border border-slate-100 p-5 space-y-4 shadow-sm"
+            >
+                <div class="flex items-center space-x-2 border-b pb-2">
+                    <SettingsIcon class="w-4 h-4 text-[#003366]" />
+                    <h2 class="text-sm font-bold text-slate-800">
+                        General Branding
+                    </h2>
                 </div>
-                <div class="space-y-6">
+
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Site Name (English)</label>
-                        <input v-model="form.site_name_en" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Site Name (EN)</label
+                        >
+                        <input
+                            v-model="form.site_name_en"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-[#003366] outline-none"
+                        />
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Site Name (Bangla)</label>
-                        <input v-model="form.site_name_bn" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Site Name (BN)</label
+                        >
+                        <input
+                            v-model="form.site_name_bn"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-[#003366] outline-none"
+                        />
                     </div>
+                </div>
+
+                <!-- Row: Logo and Favicon compact selectors -->
+                <div class="grid grid-cols-2 gap-4 pt-2">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Site Logo</label>
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden border border-slate-200">
-                                    <img v-if="logoPreview || form.existing_site_logo" :src="logoPreview || form.existing_site_logo" class="h-full object-contain" />
-                                    <ImageIcon v-else class="w-6 h-6 text-slate-300" />
-                                </div>
-                                <input type="file" @input="handleLogoUpload" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#003366] file:text-white" />
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Site Logo</label
+                        >
+                        <div
+                            class="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100"
+                        >
+                            <div
+                                class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center overflow-hidden shrink-0"
+                            >
+                                <img
+                                    v-if="
+                                        logoPreview || form.existing_site_logo
+                                    "
+                                    :src="
+                                        logoPreview || form.existing_site_logo
+                                    "
+                                    class="max-h-full max-w-full object-contain"
+                                />
+                                <ImageIcon
+                                    v-else
+                                    class="w-4 h-4 text-slate-300"
+                                />
                             </div>
-                            <button @click.prevent="openGallery('logo')" class="w-full py-2 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#003366] hover:bg-[#003366] hover:text-white transition-all flex items-center justify-center gap-2">
-                                <ImageIcon class="w-3 h-3" /> Select From Gallery
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Site Favicon (Browser Tab Icon)</label>
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden border border-slate-200">
-                                    <img v-if="faviconPreview || form.existing_site_favicon" :src="faviconPreview || form.existing_site_favicon" class="h-10 w-10 object-contain" />
-                                    <ImageIcon v-else class="w-6 h-6 text-slate-300" />
-                                </div>
-                                <input type="file" @input="handleFaviconUpload" class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#003366] file:text-white" />
+                            <div class="flex flex-col gap-1 min-w-0 w-full">
+                                <input
+                                    type="file"
+                                    @input="handleLogoUpload"
+                                    class="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-[#003366] file:text-white cursor-pointer w-full"
+                                />
+                                <button
+                                    @click.prevent="openGallery('logo')"
+                                    class="text-[10px] text-left text-[#003366] font-semibold hover:underline"
+                                >
+                                    Pick from Gallery
+                                </button>
                             </div>
-                            <button @click.prevent="openGallery('favicon')" class="w-full py-2 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#003366] hover:bg-[#003366] hover:text-white transition-all flex items-center justify-center gap-2">
-                                <ImageIcon class="w-3 h-3" /> Select From Gallery
-                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Favicon</label
+                        >
+                        <div
+                            class="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100"
+                        >
+                            <div
+                                class="w-10 h-10 bg-white rounded border border-slate-200 flex items-center justify-center overflow-hidden shrink-0"
+                            >
+                                <img
+                                    v-if="
+                                        faviconPreview ||
+                                        form.existing_site_favicon
+                                    "
+                                    :src="
+                                        faviconPreview ||
+                                        form.existing_site_favicon
+                                    "
+                                    class="h-6 w-6 object-contain"
+                                />
+                                <ImageIcon
+                                    v-else
+                                    class="w-4 h-4 text-slate-300"
+                                />
+                            </div>
+                            <div class="flex flex-col gap-1 min-w-0 w-full">
+                                <input
+                                    type="file"
+                                    @input="handleFaviconUpload"
+                                    class="text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-[#003366] file:text-white cursor-pointer w-full"
+                                />
+                                <button
+                                    @click.prevent="openGallery('favicon')"
+                                    class="text-[10px] text-left text-[#003366] font-semibold hover:underline"
+                                >
+                                    Pick from Gallery
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slider Settings -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
-                <div class="flex items-center space-x-3 mb-6 border-b pb-4">
-                    <ImageIcon class="w-5 h-5 text-[#003366]" />
-                    <h2 class="text-lg font-bold text-slate-900">Home Page Sliders</h2>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-400 uppercase">Current Sliders</span>
-                        <div class="flex items-center gap-4">
-                            <button @click.prevent="openGallery('slider')" class="text-xs font-bold text-[#003366] uppercase hover:underline flex items-center gap-1">
-                                <ImageIcon class="w-3 h-3" /> Select From Gallery
-                            </button>
-                            <button @click.prevent="triggerSliderUpload" class="text-xs font-bold text-[#FF6600] uppercase hover:underline">Add New Image</button>
-                        </div>
+            <!-- Section: Home Sliders -->
+            <div
+                class="bg-white rounded-xl border border-slate-100 p-5 space-y-3 shadow-sm"
+            >
+                <div class="flex items-center justify-between border-b pb-2">
+                    <div class="flex items-center space-x-2">
+                        <ImageIcon class="w-4 h-4 text-[#003366]" />
+                        <h2 class="text-sm font-bold text-slate-800">
+                            Home Sliders
+                        </h2>
                     </div>
-                    <input type="file" multiple ref="sliderInput" @input="handleSliderUpload" class="hidden" />
-                    
-                    <div class="grid grid-cols-3 gap-4">
-                        <div v-for="(img, index) in sliderImages" :key="index" class="relative group aspect-video rounded-lg overflow-hidden border border-slate-100">
-                            <img :src="img" class="w-full h-full object-cover">
-                            <button @click.prevent="removeSlider(index)" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Trash2 class="w-3 h-3" />
-                            </button>
-                        </div>
-                        <div v-if="sliderImages.length === 0" class="col-span-3 py-8 text-center border-2 border-dashed border-slate-100 rounded-xl text-slate-300 text-xs font-bold">
-                            No slider images uploaded
-                        </div>
+                    <div class="flex gap-3 text-[11px] font-semibold">
+                        <button
+                            @click.prevent="openGallery('slider')"
+                            class="text-[#003366] hover:underline flex items-center gap-0.5"
+                        >
+                            <Plus class="w-3 h-3" /> Gallery
+                        </button>
+                        <button
+                            @click.prevent="triggerSliderUpload"
+                            class="text-[#FF6600] hover:underline flex items-center gap-0.5"
+                        >
+                            <Plus class="w-3 h-3" /> Upload
+                        </button>
+                    </div>
+                </div>
+                <input
+                    type="file"
+                    multiple
+                    ref="sliderInput"
+                    @input="handleSliderUpload"
+                    class="hidden"
+                />
+
+                <div
+                    class="grid grid-cols-4 gap-2 max-h-[115px] overflow-y-auto pr-1"
+                >
+                    <div
+                        v-for="(img, index) in sliderImages"
+                        :key="index"
+                        class="relative group aspect-video rounded border border-slate-100 overflow-hidden bg-slate-50"
+                    >
+                        <img :src="img" class="w-full h-full object-cover" />
+                        <button
+                            @click.prevent="removeSlider(index)"
+                            class="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 class="w-3 h-3" />
+                        </button>
+                    </div>
+                    <div
+                        v-if="sliderImages.length === 0"
+                        class="col-span-4 py-8 text-center border border-dashed border-slate-200 rounded text-slate-400 text-xs"
+                    >
+                        No slider images loaded.
                     </div>
                 </div>
             </div>
 
-            <!-- Footer Details -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 md:col-span-2">
-                <div class="flex items-center space-x-3 mb-6 border-b pb-4">
-                    <Info class="w-5 h-5 text-[#003366]" />
-                    <h2 class="text-lg font-bold text-slate-900">Footer & Contact Details</h2>
+            <!-- Section: Hero Overlay Controls -->
+            <div
+                class="bg-white rounded-xl border border-slate-100 p-5 space-y-4 shadow-sm md:col-span-2"
+            >
+                <div class="flex items-center justify-between border-b pb-2">
+                    <div class="flex items-center space-x-2">
+                        <Layout class="w-4 h-4 text-[#003366]" />
+                        <h2 class="text-sm font-bold text-slate-800">
+                            Hero Overlay Text
+                        </h2>
+                    </div>
+                    <label
+                        class="relative inline-flex items-center cursor-pointer scale-90"
+                    >
+                        <input
+                            type="checkbox"
+                            v-model="form.hero_slider_text_show"
+                            class="sr-only peer"
+                        />
+                        <div
+                            class="w-9 h-5 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FF6600]"
+                        ></div>
+                    </label>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">About Description (English)</label>
-                            <textarea v-model="form.footer_about_en" rows="3" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">About Description (Bangla)</label>
-                            <textarea v-model="form.footer_about_bn" rows="3" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none"></textarea>
-                        </div>
+
+                <div
+                    v-if="form.hero_slider_text_show"
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4"
+                >
+                    <div>
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Overlay HTML Text (EN)</label
+                        >
+                        <textarea
+                            v-model="form.hero_slider_text_en"
+                            rows="2"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-[#003366] outline-none font-mono"
+                            placeholder="<h1>Title</h1>"
+                        ></textarea>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Office Address (English)</label>
-                        <input v-model="form.footer_address_en" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Office Address (Bangla)</label>
-                        <input v-model="form.footer_address_bn" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Phone Number</label>
-                        <input v-model="form.footer_phone" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email Address</label>
-                        <input v-model="form.footer_email" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
-                    </div>
-                    <div class="md:col-span-2 border-t border-slate-100 pt-6 mt-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Facebook URL</label>
-                            <input v-model="form.social_facebook" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="https://facebook.com/...">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Instagram URL</label>
-                            <input v-model="form.social_instagram" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="https://instagram.com/...">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">YouTube URL</label>
-                            <input v-model="form.social_youtube" type="text" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="https://youtube.com/...">
-                        </div>
+                        <label
+                            class="block text-xs font-semibold text-slate-500 mb-1"
+                            >Overlay HTML Text (BN)</label
+                        >
+                        <textarea
+                            v-model="form.hero_slider_text_bn"
+                            rows="2"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 text-xs focus:ring-1 focus:ring-[#003366] outline-none font-mono"
+                            placeholder="<h1>শিরোনাম</h1>"
+                        ></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Hero Section Customization -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 md:col-span-2">
-                <div class="flex items-center space-x-3 mb-6 border-b pb-4">
-                    <Layout class="w-5 h-5 text-[#003366]" />
-                    <h2 class="text-lg font-bold text-slate-900">Hero Section Configuration</h2>
+            <!-- Section: Promo Banners -->
+            <div
+                class="bg-white rounded-xl border border-slate-100 p-5 space-y-4 shadow-sm md:col-span-2"
+            >
+                <div class="flex items-center space-x-2 border-b pb-2">
+                    <Layout class="w-4 h-4 text-[#003366]" />
+                    <h2 class="text-sm font-bold text-slate-800">
+                        Promo Cards Setup
+                    </h2>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <!-- Slider Text Control -->
-                    <div class="space-y-6">
-                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Card 1 -->
+                    <div
+                        class="flex gap-4 p-3 bg-slate-50/60 border border-slate-100 rounded-xl"
+                    >
+                        <div
+                            class="w-24 h-24 bg-white rounded-lg flex flex-col items-center justify-center overflow-hidden border border-slate-200 shrink-0 relative group"
+                        >
+                            <img
+                                v-if="
+                                    heroPromo1Preview ||
+                                    form.existing_hero_promo_1_image
+                                "
+                                :src="
+                                    heroPromo1Preview ||
+                                    form.existing_hero_promo_1_image
+                                "
+                                class="w-full h-full object-cover"
+                            />
+                            <ImageIcon v-else class="w-5 h-5 text-slate-300" />
+                            <div
+                                class="absolute inset-0 bg-black/60 flex flex-col gap-1 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                <button
+                                    @click.prevent="openGallery('hero_promo_1')"
+                                    class="text-[9px] text-white underline font-bold"
+                                >
+                                    Gallery
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 w-full">
+                            <div class="col-span-2">
+                                <input
+                                    type="file"
+                                    @input="handleHeroPromo1Upload"
+                                    class="text-[10px] text-slate-500 w-full"
+                                />
+                            </div>
                             <div>
-                                <h3 class="text-sm font-bold text-[#003366]">Show Slider Text</h3>
-                                <p class="text-[10px] text-slate-500 font-medium">Toggle display of text over the hero slider</p>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" v-model="form.hero_slider_text_show" class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FF6600]"></div>
-                            </label>
-                        </div>
-                        
-                        <div v-if="form.hero_slider_text_show" class="grid grid-cols-1 gap-6">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Slider Overlay Text (English - HTML allowed)</label>
-                                <textarea v-model="form.hero_slider_text_en" rows="4" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none font-medium" placeholder="e.g. <h1>Fresh Organic</h1><p>Direct from farms</p>"></textarea>
+                                <input
+                                    v-model="form.hero_promo_1_title"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Title"
+                                />
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Slider Overlay Text (Bangla - HTML allowed)</label>
-                                <textarea v-model="form.hero_slider_text_bn" rows="4" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none font-medium" placeholder="e.g. <h1>সতেজ অর্গানিক</h1><p>সরাসরি খামার থেকে</p>"></textarea>
+                                <input
+                                    v-model="form.hero_promo_1_subtitle"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Subtitle"
+                                />
+                            </div>
+                            <div class="col-span-2">
+                                <input
+                                    v-model="form.hero_promo_1_url"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Destination Link / URL"
+                                />
                             </div>
                         </div>
                     </div>
 
-                    <!-- Promo Banners Control -->
-                    <div class="space-y-8">
-                        <div>
-                            <label class="block text-xs font-bold text-[#003366] uppercase tracking-widest mb-4 border-b pb-2">Top Promo Card</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Title</label>
-                                    <input v-model="form.hero_promo_1_title" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="New Arrival">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Subtitle</label>
-                                    <input v-model="form.hero_promo_1_subtitle" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="Gaming Laptops">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">URL / Link</label>
-                                    <input v-model="form.hero_promo_1_url" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="/shop?category=laptop">
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-4">
-                                <div class="w-full aspect-video bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden border-2 border-dashed border-slate-200 group relative">
-                                    <img v-if="heroPromo1Preview || form.existing_hero_promo_1_image" :src="heroPromo1Preview || form.existing_hero_promo_1_image" class="w-full h-full object-cover" />
-                                    <div v-else class="flex flex-col items-center gap-2 opacity-30">
-                                        <ImageIcon class="w-8 h-8" />
-                                        <span class="text-[10px] font-black uppercase">Upload Image</span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <input type="file" @input="handleHeroPromo1Upload" class="flex-grow text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-[#003366] file:text-white cursor-pointer" />
-                                    <button @click.prevent="openGallery('hero_promo_1')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#003366] hover:bg-[#003366] hover:text-white transition-all flex items-center justify-center gap-2">
-                                        <ImageIcon class="w-3 h-3" /> Gallery
-                                    </button>
-                                </div>
+                    <!-- Card 2 -->
+                    <div
+                        class="flex gap-4 p-3 bg-slate-50/60 border border-slate-100 rounded-xl"
+                    >
+                        <div
+                            class="w-24 h-24 bg-white rounded-lg flex flex-col items-center justify-center overflow-hidden border border-slate-200 shrink-0 relative group"
+                        >
+                            <img
+                                v-if="
+                                    heroPromo2Preview ||
+                                    form.existing_hero_promo_2_image
+                                "
+                                :src="
+                                    heroPromo2Preview ||
+                                    form.existing_hero_promo_2_image
+                                "
+                                class="w-full h-full object-cover"
+                            />
+                            <ImageIcon v-else class="w-5 h-5 text-slate-300" />
+                            <div
+                                class="absolute inset-0 bg-black/60 flex flex-col gap-1 items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                <button
+                                    @click.prevent="openGallery('hero_promo_2')"
+                                    class="text-[9px] text-white underline font-bold"
+                                >
+                                    Gallery
+                                </button>
                             </div>
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-[#003366] uppercase tracking-widest mb-4 border-b pb-2">Bottom Promo Card</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Title</label>
-                                    <input v-model="form.hero_promo_2_title" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="Best Price">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Subtitle</label>
-                                    <input v-model="form.hero_promo_2_subtitle" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="PC Components">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">URL / Link</label>
-                                    <input v-model="form.hero_promo_2_url" type="text" class="w-full bg-slate-50 border-none rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-[#003366]/10 outline-none" placeholder="/shop?category=component">
-                                </div>
+                        <div class="grid grid-cols-2 gap-2 w-full">
+                            <div class="col-span-2">
+                                <input
+                                    type="file"
+                                    @input="handleHeroPromo2Upload"
+                                    class="text-[10px] text-slate-500 w-full"
+                                />
                             </div>
-                            <div class="flex flex-col gap-4">
-                                <div class="w-full aspect-video bg-slate-50 rounded-2xl flex items-center justify-center overflow-hidden border-2 border-dashed border-slate-200 group relative">
-                                    <img v-if="heroPromo2Preview || form.existing_hero_promo_2_image" :src="heroPromo2Preview || form.existing_hero_promo_2_image" class="w-full h-full object-cover" />
-                                    <div v-else class="flex flex-col items-center gap-2 opacity-30">
-                                        <ImageIcon class="w-8 h-8" />
-                                        <span class="text-[10px] font-black uppercase">Upload Image</span>
-                                    </div>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <input type="file" @input="handleHeroPromo2Upload" class="flex-grow text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-[#003366] file:text-white cursor-pointer" />
-                                    <button @click.prevent="openGallery('hero_promo_2')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#003366] hover:bg-[#003366] hover:text-white transition-all flex items-center justify-center gap-2">
-                                        <ImageIcon class="w-3 h-3" /> Gallery
-                                    </button>
-                                </div>
+                            <div>
+                                <input
+                                    v-model="form.hero_promo_2_title"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Title"
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    v-model="form.hero_promo_2_subtitle"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Subtitle"
+                                />
+                            </div>
+                            <div class="col-span-2">
+                                <input
+                                    v-model="form.hero_promo_2_url"
+                                    type="text"
+                                    class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-xs outline-none"
+                                    placeholder="Destination Link / URL"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Delivery Settings -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 md:col-span-2">
-                <div class="flex items-center space-x-3 mb-6 border-b pb-4">
-                    <Truck class="w-5 h-5 text-[#003366]" />
-                    <h2 class="text-lg font-bold text-slate-900">Delivery Settings</h2>
+            <!-- Section: Contact & Logistics Framework -->
+            <div
+                class="bg-white rounded-xl border border-slate-100 p-5 space-y-4 shadow-sm md:col-span-2"
+            >
+                <div class="flex items-center space-x-2 border-b pb-2">
+                    <Info class="w-4 h-4 text-[#003366]" />
+                    <h2 class="text-sm font-bold text-slate-800">
+                        Logistics, Contacts & Footer Settings
+                    </h2>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                    <div class="md:col-span-2">
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >About Description (EN)</label
+                        >
+                        <textarea
+                            v-model="form.footer_about_en"
+                            rows="2"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-1.5 outline-none"
+                        ></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >About Description (BN)</label
+                        >
+                        <textarea
+                            v-model="form.footer_about_bn"
+                            rows="2"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-1.5 outline-none"
+                        ></textarea>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Inside Dhaka Charge (৳)</label>
-                        <input v-model="form.delivery_charge_inside_dhaka" type="number" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Address (EN)</label
+                        >
+                        <input
+                            v-model="form.footer_address_en"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Outside Dhaka Charge (৳)</label>
-                        <input v-model="form.delivery_charge_outside_dhaka" type="number" class="w-full bg-slate-50 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#003366]/10 outline-none">
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Address (BN)</label
+                        >
+                        <input
+                            v-model="form.footer_address_bn"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Phone</label
+                        >
+                        <input
+                            v-model="form.footer_phone"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Email</label
+                        >
+                        <input
+                            v-model="form.footer_email"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Inside Dhaka (৳)</label
+                        >
+                        <input
+                            v-model="form.delivery_charge_inside_dhaka"
+                            type="number"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Outside Dhaka (৳)</label
+                        >
+                        <input
+                            v-model="form.delivery_charge_outside_dhaka"
+                            type="number"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >Facebook</label
+                        >
+                        <input
+                            v-model="form.social_facebook"
+                            type="text"
+                            class="w-full bg-slate-50 border border-slate-200/60 rounded-lg px-3 py-2 outline-none"
+                            placeholder="https://..."
+                        />
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-500 mb-1"
+                            >YouTube / Instagram</label
+                        >
+                        <div class="flex gap-1">
+                            <input
+                                v-model="form.social_youtube"
+                                type="text"
+                                class="w-1/2 bg-slate-50 border border-slate-200/60 rounded-lg px-2 py-2 outline-none"
+                                placeholder="YT"
+                            />
+                            <input
+                                v-model="form.social_instagram"
+                                type="text"
+                                class="w-1/2 bg-slate-50 border border-slate-200/60 rounded-lg px-2 py-2 outline-none"
+                                placeholder="IG"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Media Gallery Modal -->
-        <MediaPicker 
-            :show="showGallery" 
-            @close="showGallery = false" 
-            @select="handleGallerySelection" 
+
+        <MediaPicker
+            :show="showGallery"
+            @close="showGallery = false"
+            @select="handleGallerySelection"
         />
     </AdminLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import MediaPicker from '@/Components/MediaPicker.vue';
-import { Save, Settings as SettingsIcon, Image as ImageIcon, Info, Plus, Trash2, CheckCircle, X, Truck, Layout } from 'lucide-vue-next';
+import { ref } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+import MediaPicker from "@/Components/MediaPicker.vue";
+import {
+    Save,
+    Settings as SettingsIcon,
+    Image as ImageIcon,
+    Info,
+    Plus,
+    Trash2,
+    CheckCircle,
+    X,
+    Truck,
+    Layout,
+} from "lucide-vue-next";
 
 const props = defineProps({
-    settings: Object
+    settings: Object,
 });
 
-const getVal = (key, locale = 'en') => {
+const getVal = (key, locale = "en") => {
     for (const group in props.settings) {
-        const found = props.settings[group].find(s => s.key === key);
+        const found = props.settings[group].find((s) => s.key === key);
         if (found) {
-            if (locale === 'bn') return found.value_bn || '';
-            return found.value_en || found.value || '';
+            if (locale === "bn") return found.value_bn || "";
+            return found.value_en || found.value || "";
         }
     }
-    return '';
+    return "";
 };
 
-const sliderImages = ref(JSON.parse(getVal('slider_images') || '[]'));
+const sliderImages = ref(JSON.parse(getVal("slider_images") || "[]"));
 const logoPreview = ref(null);
 const faviconPreview = ref(null);
 const heroPromo1Preview = ref(null);
 const heroPromo2Preview = ref(null);
 const sliderInput = ref(null);
 const showGallery = ref(false);
-const galleryTarget = ref(''); // 'logo', 'favicon', 'slider', 'hero_promo_1', 'hero_promo_2'
+const galleryTarget = ref(""); // 'logo', 'favicon', 'slider', 'hero_promo_1', 'hero_promo_2'
 
 const form = useForm({
-    site_name_en: getVal('site_name', 'en'),
-    site_name_bn: getVal('site_name', 'bn'),
+    site_name_en: getVal("site_name", "en"),
+    site_name_bn: getVal("site_name", "bn"),
     site_logo: null,
-    existing_site_logo: getVal('site_logo'),
+    existing_site_logo: getVal("site_logo"),
     site_favicon: null,
-    existing_site_favicon: getVal('site_favicon'),
-    footer_about_en: getVal('footer_about', 'en'),
-    footer_about_bn: getVal('footer_about', 'bn'),
-    footer_address_en: getVal('footer_address', 'en'),
-    footer_address_bn: getVal('footer_address', 'bn'),
-    footer_phone: getVal('footer_phone'),
-    footer_email: getVal('footer_email'),
-    social_facebook: getVal('social_facebook'),
-    social_instagram: getVal('social_instagram'),
-    social_youtube: getVal('social_youtube'),
-    delivery_charge_inside_dhaka: getVal('delivery_charge_inside_dhaka'),
-    delivery_charge_outside_dhaka: getVal('delivery_charge_outside_dhaka'),
+    existing_site_favicon: getVal("site_favicon"),
+    footer_about_en: getVal("footer_about", "en"),
+    footer_about_bn: getVal("footer_about", "bn"),
+    footer_address_en: getVal("footer_address", "en"),
+    footer_address_bn: getVal("footer_address", "bn"),
+    footer_phone: getVal("footer_phone"),
+    footer_email: getVal("footer_email"),
+    social_facebook: getVal("social_facebook"),
+    social_instagram: getVal("social_instagram"),
+    social_youtube: getVal("social_youtube"),
+    delivery_charge_inside_dhaka: getVal("delivery_charge_inside_dhaka"),
+    delivery_charge_outside_dhaka: getVal("delivery_charge_outside_dhaka"),
     slider_upload: [],
     slider_images: sliderImages.value,
     hero_promo_1_image: null,
-    existing_hero_promo_1_image: getVal('hero_promo_1_image'),
-    hero_promo_1_title: getVal('hero_promo_1_title'),
-    hero_promo_1_subtitle: getVal('hero_promo_1_subtitle'),
-    hero_promo_1_url: getVal('hero_promo_1_url'),
+    existing_hero_promo_1_image: getVal("hero_promo_1_image"),
+    hero_promo_1_title: getVal("hero_promo_1_title"),
+    hero_promo_1_subtitle: getVal("hero_promo_1_subtitle"),
+    hero_promo_1_url: getVal("hero_promo_1_url"),
     hero_promo_2_image: null,
-    existing_hero_promo_2_image: getVal('hero_promo_2_image'),
-    hero_promo_2_title: getVal('hero_promo_2_title'),
-    hero_promo_2_subtitle: getVal('hero_promo_2_subtitle'),
-    hero_promo_2_url: getVal('hero_promo_2_url'),
-    hero_slider_text_show: getVal('hero_slider_text_show') == '1',
-    hero_slider_text_en: getVal('hero_slider_text', 'en'),
-    hero_slider_text_bn: getVal('hero_slider_text', 'bn'),
+    existing_hero_promo_2_image: getVal("hero_promo_2_image"),
+    hero_promo_2_title: getVal("hero_promo_2_title"),
+    hero_promo_2_subtitle: getVal("hero_promo_2_subtitle"),
+    hero_promo_2_url: getVal("hero_promo_2_url"),
+    hero_slider_text_show: getVal("hero_slider_text_show") == "1",
+    hero_slider_text_en: getVal("hero_slider_text", "en"),
+    hero_slider_text_bn: getVal("hero_slider_text", "bn"),
 });
 
 const handleLogoUpload = (e) => {
@@ -384,7 +672,7 @@ const triggerSliderUpload = () => {
 
 const handleSliderUpload = (e) => {
     const files = Array.from(e.target.files);
-    files.forEach(file => {
+    files.forEach((file) => {
         form.slider_upload.push(file);
         sliderImages.value.push(URL.createObjectURL(file));
     });
@@ -402,23 +690,23 @@ const openGallery = (target) => {
 
 const handleGallerySelection = (item) => {
     const url = item.url;
-    if (galleryTarget.value === 'logo') {
+    if (galleryTarget.value === "logo") {
         form.site_logo = url;
         form.existing_site_logo = url;
         logoPreview.value = null;
-    } else if (galleryTarget.value === 'favicon') {
+    } else if (galleryTarget.value === "favicon") {
         form.site_favicon = url;
         form.existing_site_favicon = url;
         faviconPreview.value = null;
-    } else if (galleryTarget.value === 'hero_promo_1') {
+    } else if (galleryTarget.value === "hero_promo_1") {
         form.hero_promo_1_image = url;
         form.existing_hero_promo_1_image = url;
         heroPromo1Preview.value = null;
-    } else if (galleryTarget.value === 'hero_promo_2') {
+    } else if (galleryTarget.value === "hero_promo_2") {
         form.hero_promo_2_image = url;
         form.existing_hero_promo_2_image = url;
         heroPromo2Preview.value = null;
-    } else if (galleryTarget.value === 'slider') {
+    } else if (galleryTarget.value === "slider") {
         sliderImages.value.push(url);
         form.slider_images = [...sliderImages.value];
     }
@@ -426,12 +714,12 @@ const handleGallerySelection = (item) => {
 };
 
 const saveSettings = () => {
-    form.post('/admin/settings', {
+    form.post("/admin/settings", {
         onSuccess: () => {
             logoPreview.value = null;
             faviconPreview.value = null;
             form.slider_upload = [];
-        }
+        },
     });
 };
 </script>
