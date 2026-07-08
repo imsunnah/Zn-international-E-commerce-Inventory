@@ -1,78 +1,8 @@
 <template>
     <StoreLayout>
-        <!-- ══════════════════════════════════════════
-             ANNOUNCEMENT BAR
-        ═══════════════════════════════════════════ -->
-        <div class="bg-emerald-900 py-2 px-4 text-center">
-            <p
-                class="text-[11px] font-semibold text-emerald-50 tracking-wide flex items-center justify-center gap-3"
-            >
-                <Truck class="w-3.5 h-3.5 shrink-0" />
-                Free shipping over ৳5,000 &nbsp;·&nbsp; Nationwide delivery
-                &nbsp;·&nbsp; 24/7 Expert support &nbsp;·&nbsp; 7-day easy
-                returns
-            </p>
-        </div>
 
-        <!-- ══════════════════════════════════════════
-             SCROLLING NOTICE (runs right before the hero)
-        ═══════════════════════════════════════════ -->
-        <div
-            v-if="noticeItems.length"
-            class="bg-white border-b border-slate-200/60 py-2 overflow-hidden"
-        >
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
-                <div class="flex items-center">
-                    <div
-                        class="flex items-center gap-1.5 shrink-0 px-4 border-r border-slate-200 mr-4"
-                    >
-                        <Megaphone class="w-3.5 h-3.5 text-rose-500" />
-                        <span
-                            class="text-[10px] font-black uppercase tracking-widest text-slate-800"
-                            >Notice</span
-                        >
-                    </div>
-                    <div class="relative flex-1 overflow-hidden">
-                        <div class="marquee-track">
-                            <div class="marquee-content">
-                                <template
-                                    v-for="(n, i) in noticeItems"
-                                    :key="'a-' + i"
-                                >
-                                    <span
-                                        class="text-[12px] font-medium text-slate-700"
-                                        >{{ n }}</span
-                                    >
-                                    <span class="text-rose-500 font-bold"
-                                        >·</span
-                                    >
-                                </template>
-                            </div>
-                            <div class="marquee-content" aria-hidden="true">
-                                <template
-                                    v-for="(n, i) in noticeItems"
-                                    :key="'b-' + i"
-                                >
-                                    <span
-                                        class="text-[12px] font-medium text-slate-700"
-                                        >{{ n }}</span
-                                    >
-                                    <span class="text-rose-500 font-bold"
-                                        >·</span
-                                    >
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ══════════════════════════════════════════
-             HERO BANNER  (main slider + 2 stacked promo cards)
-        ═══════════════════════════════════════════ -->
         <section class="bg-slate-50 py-5 md:py-7 border-b border-slate-100">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="grid lg:grid-cols-3 gap-4">
                     <!-- Main Slider -->
                     <div
@@ -95,8 +25,6 @@
                                 transform: `translateX(-${currentSlide * 100}%)`,
                             }"
                         >
-                            <!-- Real slider images: fill the box edge-to-edge so small
-                                 source images don't look tiny/floating inside padding -->
                             <div
                                 v-for="(img, i) in sliderImages"
                                 :key="i"
@@ -156,33 +84,35 @@
                                         stroke="currentColor"
                                         stroke-width="1.2"
                                     >
-                                        <rect
-                                            x="8"
-                                            y="24"
-                                            width="80"
-                                            height="52"
-                                            rx="6"
-                                        />
+                                        <rect x="8" y="24" width="80" height="52" rx="6" />
                                         <path d="M28 76v8M68 76v8M20 84h56" />
-                                        <rect
-                                            x="20"
-                                            y="34"
-                                            width="56"
-                                            height="32"
-                                            rx="3"
-                                        />
+                                        <rect x="20" y="34" width="56" height="32" rx="3" />
                                         <circle cx="48" cy="50" r="8" />
-                                        <path
-                                            d="M48 42v4M48 54v4M40 50h4M52 50h4"
-                                        />
+                                        <path d="M48 42v4M48 54v4M40 50h4M52 50h4" />
                                     </svg>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Slider arrows -->
+                        <button
+                            v-if="sliderImages.length > 1"
+                            @click="goToSlide(currentSlide - 1)"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
+                        >
+                            <ChevronLeft class="w-5 h-5" />
+                        </button>
+                        <button
+                            v-if="sliderImages.length > 1"
+                            @click="goToSlide(currentSlide + 1)"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
+                        >
+                            <ChevronRight class="w-5 h-5" />
+                        </button>
+
                         <div
                             v-if="sliderImages.length > 1"
-                            class="absolute bottom-4 left-6 flex gap-1.5 z-10"
+                            class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
                         >
                             <button
                                 v-for="(_, i) in sliderImages"
@@ -193,14 +123,8 @@
                                         ? 'w-5 bg-emerald-400'
                                         : 'w-1.5 bg-white/30 hover:bg-white/50'
                                 "
-                                class="h-1.5 rounded-full transition-all duration-300"
+                                class="h-1.5 rounded-full transition-all duration-300 border-none cursor-pointer"
                             />
-                        </div>
-                        <div
-                            v-if="sliderImages.length > 1"
-                            class="absolute bottom-4 right-5 text-[10px] font-bold text-white/50 z-10"
-                        >
-                            {{ currentSlide + 1 }} / {{ sliderImages.length }}
                         </div>
                     </div>
 
@@ -214,14 +138,12 @@
                             :href="promo.href"
                             class="relative flex-1 rounded-2xl overflow-hidden border border-slate-200/60 bg-slate-100 flex items-center justify-between group hover:shadow-lg transition-all duration-300"
                         >
-                            <!-- If image exists from settings, show the banner image -->
                             <img
                                 v-if="promo.image"
                                 :src="promo.image"
                                 class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
                                 :alt="promo.title"
                             />
-                            <!-- Else fallback to standard gradient block -->
                             <template v-else>
                                 <div class="p-5 relative z-10">
                                     <span
@@ -258,199 +180,200 @@
         </section>
 
         <!-- ══════════════════════════════════════════
-             QUICK ACTIONS
+             SCROLLING NOTICE
         ═══════════════════════════════════════════ -->
-        <section class="py-8 bg-slate-50 border-b border-slate-100">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Link
-                        v-for="action in quickActions"
-                        :key="action.label"
-                        :href="action.href"
-                        class="flex items-center gap-3 bg-white border border-slate-100 rounded-2xl px-5 py-4 shadow-sm hover:border-emerald-300 hover:shadow-md transition-all duration-200 group"
-                    >
-                        <div
-                            class="w-11 h-11 rounded-full bg-emerald-700 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 transition-colors"
-                        >
-                            <component
-                                :is="action.icon"
-                                class="w-5 h-5 text-white"
-                            />
+        <div
+            v-if="noticeItems.length"
+            class="bg-slate-50 py-3 overflow-hidden border-b border-slate-100"
+        >
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="flex items-center">
+                    <div class="relative flex-1 overflow-hidden">
+                        <div class="marquee-track">
+                            <div class="marquee-content">
+                                <template
+                                    v-for="(n, i) in noticeItems"
+                                    :key="'a-' + i"
+                                >
+                                    <span
+                                        class="text-[12px] font-semibold text-[#00a651]"
+                                        >{{ n }}</span
+                                    >
+                                    <span class="text-[#ef4823] font-bold"
+                                        >·</span
+                                    >
+                                </template>
+                            </div>
+                            <div class="marquee-content" aria-hidden="true">
+                                <template
+                                    v-for="(n, i) in noticeItems"
+                                    :key="'b-' + i"
+                                >
+                                    <span
+                                        class="text-[12px] font-semibold text-[#00a651]"
+                                        >{{ n }}</span
+                                    >
+                                    <span class="text-[#ef4823] font-bold"
+                                        >·</span
+                                    >
+                                </template>
+                            </div>
                         </div>
-                        <div class="min-w-0">
-                            <p
-                                class="text-sm font-extrabold text-slate-800 leading-tight truncate"
-                            >
-                                {{ action.label }}
-                            </p>
-                            <p
-                                class="text-[11px] text-slate-400 mt-0.5 truncate"
-                            >
-                                {{ action.sub }}
-                            </p>
-                        </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- ══════════════════════════════════════════
-             FEATURED CATEGORY  (grid, not carousel)
+             FEATURED CATEGORIES (compact icons)
         ═══════════════════════════════════════════ -->
-        <section class="py-12 bg-white border-b border-slate-100">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
+        <section class="py-10 bg-white border-b border-slate-100">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-8">
-                    <h2
-                        class="text-2xl font-black text-slate-950 tracking-tight"
-                    >
-                        Featured <span class="text-emerald-700">Category</span>
+                    <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                        Featured <span class="text-[#00a651] italic">Categories</span>
                     </h2>
                     <p class="text-slate-400 text-xs mt-1 font-medium">
                         Get your desired product from featured category
                     </p>
                 </div>
 
-                <div
-                    class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4"
-                >
-                    <Link
-                        v-for="cat in featuredCategories"
-                        :key="cat.id"
-                        :href="`/shop?category=${cat.slug}`"
-                        class="group flex aspect-square flex-col items-center justify-between rounded-2xl bg-white border border-slate-100 p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-900/5"
-                    >
-                        <div
-                            class="flex flex-1 items-center justify-center w-full overflow-hidden"
-                        >
-                            <img
-                                v-if="cat.image"
-                                :src="cat.image"
-                                :alt="cat.name"
-                                class="h-full w-full max-h-16 max-w-16 object-contain transition-transform duration-300 group-hover:scale-110"
-                            />
-                            <div
-                                v-else
-                                class="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-50 group-hover:bg-emerald-100 transition-colors"
-                            >
-                                <span
-                                    class="text-lg font-bold uppercase text-emerald-600"
-                                    >{{ cat.name.charAt(0) }}</span
-                                >
-                            </div>
-                        </div>
-                        <span
-                            class="block text-center truncate w-full text-[11px] font-bold text-slate-600 group-hover:text-emerald-700 transition-colors pt-1"
-                        >
-                            {{ cat.name }}
-                        </span>
-                    </Link>
-                </div>
+              <div class="flex items-center justify-center gap-6 md:gap-8 flex-wrap">
+    <Link
+        v-for="cat in displayedCategories"
+        :key="cat.id"
+        :href="`/shop?category=${cat.slug}`"
+        class="group flex flex-col items-center gap-3 decoration-transparent"
+    >
+        <div class="w-28 h-24 md:w-36 md:h-30 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:border-[#00a651] group-hover:shadow-md group-hover:bg-[#e6f6ee]">
+            
+            <img
+                v-if="cat.image"
+                :src="cat.image"
+                :alt="cat.name"
+                class="w-20 h-20 md:w-24 md:h-22 object-contain transition-transform duration-300 group-hover:scale-110"
+            />
+            
+            <div
+                v-else
+                class="flex items-center justify-center w-14 h-14 md:w-18 md:h-18 rounded-lg bg-slate-100 group-hover:bg-[#d4edda] transition-colors"
+            >
+                <span class="text-xl font-bold uppercase text-[#00a651]">{{ cat.name.charAt(0) }}</span>
+            </div>
+            
+        </div>
+        
+        <span class="text-[13px] md:text-sm font-bold text-slate-600 group-hover:text-[#00a651] transition-colors text-center leading-tight max-w-[110px] md:max-w-[130px] truncate uppercase">
+            {{ cat.name }}
+        </span>
+    </Link>
+</div>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             STORE LOCATOR BANNER
+             FEATURED PRODUCTS (first section — top selling)
         ═══════════════════════════════════════════ -->
-        <section class="py-6 bg-slate-50">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
-                <Link
-                    href="/stores"
-                    class="relative flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl px-6 md:px-10 py-6 overflow-hidden bg-gradient-to-r from-emerald-950 via-emerald-800 to-emerald-700 group"
-                >
-                    <div class="flex items-center gap-3 relative z-10">
-                        <div
-                            class="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center shrink-0"
-                        >
-                            <MapPin class="w-5 h-5 text-emerald-300" />
-                        </div>
-                        <div>
-                            <p
-                                class="text-white font-black text-lg leading-tight"
-                            >
-                                20+ Physical Stores
-                            </p>
-                            <p class="text-emerald-200/70 text-xs font-medium">
-                                Visit our store &amp; get your desired IT
-                                product!
-                            </p>
-                        </div>
-                    </div>
-                    <span
-                        class="relative z-10 inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-400 text-emerald-950 rounded-xl text-sm font-black group-hover:bg-emerald-300 transition-all shrink-0"
-                    >
-                        Find Our Store
-                        <Search class="w-4 h-4" />
-                    </span>
-                    <div
-                        class="absolute -right-6 -top-10 w-40 h-40 rounded-full bg-white/5 pointer-events-none"
-                    />
-                </Link>
-            </div>
-        </section>
-
-        <!-- ══════════════════════════════════════════
-             PRODUCT TABS / FEATURED PRODUCTS
-        ═══════════════════════════════════════════ -->
-        <section class="py-14 bg-white border-b border-slate-100">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
-                >
-                    <div class="text-center sm:text-left w-full sm:w-auto">
-                        <h2
-                            class="text-2xl font-black text-slate-950 tracking-tight"
-                        >
-                            Featured
-                            <span class="text-emerald-700">Products</span>
-                        </h2>
-                        <p class="text-slate-400 text-xs mt-1 font-medium">
-                            Check &amp; get your desired product!
-                        </p>
-                    </div>
-                    <div
-                        class="flex gap-1 bg-slate-50 border border-slate-200 rounded-xl p-1 w-fit mx-auto sm:mx-0 shadow-sm"
-                    >
-                        <button
-                            v-for="tab in productTabs"
-                            :key="tab.key"
-                            @click="activeTab = tab.key"
-                            :class="
-                                activeTab === tab.key
-                                    ? 'bg-emerald-700 text-white shadow-sm'
-                                    : 'text-slate-500 hover:text-slate-800'
-                            "
-                            class="px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all duration-200"
-                        >
-                            {{ tab.label }}
-                        </button>
-                    </div>
+        <section class="py-10 bg-[#00a651]/5 border-b border-slate-100">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                        Featured <span class="text-[#00a651] italic">Products</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1 font-medium">
+                        Check &amp; get your desired product!
+                    </p>
                 </div>
 
-                <Transition name="tab-fade" mode="out-in">
+                <div class="relative">
+                    <button
+                        v-if="featuredProducts.length > 5"
+                        @click="scrollCarousel('featured-carousel', -1)"
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronLeft class="w-4 h-4" />
+                    </button>
+
                     <div
-                        :key="activeTab"
-                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+                        ref="featuredCarouselRef"
+                        id="featured-carousel"
+                        class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2"
                     >
                         <div
-                            v-for="p in tabbedProducts"
+                            v-for="p in featuredProducts"
                             :key="p.id"
-                            class="h-full"
+                            class="flex-none w-[200px] md:w-[205px]"
                         >
-                            <ProductCard
-                                :product="p"
-                                @quickView="openQuickView"
-                            />
+                            <ProductCard :product="p" @quickView="openQuickView" />
                         </div>
                     </div>
-                </Transition>
 
-                <div class="mt-10 flex justify-center">
+                    <button
+                        v-if="featuredProducts.length > 5"
+                        @click="scrollCarousel('featured-carousel', 1)"
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronRight class="w-4 h-4" />
+                    </button>
+                </div>
+
+                <div class="mt-8 flex justify-center">
                     <Link
                         href="/shop"
-                        class="px-7 py-3 bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-emerald-800 transition-all flex items-center gap-2 shadow-sm shadow-emerald-900/20"
+                        class="px-7 py-2.5 bg-[#00a651] hover:bg-[#008541] text-white rounded text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm decoration-transparent"
                     >
                         View full inventory <ArrowRight class="w-4 h-4" />
                     </Link>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════
+             CATEGORY-WISE PRODUCT SECTIONS
+        ═══════════════════════════════════════════ -->
+        <section
+            v-for="(section, sIdx) in categorySections"
+            :key="section.id"
+            :class="sIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'"
+            class="py-10 border-b border-slate-100"
+        >
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                        {{ section.name.split(' ').slice(0, -1).join(' ') || section.name }}
+                        <span class="text-[#00a651] italic">{{ section.name.split(' ').pop() }}</span>
+                    </h2>
+                </div>
+
+                <div class="relative">
+                    <button
+                        v-if="section.products.length > 5"
+                        @click="scrollCarousel(`cat-carousel-${section.id}`, -1)"
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronLeft class="w-4 h-4" />
+                    </button>
+
+                    <div
+                        :id="`cat-carousel-${section.id}`"
+                        class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2"
+                    >
+                        <div
+                            v-for="p in section.products"
+                            :key="p.id"
+                            class="flex-none w-[200px] md:w-[205px]"
+                        >
+                            <ProductCard :product="p" @quickView="openQuickView" />
+                        </div>
+                    </div>
+
+                    <button
+                        v-if="section.products.length > 5"
+                        @click="scrollCarousel(`cat-carousel-${section.id}`, 1)"
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronRight class="w-4 h-4" />
+                    </button>
                 </div>
             </div>
         </section>
@@ -460,28 +383,16 @@
         ═══════════════════════════════════════════ -->
         <section
             v-if="combos?.length"
-            class="py-14 bg-slate-50 border-b border-slate-100"
+            class="py-10 bg-slate-50 border-b border-slate-100"
         >
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
-                <div
-                    class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-8"
-                >
-                    <div>
-                        <h2
-                            class="text-2xl font-black text-slate-950 tracking-tight"
-                        >
-                            Combo <span class="text-emerald-700">Deals</span>
-                        </h2>
-                        <p class="text-slate-400 text-xs mt-1 font-medium">
-                            Pre-configured bundles by our tech experts
-                        </p>
-                    </div>
-                    <Link
-                        href="/shop?type=combo"
-                        class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 transition-colors shrink-0"
-                    >
-                        View all <ArrowRight class="w-3.5 h-3.5" />
-                    </Link>
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                        Combo <span class="text-[#00a651] italic">Deals</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1 font-medium">
+                        Pre-configured bundles by our tech experts
+                    </p>
                 </div>
                 <div
                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
@@ -492,6 +403,14 @@
                         :combo="combo"
                     />
                 </div>
+                <div class="mt-6 flex justify-center">
+                    <Link
+                        href="/shop?type=combo"
+                        class="text-xs font-bold text-[#00a651] hover:text-[#008541] flex items-center gap-1 transition-colors"
+                    >
+                        View all combos <ArrowRight class="w-3.5 h-3.5" />
+                    </Link>
+                </div>
             </div>
         </section>
 
@@ -500,31 +419,28 @@
         ═══════════════════════════════════════════ -->
         <section
             v-if="brands?.length"
-            class="py-12 bg-white border-b border-slate-100"
+            class="py-10 bg-white border-b border-slate-100"
         >
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="flex items-center justify-between mb-7">
-                    <div>
-                        <h2
-                            class="text-2xl font-black text-slate-950 tracking-tight"
-                        >
-                            Top <span class="text-emerald-700">Brands</span>
+                    <div class="flex-1 text-center">
+                        <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                            Top <span class="text-[#00a651] italic">Brands</span>
                         </h2>
                         <p class="text-slate-400 text-xs mt-1 font-medium">
-                            Official authorized reseller — genuine products
-                            guaranteed
+                            Official authorized reseller — genuine products guaranteed
                         </p>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 shrink-0">
                         <button
                             @click="scrollContainer('brand-container', -480)"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 active:scale-95 transition-all text-slate-500 shadow-sm"
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 bg-white hover:bg-[#e6f6ee] hover:border-[#00a651] hover:text-[#00a651] active:scale-95 transition-all text-slate-500 shadow-sm cursor-pointer"
                         >
                             <ChevronLeft class="w-4 h-4" />
                         </button>
                         <button
                             @click="scrollContainer('brand-container', 480)"
-                            class="w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 active:scale-95 transition-all text-slate-500 shadow-sm"
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-slate-200 bg-white hover:bg-[#e6f6ee] hover:border-[#00a651] hover:text-[#00a651] active:scale-95 transition-all text-slate-500 shadow-sm cursor-pointer"
                         >
                             <ChevronRight class="w-4 h-4" />
                         </button>
@@ -539,7 +455,7 @@
                         <Link
                             v-if="brand.image"
                             :href="`/shop?brand=${brand.slug}`"
-                            class="group flex-shrink-0 w-[140px] md:w-[160px] h-[90px] md:h-[100px] flex items-center justify-center p-4 rounded-2xl border border-slate-100 bg-white hover:border-emerald-300 hover:bg-emerald-50/40 hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-250 overflow-hidden"
+                            class="group flex-shrink-0 w-[130px] md:w-[150px] h-[80px] md:h-[90px] flex items-center justify-center p-4 rounded-2xl border border-slate-100 bg-white hover:border-[#00a651] hover:bg-[#e6f6ee]/40 hover:shadow-xl hover:shadow-emerald-900/5 transition-all duration-250 overflow-hidden"
                         >
                             <img
                                 :src="brand.image"
@@ -553,20 +469,92 @@
         </section>
 
         <!-- ══════════════════════════════════════════
-             SEO CONTENT
+             NEW PRODUCTS
         ═══════════════════════════════════════════ -->
-        <section v-if="seoContent?.length" class="py-14 bg-slate-50">
-            <div class="max-w-[1400px] mx-auto px-4 md:px-8 xl:px-12 space-y-6">
-                <h2 class="text-xl font-black text-slate-950 mb-4">
-                    Leading Computer, Laptop &amp; Gaming PC Retail &amp; Online
-                    Shop in Bangladesh
+        <section v-if="latestProducts.length" class="py-10 bg-white border-b border-slate-100">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-black text-slate-950 tracking-tight">
+                        New <span class="text-[#00a651] italic">Products</span>
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1 font-medium">
+                        Latest arrivals fresh in stock
+                    </p>
+                </div>
+
+                <div class="relative">
+                    <button
+                        v-if="latestProducts.length > 5"
+                        @click="scrollCarousel('new-carousel', -1)"
+                        class="absolute -left-3 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronLeft class="w-4 h-4" />
+                    </button>
+
+                    <div
+                        id="new-carousel"
+                        class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2"
+                    >
+                        <div
+                            v-for="p in latestProducts"
+                            :key="p.id"
+                            class="flex-none w-[200px] md:w-[205px]"
+                        >
+                            <ProductCard :product="p" @quickView="openQuickView" />
+                        </div>
+                    </div>
+
+                    <button
+                        v-if="latestProducts.length > 5"
+                        @click="scrollCarousel('new-carousel', 1)"
+                        class="absolute -right-3 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white border border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651] hover:bg-[#e6f6ee] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    >
+                        <ChevronRight class="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════════════════════════════════
+             SEO / TRUST CONTENT
+        ═══════════════════════════════════════════ -->
+        <section class="py-10 bg-slate-50 border-t border-slate-100">
+            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12 space-y-6">
+                <h2 class="text-xl font-bold text-slate-900 border-l-4 border-[#00a651] pl-3 leading-none uppercase">
+                    ZN International — Computer, Printer, Scanner &amp; IT Solutions
                 </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs font-semibold text-slate-600 leading-relaxed pt-2">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-slate-800 font-extrabold text-sm mb-1.5 uppercase">Why ZN International?</h3>
+                            <p class="text-slate-500">ZN International has been offering IT products and computer services for more than two decades. We guarantee 100% original products, official brand warranty services, and competitive pricing across scanners, printers, and accessories.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-slate-800 font-extrabold text-sm mb-1.5 uppercase">Quality Printer in Bangladesh</h3>
+                            <p class="text-slate-500">Find top-tier printers from leading brands such as HP, Epson, Canon, and Brother for office or home needs with original cartridge support.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="border border-slate-100 bg-white p-4 rounded">
+                            <ul class="space-y-2">
+                                <li class="flex items-center gap-2"><span class="text-[#00a651]">✓</span> Wide Selection of Scanner</li>
+                                <li class="flex items-center gap-2"><span class="text-[#00a651]">✓</span> Laptops, Monitor and computer accessories</li>
+                                <li class="flex items-center gap-2"><span class="text-[#00a651]">✓</span> Best Office Equipment in Bangladesh</li>
+                                <li class="flex items-center gap-2"><span class="text-[#00a651]">✓</span> Best E-Commerce Shop to Order Product</li>
+                                <li class="flex items-center gap-2"><span class="text-[#00a651]">✓</span> Best Price, Personal &amp; Warranty service</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <div
                     v-for="block in seoContent"
                     :key="block.heading"
-                    class="space-y-2"
+                    class="space-y-2 border-t border-slate-100 pt-4"
                 >
-                    <h3 class="text-sm font-extrabold text-emerald-800">
+                    <h3 class="text-sm font-extrabold text-[#00a651] uppercase">
                         {{ block.heading }}
                     </h3>
                     <p class="text-[13px] text-slate-500 leading-relaxed">
@@ -583,6 +571,7 @@
             @close="selectedProduct = null"
         />
     </StoreLayout>
+
 </template>
 
 <script setup>
@@ -623,18 +612,25 @@ const props = defineProps({
 });
 
 const page = usePage();
-const featuredCategories = computed(() => props.featuredCategories || []);
 
-// Scrolling notice ticker — built from the `notice` prop
-// (Notice model). Falls back to nothing if the list is empty.
+// Featured categories display (compact icons)
+const displayedCategories = computed(() => {
+    return (props.featuredCategories || []).slice(0, 5);
+});
+
+// Featured products (first section)
+const featuredProducts = computed(() => {
+    return (props.topSelling.length ? props.topSelling : props.latestProducts).slice(0, 10);
+});
+
+// Scrolling notice ticker
 const noticeItems = computed(() =>
     (props.notice || [])
         .map((n) => n.title ?? n.message ?? n.description ?? "")
         .filter(Boolean),
 );
 
-// Hero right-column promo cards (kept static/link-driven, same pattern as
-// the old "Custom PC Builder" box — swap hrefs/copy as needed)
+// Hero promo cards
 const heroPromos = computed(() => [
     {
         title: page.props.settings?.hero_promo_1_title || "Sell Your Device",
@@ -660,51 +656,18 @@ const heroPromos = computed(() => [
     },
 ]);
 
-const quickActions = [
-    {
-        label: "Laptop Finder",
-        sub: "Find your laptop easily",
-        icon: Search,
-        href: "/laptop-finder",
-    },
-    {
-        label: "Raise a Complain",
-        sub: "Share your experience",
-        icon: MessageSquare,
-        href: "/complain",
-    },
-    {
-        label: "Home Service",
-        sub: "Get expert help",
-        icon: Home,
-        href: "/home-service",
-    },
-    {
-        label: "Servicing Center",
-        sub: "Repair your device",
-        icon: Wrench,
-        href: "/service-center",
-    },
-];
-
-const activeTab = ref("featured");
-const productTabs = [
-    { key: "featured", label: "Recommended" },
-    { key: "new", label: "New stock" },
-    { key: "deals", label: "Discounts" },
-];
-const tabbedProducts = computed(() => {
-    if (activeTab.value === "new") return props.latestProducts.slice(0, 10);
-    if (activeTab.value === "deals")
-        return props.discountedProducts.slice(0, 10);
-    return (
-        props.topSelling.length ? props.topSelling : props.latestProducts
-    ).slice(0, 10);
-});
-
 const selectedProduct = ref(null);
 const openQuickView = (p) => {
     selectedProduct.value = p;
+};
+
+// Scroll 1 product card at a time (~220px)
+const scrollCarousel = (id, direction) => {
+    const el = document.getElementById(id);
+    if (el) {
+        const cardWidth = 220;
+        el.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
 };
 
 const scrollContainer = (id, offset) => {
@@ -723,8 +686,6 @@ const sliderImages = computed(() => {
     }
 });
 
-// Optional SEO content blocks — pass via settings.seo_content (array of
-// { heading, body }) if you want to manage this copy from the backend.
 const seoContent = computed(() => page.props.settings?.seo_content || []);
 
 const currentSlide = ref(0);
@@ -732,6 +693,7 @@ let autoSlide = null;
 let isPaused = false;
 
 const goToSlide = (i) => {
+    if (!sliderImages.value.length) return;
     currentSlide.value =
         ((i % sliderImages.value.length) + sliderImages.value.length) %
         sliderImages.value.length;
@@ -762,21 +724,6 @@ onUnmounted(() => {
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
-
-.tab-fade-enter-active,
-.tab-fade-leave-active {
-    transition:
-        opacity 0.18s ease,
-        transform 0.18s ease;
-}
-.tab-fade-enter-from {
-    opacity: 0;
-    transform: translateY(6px);
-}
-.tab-fade-leave-to {
-    opacity: 0;
-    transform: translateY(-4px);
 }
 
 /* Scrolling notice ticker */

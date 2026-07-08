@@ -1,28 +1,23 @@
 <template>
     <StoreLayout>
         <div
-            class="bg-slate-50 min-h-screen py-10 font-sans antialiased text-slate-600 selection:bg-emerald-500 selection:text-white"
+            class="bg-white min-h-screen py-8 font-sans antialiased text-slate-650 selection:bg-[#00a651] selection:text-white"
         >
-            <!-- Subtle Radial Gradient Background Grid -->
             <div
-                class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-40 pointer-events-none z-0"
-            ></div>
-
-            <div
-                class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+                class="max-w-[1300px] mx-auto px-4 md:px-8 xl:px-12 relative z-10"
             >
                 <!-- Breadcrumbs & Header Section -->
-                <div class="mb-12">
+                <div class="mb-8">
                     <nav
-                        class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-4"
+                        class="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-3"
                     >
                         <Link
                             href="/"
-                            class="hover:text-slate-900 transition-colors"
-                            >Infrastructure</Link
+                            class="hover:text-[#00a651] transition-colors decoration-transparent"
+                            >Home</Link
                         >
                         <ChevronRight class="w-3.5 h-3.5 text-slate-300" />
-                        <span class="text-slate-900 font-semibold">{{
+                        <span class="text-slate-800 font-bold">{{
                             activeCategoryName
                         }}</span>
                     </nav>
@@ -32,41 +27,38 @@
                     >
                         <div>
                             <h1
-                                class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
+                                class="text-xl md:text-2xl font-black tracking-tight text-slate-900 uppercase"
                             >
-                                Tech
-                                <span class="text-emerald-600 font-medium"
-                                    >Inventory</span
-                                >
+                                {{ activeCategoryName }}
                             </h1>
-                            <p class="text-sm text-slate-500 mt-1">
+                            <p class="text-xs text-slate-500 mt-1">
                                 Reviewing
                                 {{
                                     activeCategoryName.toLowerCase()
                                 }}
-                                components.
+                                catalog.
                             </p>
                         </div>
 
                         <!-- Toolbar Controls -->
                         <div
-                            class="flex items-center gap-3 bg-white p-1.5 rounded-xl border border-slate-200/80 shadow-sm self-start sm:self-auto"
+                            class="flex items-center gap-3 bg-white p-1.5 rounded border border-slate-200 shadow-sm self-start sm:self-auto"
                         >
                             <div
-                                class="flex items-center gap-1.5 px-3 py-1.5 border-r border-slate-100 text-xs font-medium text-slate-500"
+                                class="flex items-center gap-1.5 px-3 py-1 border-r border-slate-100 text-xs font-semibold text-slate-500"
                             >
-                                <span>Nodes:</span>
-                                <span class="text-slate-900 font-semibold">{{
+                                <span>Total Products:</span>
+                                <span class="text-slate-900 font-black">{{
                                     products.total
                                 }}</span>
                             </div>
                             <div
-                                class="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-500"
+                                class="flex items-center gap-2 px-3 py-1 text-xs font-semibold text-slate-500"
                             >
-                                <span>Sort:</span>
+                                <span>Sort by:</span>
                                 <select
                                     v-model="sortBy"
-                                    class="text-slate-900 font-semibold bg-transparent border-none p-0 focus:ring-0 outline-none cursor-pointer text-xs"
+                                    class="text-slate-900 font-bold bg-transparent border-none p-0 focus:ring-0 outline-none cursor-pointer text-xs"
                                 >
                                     <option value="Latest Arrival">
                                         Latest Arrival
@@ -85,45 +77,42 @@
 
                 <!-- Main Section Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-                    <!-- Clean Sidebar Minimalist Panel -->
-                    <div class="lg:col-span-1 space-y-8 lg:sticky lg:top-8">
+                    <!-- Sidebar Filters Panel -->
+                    <div class="lg:col-span-1 space-y-6 lg:sticky lg:top-8">
                         <!-- Category Filter Block -->
                         <div
                             v-if="categories?.length"
-                            class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm"
+                            class="bg-white p-5 rounded border border-slate-200 shadow-sm"
                         >
                             <h3
-                                class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2"
+                                class="text-xs font-black text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2"
                             >
                                 <SlidersHorizontal
                                     class="w-3.5 h-3.5 text-slate-400"
                                 />
                                 Categories
                             </h3>
-                            <div class="space-y-1">
+                            <div class="space-y-1 max-h-60 overflow-y-auto pr-1">
                                 <button
                                     v-for="cat in categories"
                                     :key="cat.id"
                                     @click="toggleCategory(cat.slug)"
-                                    class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
+                                    class="w-full flex items-center justify-between px-3 py-2 rounded text-xs font-bold transition-all text-left border-none cursor-pointer"
                                     :class="
                                         selectedCategories.includes(cat.slug)
-                                            ? 'bg-slate-900 text-white shadow-sm'
-                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                            ? 'bg-[#00a651] text-white shadow-sm'
+                                            : 'bg-transparent text-slate-600 hover:bg-slate-50 hover:text-[#00a651]'
                                     "
                                 >
                                     <span>{{ cat.name }}</span>
                                     <Check
+                                        v-slot:default
                                         v-if="
                                             selectedCategories.includes(
                                                 cat.slug,
                                             )
                                         "
-                                        class="w-4 h-4 text-emerald-400"
-                                    />
-                                    <ChevronRight
-                                        v-else
-                                        class="w-3.5 h-3.5 text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        class="w-3.5 h-3.5 text-white"
                                     />
                                 </button>
                             </div>
@@ -131,46 +120,46 @@
 
                         <!-- Price Range Block -->
                         <div
-                            class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm"
+                            class="bg-white p-5 rounded border border-slate-200 shadow-sm"
                         >
                             <h3
-                                class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4"
+                                class="text-xs font-black text-slate-900 uppercase tracking-wider mb-4"
                             >
-                                Price Limits
+                                Price Range (৳)
                             </h3>
                             <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-3">
                                     <div class="space-y-1">
                                         <span
-                                            class="text-[10px] font-medium text-slate-400"
+                                            class="text-[10px] font-bold text-slate-400"
                                             >Min Price</span
                                         >
                                         <div class="relative">
                                             <span
-                                                class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"
-                                                >$</span
+                                                class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-450 text-xs"
+                                                >৳</span
                                             >
                                             <input
                                                 v-model.number="minPrice"
                                                 type="number"
-                                                class="w-full pl-6 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-semibold outline-none focus:border-emerald-500 focus:bg-white transition-colors"
+                                                class="w-full pl-5 pr-2 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-900 font-bold outline-none focus:border-[#00a651] focus:bg-white transition-colors"
                                             />
                                         </div>
                                     </div>
                                     <div class="space-y-1">
                                         <span
-                                            class="text-[10px] font-medium text-slate-400"
+                                            class="text-[10px] font-bold text-slate-400"
                                             >Max Price</span
                                         >
                                         <div class="relative">
                                             <span
-                                                class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"
-                                                >$</span
+                                                class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-450 text-xs"
+                                                >৳</span
                                             >
                                             <input
                                                 v-model.number="maxPrice"
                                                 type="number"
-                                                class="w-full pl-6 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-semibold outline-none focus:border-emerald-500 focus:bg-white transition-colors"
+                                                class="w-full pl-5 pr-2 py-1.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-900 font-bold outline-none focus:border-[#00a651] focus:bg-white transition-colors"
                                             />
                                         </div>
                                     </div>
@@ -178,26 +167,74 @@
                             </div>
                         </div>
 
+                        <!-- Availability Filter Block (New Paragon Style) -->
+                        <div
+                            class="bg-white p-5 rounded border border-slate-200 shadow-sm"
+                        >
+                            <h3
+                                class="text-xs font-black text-slate-900 uppercase tracking-wider mb-4"
+                            >
+                                Availability
+                            </h3>
+                            <div class="space-y-2">
+                                <label
+                                    class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        :checked="selectedAvailability.length === 0"
+                                        @change="selectedAvailability = []; triggerSearch()"
+                                        class="rounded border-slate-350 text-[#00a651] focus:ring-[#00a651] w-4 h-4 cursor-pointer"
+                                    />
+                                    <span>All</span>
+                                </label>
+                                <label
+                                    class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value="in_stock"
+                                        :checked="selectedAvailability.includes('in_stock')"
+                                        @change="toggleAvailability('in_stock')"
+                                        class="rounded border-slate-350 text-[#00a651] focus:ring-[#00a651] w-4 h-4 cursor-pointer"
+                                    />
+                                    <span>In Stock</span>
+                                </label>
+                                <label
+                                    class="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value="out_of_stock"
+                                        :checked="selectedAvailability.includes('out_of_stock')"
+                                        @change="toggleAvailability('out_of_stock')"
+                                        class="rounded border-slate-350 text-[#00a651] focus:ring-[#00a651] w-4 h-4 cursor-pointer"
+                                    />
+                                    <span>Out of Stock</span>
+                                </label>
+                            </div>
+                        </div>
+
                         <!-- Brand Filter Block -->
                         <div
                             v-if="brands?.length"
-                            class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm"
+                            class="bg-white p-5 rounded border border-slate-200 shadow-sm"
                         >
                             <h3
-                                class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4"
+                                class="text-xs font-black text-slate-900 uppercase tracking-wider mb-4"
                             >
-                                Manufacturers
+                                Brands
                             </h3>
-                            <div class="flex flex-wrap gap-1.5">
+                            <div class="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto pr-1">
                                 <button
                                     v-for="brand in brands"
                                     :key="brand.id"
                                     @click="toggleBrand(brand.slug)"
-                                    class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all"
+                                    class="px-2.5 py-1.5 rounded text-[10px] font-bold border transition-all cursor-pointer"
                                     :class="
                                         selectedBrands.includes(brand.slug)
-                                            ? 'bg-slate-900 border-slate-900 text-white shadow-sm'
-                                            : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900'
+                                            ? 'bg-[#00a651] border-[#00a651] text-white shadow-sm'
+                                            : 'bg-white border-slate-200 text-slate-600 hover:border-[#00a651] hover:text-[#00a651]'
                                     "
                                 >
                                     {{ brand.name }}
@@ -208,9 +245,9 @@
                         <!-- Reset Master Switch -->
                         <button
                             @click="resetFilters"
-                            class="w-full py-3 bg-white border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98] transition-all shadow-sm"
+                            class="w-full py-2.5 bg-white border border-slate-200 text-slate-700 rounded text-xs font-extrabold hover:bg-slate-50 hover:text-slate-900 active:scale-[0.98] transition-all shadow-sm cursor-pointer"
                         >
-                            Reset System Filters
+                            Reset Filters
                         </button>
                     </div>
 
@@ -220,7 +257,7 @@
                             v-if="products.data.length > 0"
                             name="grid-fade"
                             tag="div"
-                            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+                            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
                         >
                             <ProductCard
                                 v-for="product in products.data"
@@ -229,30 +266,29 @@
                             />
                         </transition-group>
 
-                        <!-- Clean Minimal Empty State -->
+                        <!-- Clean Empty State -->
                         <div
                             v-else
-                            class="py-24 text-center bg-white rounded-3xl border border-slate-200/60 shadow-sm px-6"
+                            class="py-24 text-center bg-white rounded border border-slate-200 shadow-sm px-6"
                         >
                             <div
-                                class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-slate-100"
+                                class="w-16 h-16 bg-slate-55 rounded flex items-center justify-center mx-auto mb-6 border border-slate-100"
                             >
                                 <Package class="w-6 h-6 text-slate-400" />
                             </div>
                             <h2
-                                class="text-lg font-semibold text-slate-900 mb-1"
+                                class="text-base font-black text-slate-900 mb-1 uppercase"
                             >
-                                No hardware configurations found
+                                No Products Found
                             </h2>
                             <p
-                                class="text-sm text-slate-500 max-w-xs mx-auto mb-6"
+                                class="text-xs text-slate-500 max-w-xs mx-auto mb-6"
                             >
-                                No matching machine inventory items are
-                                registered in this filtered cluster sector.
+                                No matching inventory items fit your current active search filters.
                             </p>
                             <button
                                 @click="resetFilters"
-                                class="px-5 py-2.5 bg-emerald-600 text-white rounded-xl font-medium text-sm hover:bg-emerald-500 shadow-sm transition-all active:scale-[0.98]"
+                                class="px-5 py-2 bg-[#00a651] text-white rounded font-bold text-xs uppercase hover:bg-[#008541] border-none shadow-sm transition-all cursor-pointer"
                             >
                                 Clear Filters
                             </button>
@@ -261,7 +297,7 @@
                         <!-- Pagination Grid System -->
                         <div
                             v-if="products.last_page > 1"
-                            class="mt-16 flex justify-center items-center gap-1.5"
+                            class="mt-12 flex justify-center items-center gap-1.5"
                         >
                             <Link
                                 v-for="(link, index) in products.links"
@@ -270,13 +306,13 @@
                                 v-html="link.label"
                                 :class="[
                                     link.active
-                                        ? 'bg-slate-900 text-white shadow-sm w-10 h-10 rounded-xl'
-                                        : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 w-10 h-10 rounded-xl',
+                                        ? 'bg-[#00a651] text-white shadow-sm w-9 h-9 rounded'
+                                        : 'bg-white text-slate-650 hover:bg-slate-50 border border-slate-200 w-9 h-9 rounded',
                                     !link.url
                                         ? 'opacity-30 pointer-events-none'
                                         : '',
                                 ]"
-                                class="flex items-center justify-center text-xs font-semibold transition-all"
+                                class="flex items-center justify-center text-xs font-bold transition-all decoration-transparent"
                             >
                             </Link>
                         </div>
@@ -319,6 +355,9 @@ const maxPrice = ref(
     props.filters.max_price ? parseInt(props.filters.max_price) : 5000000,
 );
 const sortBy = ref(props.filters.sort || "Latest Arrival");
+const selectedAvailability = ref(
+    props.filters.availability ? props.filters.availability.split(",") : [],
+);
 
 const activeCategoryName = computed(() => {
     if (props.filters.sub_category) {
@@ -333,7 +372,7 @@ const activeCategoryName = computed(() => {
     if (selectedCategories.value.length > 1) {
         return "Multi-Sector";
     }
-    return "All Hardware";
+    return "All Products";
 });
 
 const toggleCategory = (slug) => {
@@ -350,6 +389,13 @@ const toggleBrand = (slug) => {
     triggerSearch();
 };
 
+const toggleAvailability = (val) => {
+    const idx = selectedAvailability.value.indexOf(val);
+    if (idx > -1) selectedAvailability.value.splice(idx, 1);
+    else selectedAvailability.value.push(val);
+    triggerSearch();
+};
+
 const triggerSearch = () => {
     router.get(
         "/shop",
@@ -359,6 +405,7 @@ const triggerSearch = () => {
             min_price: minPrice.value,
             max_price: maxPrice.value,
             sort: sortBy.value,
+            availability: selectedAvailability.value.join(","),
             sub_category:
                 selectedCategories.value.length === 0
                     ? props.filters.sub_category
@@ -382,6 +429,7 @@ const resetFilters = () => {
     minPrice.value = 0;
     maxPrice.value = 5000000;
     sortBy.value = "Latest Arrival";
+    selectedAvailability.value = [];
     router.get("/shop");
 };
 </script>

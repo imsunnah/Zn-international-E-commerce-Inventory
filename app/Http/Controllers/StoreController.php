@@ -83,6 +83,20 @@ class StoreController extends Controller
             });
         }
 
+        if ($request->has('availability') && $request->availability) {
+            $availabilities = explode(',', $request->availability);
+            if (!in_array('all', $availabilities)) {
+                $query->where(function ($q) use ($availabilities) {
+                    if (in_array('in_stock', $availabilities)) {
+                        $q->orWhere('stock', '>', 0);
+                    }
+                    if (in_array('out_of_stock', $availabilities)) {
+                        $q->orWhere('stock', '<=', 0);
+                    }
+                });
+            }
+        }
+
         if ($request->has('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('name_en', 'like', '%' . $request->search . '%')
@@ -119,7 +133,7 @@ class StoreController extends Controller
         return Inertia::render('Shop', [
             'products' => $products,
             'brands' => $brands,
-            'filters' => $request->only(['category', 'sub_category', 'subcategory', 'search', 'min_price', 'max_price', 'sort', 'brand'])
+            'filters' => $request->only(['category', 'sub_category', 'subcategory', 'search', 'min_price', 'max_price', 'sort', 'brand', 'availability'])
         ]);
     }
 

@@ -1,14 +1,14 @@
 <template>
     <div
-        class="group bg-white rounded-2xl border border-slate-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full relative overflow-hidden w-full"
+        class="group bg-white rounded border border-slate-200 hover:shadow-md transition-all duration-300 flex flex-col h-full relative overflow-hidden w-full p-4 font-sans"
     >
-        <!-- Badges -->
+        <!-- Badges / Discount -->
         <div
-            class="absolute top-3 left-3 z-20 flex flex-col gap-1.5 pointer-events-none"
+            v-if="product.discount_type"
+            class="absolute top-2 left-2 z-20 pointer-events-none"
         >
             <span
-                v-if="product.discount_type"
-                class="px-2.5 py-1 bg-[#6e2582] text-white text-[10px] font-black uppercase tracking-wider rounded-lg shadow-md"
+                class="px-2 py-0.5 bg-[#ef4823] text-white text-[9px] font-black uppercase rounded shadow-sm"
             >
                 {{
                     product.discount_type === "percentage"
@@ -16,26 +16,11 @@
                         : `Save: ৳${parseFloat(product.discount_value).toLocaleString()}`
                 }}
             </span>
-            <span
-                v-if="product.stock <= 0"
-                class="px-2.5 py-1 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider rounded-lg"
-            >
-                Sold Out
-            </span>
         </div>
 
-        <!-- Quick Action / Quick View -->
-        <button
-            @click.stop="$emit('quickView', product)"
-            class="absolute top-3 right-3 z-20 w-9 h-9 bg-white/90 backdrop-blur rounded-xl flex items-center justify-center text-slate-700 hover:text-white hover:bg-emerald-600 shadow-sm border border-slate-100 md:opacity-0 md:translate-y-[-4px] group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-            title="Quick View"
-        >
-            <Scan class="w-4 h-4" />
-        </button>
-
-        <!-- Image Area: Complete Bleed No Space -->
+        <!-- Image Area -->
         <div
-            class="relative w-full aspect-square overflow-hidden bg-slate-50 shrink-0"
+            class="relative w-full aspect-square overflow-hidden bg-white shrink-0 mb-3 flex items-center justify-center"
         >
             <Link
                 :href="`/products/${product.slug}`"
@@ -46,58 +31,58 @@
                         product.image ||
                         `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(product.name)}`
                     "
-                    class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-out"
                     :alt="product.name"
                 />
             </Link>
         </div>
 
-        <!-- Simplified Content Block -->
-        <div class="p-4 flex flex-grow flex-col justify-between">
-            <div>
-                <!-- Clean Title Focused Area -->
-                <Link :href="`/products/${product.slug}`" class="block mb-2">
+        <!-- Product Details -->
+        <div class="flex-grow flex flex-col justify-between">
+            <div class="space-y-1.5">
+                <!-- Stock Status / Availability tag (Paragon Style) -->
+                <div class="flex items-center gap-1.5 text-[11px] font-bold">
+                    <span
+                        :class="product.stock > 0 ? 'text-[#00a651]' : 'text-slate-400'"
+                    >
+                        ● {{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
+                    </span>
+                </div>
+
+                <!-- Product Name -->
+                <Link :href="`/products/${product.slug}`" class="block">
                     <h3
-                        class="text-sm md:text-base font-bold text-slate-800 leading-snug hover:text-emerald-600 transition-colors line-clamp-2 tracking-tight"
+                        class="text-xs md:text-sm font-bold text-slate-800 hover:text-[#00a651] transition-colors leading-snug line-clamp-2 h-9 tracking-tight"
                     >
                         {{ product.name }}
                     </h3>
                 </Link>
 
-                <!-- Price Panel -->
-                <div class="flex items-baseline gap-2 mb-4">
+                <!-- Clean Pricing Section -->
+                <div class="flex items-baseline gap-2 py-1">
                     <span
-                        class="text-base md:text-lg font-black text-[#ef4823] tracking-tight"
+                        class="text-sm md:text-base font-extrabold text-[#ef4823]"
                     >
-                        ৳{{ finalPrice.toLocaleString() }}
+                        {{ finalPrice.toLocaleString() }}৳
                     </span>
                     <span
                         v-if="product.discount_type"
-                        class="text-xs text-slate-400 line-through font-medium"
+                        class="text-xs text-slate-400 line-through font-normal"
                     >
-                        ৳{{ parseFloat(product.price).toLocaleString() }}
+                        {{ parseFloat(product.price).toLocaleString() }}৳
                     </span>
                 </div>
             </div>
 
-            <!-- Actions Layer -->
-            <div class="flex gap-2 w-full mt-auto">
+            <!-- Bottom Add to Cart Button (Paragon Style) -->
+            <div class="pt-3 mt-auto">
                 <button
                     @click.stop="handleAddToCart"
                     :disabled="product.stock <= 0"
-                    class="w-11 h-11 bg-slate-50 text-slate-600 rounded-xl hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-center disabled:opacity-40 border border-slate-200/60 shrink-0"
-                    title="Add to Cart"
+                    class="w-full py-2 bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white font-bold text-xs uppercase transition-all tracking-wider rounded select-none cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                    <ShoppingCart class="w-4 h-4" />
-                </button>
-                <button
-                    @click.stop="handleBuyNow"
-                    :disabled="product.stock <= 0"
-                    class="flex-1 h-11 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors flex items-center justify-center gap-1.5 text-xs font-black uppercase tracking-wider disabled:bg-slate-200 disabled:text-slate-400"
-                >
-                    <span>{{
-                        product.stock > 0 ? "Buy Now" : "Out of Stock"
-                    }}</span>
+                    <ShoppingCart class="w-3.5 h-3.5" />
+                    <span>{{ product.stock > 0 ? "Add to Cart" : "Out of Stock" }}</span>
                 </button>
             </div>
         </div>
@@ -107,7 +92,7 @@
 <script setup>
 import { computed } from "vue";
 import { Link, router } from "@inertiajs/vue3";
-import { ShoppingCart, Scan } from "lucide-vue-next";
+import { ShoppingCart } from "lucide-vue-next";
 import { useCart } from "@/Composables/useCart";
 
 const props = defineProps({
@@ -131,10 +116,5 @@ const finalPrice = computed(() => {
 
 const handleAddToCart = () => {
     addToCart(props.product, 1);
-};
-
-const handleBuyNow = () => {
-    addToCart(props.product, 1);
-    router.visit("/checkout");
 };
 </script>
