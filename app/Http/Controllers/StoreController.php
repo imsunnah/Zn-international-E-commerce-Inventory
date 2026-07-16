@@ -18,20 +18,20 @@ class StoreController extends Controller
 {
     public function home()
     {
-        $topSelling = Product::with(['category', 'brand'])->where('is_active', true)->inRandomOrder()->take(8)->get();
-        $latestProducts = Product::with(['category', 'brand'])->where('is_active', true)->latest()->take(10)->get();
+        $topSelling = Product::with(['category', 'brand'])->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->take(5)->get();
+        $latestProducts = Product::with(['category', 'brand'])->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->latest()->take(10)->get();
         $discountedProducts = Product::with(['category', 'brand'])->where('is_active', true)->whereNotNull('discount_type')->latest()->take(10)->get();
         $combos = \App\Models\Combo::with('products')->where('is_active', true)->latest()->take(6)->get();
-        $featuredCategories = Category::withCount('products')->orderBy('products_count', 'desc')->take(8)->get();
+        $featuredCategories = Category::withCount('products')->orderByRaw('serial IS NULL, serial ASC')->take(5)->get();
         $brands = \App\Models\Brand::where('is_active', true)->take(12)->get();
         $reviews = Review::where('is_active', true)->latest()->take(9)->get();
         $notice = Notice::where('is_active', true)->latest()->take(9)->get();
 
         $categorySections = Category::with([
             'products' => function ($query) {
-                $query->where('is_active', true)->take(8);
+                $query->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->take(8);
             }
-        ])->has('products', '>', 0)->get();
+        ])->has('products', '>', 0)->orderByRaw('serial IS NULL, serial ASC')->get();
 
         return Inertia::render('Home', [
             'topSelling'         => $topSelling,
@@ -111,13 +111,18 @@ class StoreController extends Controller
             } elseif ($request->sort === 'Price: High to Low') {
                 $query->orderBy('price', 'desc');
             } else {
-                $query->latest();
+                $query->orderByRaw('serial IS NULL, serial ASC')->latest();
             }
         } else {
-            $query->latest();
+            $query->orderByRaw('serial IS NULL, serial ASC')->latest();
         }
 
         $products = $query->paginate(12)->withQueryString();
+        
+        $fallbackProducts = [];
+        if ($products->count() === 0) {
+            $fallbackProducts = Product::where('is_active', true)->inRandomOrder()->take(8)->get();
+        }
 
         $brandsQuery = \App\Models\Brand::where('is_active', true)->orderBy(app()->getLocale() === 'bn' ? 'name_bn' : 'name_en', 'asc');
         if ($request->has('category') && $request->category) {
@@ -132,6 +137,7 @@ class StoreController extends Controller
 
         return Inertia::render('Shop', [
             'products' => $products,
+            'fallbackProducts' => $fallbackProducts,
             'brands' => $brands,
             'filters' => $request->only(['category', 'sub_category', 'subcategory', 'search', 'min_price', 'max_price', 'sort', 'brand', 'availability'])
         ]);

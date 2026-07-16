@@ -2,8 +2,8 @@
     <StoreLayout>
 
         <section class="bg-slate-50 py-5 md:py-7 border-b border-slate-100">
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
-                <div class="grid lg:grid-cols-3 gap-4">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
+                <div class="grid lg:grid-cols-3 gap-2">
                     <!-- Main Slider -->
                     <div
                         class="lg:col-span-2 relative h-[220px] sm:h-[300px] md:h-[380px] lg:h-[420px] overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 border border-emerald-900 group shadow-sm"
@@ -186,7 +186,7 @@
             v-if="noticeItems.length"
             class="bg-slate-50 py-3 overflow-hidden border-b border-slate-100"
         >
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="flex items-center">
                     <div class="relative flex-1 overflow-hidden">
                         <div class="marquee-track">
@@ -228,7 +228,7 @@
              FEATURED CATEGORIES (compact icons)
         ═══════════════════════════════════════════ -->
         <section class="py-10 bg-white border-b border-slate-100">
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-black text-slate-950 tracking-tight">
                         Featured <span class="text-[#00a651] italic">Categories</span>
@@ -275,7 +275,7 @@
              FEATURED PRODUCTS (first section — top selling)
         ═══════════════════════════════════════════ -->
         <section class="py-10 bg-[#00a651]/5 border-b border-slate-100">
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-black text-slate-950 tracking-tight">
                         Featured <span class="text-[#00a651] italic">Products</span>
@@ -337,7 +337,7 @@
             :class="sIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'"
             class="py-10 border-b border-slate-100"
         >
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-black text-slate-950 tracking-tight">
                         {{ section.name.split(' ').slice(0, -1).join(' ') || section.name }}
@@ -385,7 +385,7 @@
             v-if="combos?.length"
             class="py-10 bg-slate-50 border-b border-slate-100"
         >
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-black text-slate-950 tracking-tight">
                         Combo <span class="text-[#00a651] italic">Deals</span>
@@ -421,7 +421,7 @@
             v-if="brands?.length"
             class="py-10 bg-white border-b border-slate-100"
         >
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="flex items-center justify-between mb-7">
                     <div class="flex-1 text-center">
                         <h2 class="text-2xl font-black text-slate-950 tracking-tight">
@@ -472,7 +472,7 @@
              NEW PRODUCTS
         ═══════════════════════════════════════════ -->
         <section v-if="latestProducts.length" class="py-10 bg-white border-b border-slate-100">
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-black text-slate-950 tracking-tight">
                         New <span class="text-[#00a651] italic">Products</span>
@@ -519,7 +519,7 @@
              SEO / TRUST CONTENT
         ═══════════════════════════════════════════ -->
         <section class="py-10 bg-slate-50 border-t border-slate-100">
-            <div class="max-w-[1100px] mx-auto px-4 md:px-8 xl:px-12 space-y-6">
+            <div class="max-w-[1200px] mx-auto px-4 md:px-8 xl:px-12 space-y-6">
                 <h2 class="text-xl font-bold text-slate-900 border-l-4 border-[#00a651] pl-3 leading-none uppercase">
                     ZN International — Computer, Printer, Scanner &amp; IT Solutions
                 </h2>

@@ -80,6 +80,11 @@
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Display Serial</label>
+                                <input v-model="form.serial" type="number" placeholder="e.g. 1" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
+                                <p v-if="form.errors.serial" class="mt-1 text-xs text-red-500">{{ form.errors.serial }}</p>
+                            </div>
+                            <div>
                                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Stock Amount</label>
                                 <input v-model="form.stock" type="number" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
                                 <p v-if="form.errors.stock" class="mt-1 text-xs text-red-500">{{ form.errors.stock }}</p>
@@ -233,6 +238,7 @@ const form = useForm({
     remarks: '',
     size: '',
     weight: '',
+    serial: null,
 });
 
 const mainPreview = ref(null);

@@ -33,6 +33,7 @@ class CategoryController extends Controller
             'description_en' => 'nullable|string',
             'description_bn' => 'nullable|string',
             'is_active' => 'boolean',
+            'serial' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -63,6 +64,7 @@ class CategoryController extends Controller
             'description_en' => 'nullable|string',
             'description_bn' => 'nullable|string',
             'is_active' => 'boolean',
+            'serial' => 'nullable|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 

@@ -59,6 +59,7 @@
                         <li v-for="item in [
                             { href: '/admin/products', icon: Package, label: 'Products' },
                             { href: '/admin/combos', icon: Zap, label: 'Combos' },
+                            { href: '/admin/pc-builder-categories', icon: Monitor, label: 'PC Builder' },
                             { href: '/admin/categories', icon: Tags, label: 'Categories' },
                             { href: '/admin/subcategories', icon: ListTree, label: 'Subcategories' },
                             { href: '/admin/brands', icon: Award, label: 'Brands' }
@@ -228,7 +229,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
-import { LayoutDashboard, ShoppingCart, Package, Tags, LogOut, Search, ExternalLink, ListTree, Users, Settings, Menu, Zap, Star, Image, FileText, Award, MessageSquare, Truck, ShieldCheck, Key, Bell, Percent } from 'lucide-vue-next';
+import { LayoutDashboard, ShoppingCart, Package, Tags, LogOut, Search, ExternalLink, ListTree, Users, Settings, Menu, Zap, Star, Image, FileText, Award, MessageSquare, Truck, ShieldCheck, Key, Bell, Percent, Monitor } from 'lucide-vue-next';
 
 const isSidebarOpen = ref(false);
 const isProfileOpen = ref(false);

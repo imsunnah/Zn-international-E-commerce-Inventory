@@ -294,6 +294,21 @@
                             </button>
                         </div>
 
+                        <!-- Fallback / Recommended Products -->
+                        <div v-if="fallbackProducts?.length > 0 && products.data.length === 0" class="mt-12">
+                            <h3 class="text-lg font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-[#ef4823]"></span>
+                                Recommended For You
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                <ProductCard
+                                    v-for="product in fallbackProducts"
+                                    :key="product.id"
+                                    :product="product"
+                                />
+                            </div>
+                        </div>
+
                         <!-- Pagination Grid System -->
                         <div
                             v-if="products.last_page > 1"
@@ -337,6 +352,7 @@ import {
 
 const props = defineProps({
     products: Object,
+    fallbackProducts: Array,
     filters: Object,
     categories: Array,
     brands: Array,
@@ -406,6 +422,7 @@ const triggerSearch = () => {
             max_price: maxPrice.value,
             sort: sortBy.value,
             availability: selectedAvailability.value.join(","),
+            search: props.filters.search || null,
             sub_category:
                 selectedCategories.value.length === 0
                     ? props.filters.sub_category
@@ -418,10 +435,16 @@ const triggerSearch = () => {
     );
 };
 
+let priceTimeout;
+const handlePriceChange = () => {
+    clearTimeout(priceTimeout);
+    priceTimeout = setTimeout(() => {
+        triggerSearch();
+    }, 800);
+};
+
 watch(sortBy, triggerSearch);
-watch([minPrice, maxPrice], () => {
-    triggerSearch();
-});
+watch([minPrice, maxPrice], handlePriceChange);
 
 const resetFilters = () => {
     selectedCategories.value = [];

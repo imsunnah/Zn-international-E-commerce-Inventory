@@ -24,8 +24,12 @@
         >
             <Link
                 :href="`/products/${product.slug}`"
-                class="block w-full h-full"
+                class="block w-full h-full relative"
             >
+                <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/40 backdrop-blur-[2px] flex items-center justify-center pointer-events-none">
+                    <span class="px-3 py-1 bg-slate-800 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">Out of Stock</span>
+                </div>
+                
                 <img
                     :src="
                         product.image ||

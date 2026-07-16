@@ -55,9 +55,10 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr
-                            class="bg-slate-50 text-xs font-semibold text-slate-600 border-b border-slate-200>"
+                            class="bg-slate-50 text-xs font-semibold text-slate-600 border-b border-slate-200"
                         >
                             <th class="py-4 px-6 text-center w-20">ID</th>
+                            <th class="py-4 px-6 text-center w-20">Serial</th>
                             <th class="py-4 px-6 w-20">Visual</th>
                             <th class="py-4 px-6">Designation</th>
                             <th class="py-4 px-6 text-center">Sub/Brands</th>
@@ -75,6 +76,9 @@
                                 class="py-4 px-6 text-center text-sm font-mono text-slate-400"
                             >
                                 #{{ String(category.id).padStart(3, "0") }}
+                            </td>
+                            <td class="py-4 px-6 text-center font-bold text-slate-800">
+                                {{ category.serial !== null ? category.serial : '--' }}
                             </td>
                             <td class="py-4 px-6">
                                 <div

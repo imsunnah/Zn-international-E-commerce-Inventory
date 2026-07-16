@@ -27,6 +27,7 @@ class Product extends Model
         'brand_id',
         'size',
         'weight',
+        'serial',
     ];
 
     protected $casts = [

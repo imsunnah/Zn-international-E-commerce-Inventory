@@ -32,10 +32,12 @@ class Order extends Model
         'courier_consignment_id',
         'courier_status',
         'courier_response',
+        'pc_build_data',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'pc_build_data' => 'array',
     ];
 
     public static function generateUniqueId()

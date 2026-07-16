@@ -127,6 +127,43 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- PC Build Configuration -->
+                <div v-if="order.pc_build_data" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div class="flex items-center space-x-3">
+                            <Cpu class="w-5 h-5 text-[#00a651]" />
+                            <h2 class="font-black text-[#003366] uppercase tracking-wider text-sm">{{ $t('PC Build Configuration') }}</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-black text-slate-400 uppercase">{{ $t('Total Wattage:') }}</span>
+                            <span class="px-2.5 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-black font-mono shadow-sm">
+                                {{ order.pc_build_data.total_wattage }}W
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead>
+                                <tr class="bg-slate-50 text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-150">
+                                    <th class="py-3 px-4 font-black">{{ $t('Component Category') }}</th>
+                                    <th class="py-3 px-4 font-black">{{ $t('Selected Product') }}</th>
+                                    <th class="py-3 px-4 text-center font-black">{{ $t('Wattage') }}</th>
+                                    <th class="py-3 px-4 text-right font-black">{{ $t('Price') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr v-for="comp in order.pc_build_data.components" :key="comp.product_id" class="hover:bg-slate-50/50 transition-colors">
+                                    <td class="py-3 px-4 font-black uppercase text-[#003366] tracking-tight">{{ comp.category_name }}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-800 uppercase">{{ comp.product_name }}</td>
+                                    <td class="py-3 px-4 text-center font-mono font-bold">{{ comp.wattage ? comp.wattage + 'W' : '-' }}</td>
+                                    <td class="py-3 px-4 text-right font-black text-slate-900 border-r-0">৳{{ parseFloat(comp.price).toLocaleString() }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Side: Status & Customer -->
@@ -372,7 +409,8 @@ import {
     MessageSquare,
     Send,
     Code2,
-    X
+    X,
+    Cpu
 } from 'lucide-vue-next';
 
 const props = defineProps({

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\Store\PcBuilderStoreController;
 use Inertia\Inertia;
 use App\Http\Controllers\LanguageController;
 
@@ -98,6 +99,12 @@ Route::get('/reviews', [StoreController::class, 'reviewsPage'])->name('reviews')
 Route::get('/products/{product:slug}', [StoreController::class, 'product'])->name('product.show');
 Route::post('/products/{product:slug}/reviews', [StoreController::class, 'storeProductReview'])->name('product.reviews.store');
 Route::get('/combos/{combo:slug}', [StoreController::class, 'combo'])->name('combo.show');
+
+// PC Builder Routes
+Route::get('/pc-builder', [PcBuilderStoreController::class, 'index'])->name('pc-builder');
+Route::get('/api/pc-builder/category/{category}/products', [PcBuilderStoreController::class, 'categoryProducts']);
+Route::post('/pc-builder/checkout', [PcBuilderStoreController::class, 'checkout'])->name('pc-builder.checkout');
+
 Route::get('/cart', function () {
     return Inertia::render('Cart');
 })->name('cart');
@@ -294,4 +301,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/api/chat/threads/{user}/messages', [\App\Http\Controllers\Admin\AdminChatController::class, 'getMessages'])->name('chat.messages');
     Route::post('/api/chat/threads/{user}/messages', [\App\Http\Controllers\Admin\AdminChatController::class, 'sendMessage'])->name('chat.send');
     Route::post('/steadfast-webhook', [\App\Http\Controllers\Admin\SteadFastWebhookController::class, 'handleSteadFastWebhook'])->name('courier.webhook');
+
+    // PC Builder Admin Routes
+    Route::resource('pc-builder-categories', \App\Http\Controllers\Admin\PcBuilderCategoryController::class)->except(['show', 'edit', 'create']);
+    Route::get('/pc-builder-categories/{category}/products', [\App\Http\Controllers\Admin\PcBuilderCategoryController::class, 'products'])->name('pc-builder-categories.products');
+    Route::post('/pc-builder-categories/{category}/products', [\App\Http\Controllers\Admin\PcBuilderCategoryController::class, 'addProduct'])->name('pc-builder-categories.add-product');
+    Route::delete('/pc-builder-categories/{category}/products/{product}', [\App\Http\Controllers\Admin\PcBuilderCategoryController::class, 'removeProduct'])->name('pc-builder-categories.remove-product');
 });

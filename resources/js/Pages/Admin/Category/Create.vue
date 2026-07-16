@@ -26,6 +26,14 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Display Serial (Order)</label>
+                        <input v-model="form.serial" type="number" placeholder="e.g. 1" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
+                        <p v-if="form.errors.serial" class="mt-2 text-xs text-red-500 font-bold">{{ form.errors.serial }}</p>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Category Image</label>
                     <div class="mt-2 flex items-center space-x-6">
@@ -82,6 +90,7 @@ const form = useForm({
     description_en: '',
     description_bn: '',
     is_active: true,
+    serial: null,
     image: null,
 });
 

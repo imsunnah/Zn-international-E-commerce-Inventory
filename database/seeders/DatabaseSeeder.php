@@ -90,6 +90,7 @@ class DatabaseSeeder extends Seeder
             StoreSeeder::class,
             PageSeeder::class,
             ProductSeeder::class,
+            PcBuilderSeeder::class,
         ]);
     }
 }

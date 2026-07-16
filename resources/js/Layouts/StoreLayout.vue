@@ -1,246 +1,240 @@
 <template>
     <div class="min-h-screen flex flex-col font-sans bg-slate-50 text-slate-900">
-        <header class="bg-white sticky top-0 z-50 shadow-sm border-t-4 border-[#00a651]">
-            <div class="max-w-[1100px] mx-auto w-full px-4 sm:px-6 py-3 flex items-center justify-between gap-4 md:gap-6 bg-white">
-                <Link href="/" class="flex items-center flex-shrink-0 gap-2 group decoration-none">
-                    <img
-                        v-if="siteLogo"
-                        :src="siteLogo"
-                        :alt="siteName"
-                        class="h-8 md:h-9 w-auto object-contain transition-transform group-hover:scale-105 duration-300"
-                    />
-                    <div v-else class="flex items-center">
-                        <div class="w-8 h-8 bg-[#00a651] rounded-full flex items-center justify-center text-white font-black text-xl shadow-sm mr-1.5 select-none transition-transform group-hover:scale-105 duration-300">
-                            P
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-base font-black text-[#00a651] tracking-tight leading-none uppercase font-sans">
-                                Paragon
-                            </span>
-                            <span class="text-[8px] font-bold text-[#00a651] tracking-wider leading-none uppercase mt-0.5">
-                                Computer
-                            </span>
-                        </div>
-                    </div>
-                </Link>
-
-                <div class="hidden md:flex flex-grow max-w-md relative group/search">
-                    <div class="flex w-full items-center border border-slate-200 focus-within:border-[#00a651] rounded bg-slate-50 transition-colors overflow-hidden">
-                        <input
-                            v-model="searchQuery"
-                            type="text"
-                            placeholder="Search products, brands, categories..."
-                            class="w-full pl-3 pr-10 py-2 bg-transparent text-slate-800 focus:outline-none border-none text-xs font-medium placeholder:text-slate-400"
-                            @keyup.enter="handleSearch"
-                        />
-                        <button
-                            @click="handleSearch"
-                            class="bg-[#00a651] text-white px-4 py-2.5 flex items-center justify-center hover:bg-[#008541] transition-all cursor-pointer border-none self-stretch"
-                        >
-                            <Search class="w-3.5 h-3.5" />
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 flex-shrink-0">
-                    <button
-                        @click="isMobileSearchOpen = !isMobileSearchOpen"
-                        class="md:hidden p-2 text-[#00a651] hover:bg-[#e6f6ee] rounded transition-colors border border-slate-200"
-                    >
-                        <Search class="w-4 h-4" />
-                    </button>
-
-                    <Link
-                        href="/shop?category=printer"
-                        class="hidden sm:flex items-center px-2.5 py-1.5 bg-transparent text-[#00a651] border border-[#00a651] rounded font-bold text-[10px] uppercase cursor-pointer hover:bg-[#00a651] hover:text-white transition-all select-none decoration-none"
-                    >
-                        Printers
-                    </Link>
-
-                    <Link
-                        href="/shop?category=brand-pc"
-                        class="hidden sm:flex items-center px-2.5 py-1.5 bg-[#00a651] text-white border border-[#00a651] rounded font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] hover:border-[#008541] transition-all select-none decoration-none"
-                    >
-                        Desktops
-                    </Link>
-
-                    <Link
-                        v-if="currentUser"
-                        :href="accountHref"
-                        class="flex items-center gap-1.5 px-2.5 py-1.5 text-slate-700 bg-white border border-slate-200 rounded transition-colors hover:bg-slate-50 font-bold text-[10px] decoration-none"
-                    >
-                        <User class="w-3.5 h-3.5 text-[#00a651]" />
-                        <span class="hidden lg:inline truncate max-w-[80px]">
-                            {{ currentUser.name }}
-                        </span>
-                    </Link>
-                    <button
-                        v-else
-                        @click="openAuthModal('login')"
-                        class="flex items-center px-3 py-1.5 bg-[#ef4823] text-white rounded font-bold text-[10px] uppercase cursor-pointer hover:bg-[#d63d1a] border-none transition-all select-none"
-                    >
-                        Login
-                    </button>
-
-                    <button
-                        @click="isCartOpen = true"
-                        class="flex items-center gap-1.5 px-3 py-1.5 bg-[#ef4823] text-white rounded font-bold text-[10px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none group/cart"
-                    >
-                        <span>৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
-                        <ShoppingBag class="w-3.5 h-3.5" />
-                        <span class="bg-white text-[#ef4823] px-1 rounded-sm text-[9px] font-black min-w-[14px] text-center">
-                            {{ cartCount }}
-                        </span>
-                    </button>
-
-                    <button
-                        @click="isMobileMenuOpen = true"
-                        class="md:hidden p-2 bg-white border border-slate-200 text-slate-600 rounded hover:text-[#00a651] hover:bg-[#e6f6ee] transition-colors"
-                    >
-                        <Menu class="w-4 h-4" />
-                    </button>
-                </div>
+  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm border-t-4 border-[#00a651] transition-all">
+    <div class="max-w-[1200px] mx-auto w-full px-4 sm:px-6 h-16 flex items-center justify-between gap-4 bg-transparent">
+        
+        <!-- Logo Section -->
+        <Link href="/" class="flex items-center flex-shrink-0 gap-2 group decoration-none">
+            <img
+                v-if="siteLogo"
+                :src="siteLogo"
+                :alt="siteName"
+                class="h-8 md:h-9 w-auto object-contain transition-transform group-hover:scale-105 duration-300"
+            />
+            <div class="w-9 h-9 bg-[#ef4823] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md transition-all group-hover:scale-105 group-hover:rotate-3 duration-300 select-none">
+                Z
             </div>
+            <div class="flex flex-col justify-center">
+                <span class="text-base font-black text-[#ef4823] tracking-tight leading-none uppercase font-sans">
+                    ZN
+                </span>
+                <span class="text-[8px] font-bold text-slate-400 tracking-widest leading-none uppercase mt-1 transition-colors group-hover:text-[#ef4823]">
+                    International
+                </span>
+            </div>
+        </Link>
 
-            <Transition v-bind="fadeSlideTransition">
-                <div
-                    v-if="isMobileSearchOpen"
-                    class="md:hidden px-4 pb-4 bg-white border-t border-slate-100"
+        <!-- Desktop Search Bar -->
+        <div class="hidden md:flex flex-grow max-w-md relative group/search">
+            <div class="flex w-full items-center border border-slate-200 focus-within:border-[#00a651] focus-within:ring-2 focus-within:ring-[#00a651]/10 rounded-lg bg-slate-50/50 transition-all overflow-hidden">
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Search products, brands, categories..."
+                    class="w-full pl-3 pr-4 py-2 bg-transparent text-slate-800 focus:outline-none border-none text-xs font-medium placeholder:text-slate-400"
+                    @keyup.enter="handleSearch"
+                />
+                <button
+                    @click="handleSearch"
+                    class="bg-[#00a651] text-white px-4 py-2.5 flex items-center justify-center hover:bg-[#008541] transition-all cursor-pointer border-none self-stretch"
                 >
-                    <div class="relative mt-2">
-                        <input
-                            v-model="searchQuery"
-                            type="text"
-                            placeholder="Search for items..."
-                            class="w-full pl-4 pr-12 py-2.5 bg-slate-100 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#00a651]/20 focus:border-[#00a651] transition-all outline-none text-xs font-medium"
-                            @keyup.enter="
-                                handleSearch();
-                                isMobileSearchOpen = false;
-                            "
-                        />
-                        <button
-                            @click="
-                                handleSearch();
-                                isMobileSearchOpen = false;
-                            "
-                            class="absolute right-1.5 top-1.5 w-8 h-8 bg-[#00a651] text-white rounded flex items-center justify-center border-none cursor-pointer"
-                        >
-                            <Search class="w-3.5 h-3.5" />
-                        </button>
-                    </div>
-                </div>
-            </Transition>
+                    <Search class="w-3.5 h-3.5" />
+                </button>
+            </div>
+        </div>
 
-            <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800 shadow-md">
-                <div class="max-w-[1100px] mx-auto flex items-center h-11 px-4">
+        <!-- Right Side Actions Wrapper -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 h-full">
+            <!-- Mobile Search Toggle -->
+            <button
+                @click="isMobileSearchOpen = !isMobileSearchOpen"
+                class="md:hidden p-2 text-[#00a651] bg-slate-50 hover:bg-[#e6f6ee] rounded-lg transition-colors border border-slate-200 cursor-pointer"
+            >
+                <Search class="w-4 h-4" />
+            </button>
+
+            <!-- Quick Links -->
+            <Link
+                href="/shop?category=printer"
+                class="hidden sm:flex items-center px-3 py-2 bg-transparent text-[#00a651] border border-[#00a651] rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#00a651] hover:text-white transition-all select-none decoration-none"
+            >
+                Printers
+            </Link>
+
+            <Link
+                href="/pc-builder"
+                class="hidden sm:flex items-center px-3 py-2 bg-[#00a651] text-white border border-[#00a651] rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] hover:border-[#008541] transition-all select-none decoration-none shadow-sm shadow-[#00a651]/20"
+            >
+                PC Builder
+            </Link>
+
+       
+
+            <!-- Authentication State -->
+            <Link
+                v-if="currentUser"
+                :href="accountHref"
+                class="flex items-center gap-1.5 h-9 px-3 text-slate-700 bg-white border border-slate-200 rounded-lg transition-colors hover:bg-slate-50 font-bold text-[10px] decoration-none"
+            >
+                <User class="w-3.5 h-3.5 text-[#00a651]" />
+                <span class="hidden lg:inline truncate max-w-[80px]">
+                    {{ currentUser.name }}
+                </span>
+            </Link>
+            
+            <button
+                v-else
+                @click="openAuthModal('login')"
+                class="flex items-center h-9 px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-slate-800 border-none transition-all select-none"
+            >
+                Login
+            </button>
+
+            <!-- Mini Cart Dropdown Trigger -->
+            <button
+                @click="isCartOpen = true"
+                class="flex items-center gap-2 h-9 px-3 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
+            >
+                <span>৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
+                <ShoppingBag class="w-3.5 h-3.5 transition-transform group-hover/cart:scale-110" />
+                <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[9px] shadow-sm">
+                    {{ cartCount }}
+                </span>
+            </button>
+
+            <!-- Mobile Hamburger Menu Toggle -->
+            <button
+                @click="isMobileMenuOpen = true"
+                class="md:hidden p-2 bg-white border border-slate-200 text-slate-600 rounded-lg hover:text-[#00a651] hover:bg-[#e6f6ee] transition-colors cursor-pointer"
+            >
+                <Menu class="w-4 h-4" />
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Search Drawer Open State -->
+    <Transition v-bind="fadeSlideTransition">
+        <div
+            v-if="isMobileSearchOpen"
+            class="md:hidden px-4 pb-4 pt-2 bg-white border-t border-slate-100 shadow-inner"
+        >
+            <div class="relative">
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Search for items..."
+                    class="w-full pl-4 pr-12 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#00a651]/20 focus:border-[#00a651] transition-all outline-none text-xs font-medium placeholder:text-slate-400"
+                    @keyup.enter="handleSearch(); isMobileSearchOpen = false;"
+                />
+                <button
+                    @click="handleSearch(); isMobileSearchOpen = false;"
+                    class="absolute right-1.5 top-1.5 w-8 h-8 bg-[#00a651] text-white rounded-lg flex items-center justify-center border-none cursor-pointer hover:bg-[#008541] transition-colors"
+                >
+                    <Search class="w-3.5 h-3.5" />
+                </button>
+            </div>
+        </div>
+    </Transition>
+
+    <!-- Desktop Navigation Layer -->
+    <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
+        <div class="max-w-[1200px] mx-auto flex items-center h-11 px-4">
+            <Link
+                href="/"
+                class="px-4 text-white text-[11px] font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            >
+                Home
+            </Link>
+
+            <button
+                v-if="hasPrevCategories"
+                @click="prevCategories"
+                class="px-2.5 text-white bg-slate-900/50 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer"
+            >
+                <ChevronLeft class="w-4 h-4" />
+            </button>
+
+            <!-- Dynamic Category List Map -->
+            <div class="flex items-center h-full overflow-visible">
+                <div
+                    v-for="category in visibleCategories"
+                    :key="category.id"
+                    class="relative group/category h-full flex"
+                >
                     <Link
-                        href="/"
-                        class="px-3 text-white text-xs font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
+                        :href="`/shop?category=${category.slug}`"
+                        class="px-4 text-white text-[11px] tracking-wider font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
                     >
-                        Home
+                        {{ category.name }}
+                        <ChevronDown
+                            v-if="categoryHasChildren(category)"
+                            class="w-3 h-3 text-slate-400 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
+                        />
                     </Link>
 
-                    <button
-                        v-if="hasPrevCategories"
-                        @click="prevCategories"
-                        class="px-2 text-white bg-slate-900 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer"
+                    <!-- Mega Dropdown Column Tier 1 -->
+                    <div
+                        v-if="categoryHasChildren(category)"
+                        class="absolute left-0 top-full bg-white p-2 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[250px] border border-slate-100 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
                     >
-                        <ChevronLeft class="w-4 h-4" />
-                    </button>
-
-                    <div class="flex items-center h-full">
-                        <div
-                            v-for="category in visibleCategories"
-                            :key="category.id"
-                            class="relative group/category h-full flex"
-                        >
-                            <Link
-                                :href="`/shop?category=${category.slug}`"
-                                class="px-3 text-white text-[11px] tracking-wide font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none"
-                            >
-                                {{ category.name }}
-                                <ChevronDown
-                                    v-if="categoryHasChildren(category)"
-                                    class="w-3 h-3 text-slate-400 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
-                                />
-                            </Link>
-
+                        <template v-if="category.sub_categories?.length">
                             <div
-                                v-if="categoryHasChildren(category)"
-                                class="absolute left-0 top-full bg-white p-1.5 shadow-xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[240px] border border-slate-100 translate-y-2 group-hover/category:translate-y-0 rounded-b"
+                                v-for="sub in category.sub_categories"
+                                :key="sub.id"
+                                class="relative group/sub"
                             >
-                                <template v-if="category.sub_categories?.length">
-                                    <div
-                                        v-for="sub in category.sub_categories"
-                                        :key="sub.id"
-                                        class="relative group/sub"
-                                    >
-                                        <Link
-                                            :href="`/shop?sub_category=${sub.slug}`"
-                                            class="flex items-center justify-between px-3 py-2 hover:bg-slate-50 text-xs font-bold text-slate-700 hover:text-[#00a651] transition-colors decoration-none"
-                                        >
-                                            {{ sub.name }}
-                                            <ChevronRight
-                                                v-if="sub.brands?.length"
-                                                class="w-3 h-3 text-slate-400 group-hover/sub:text-[#00a651] transition-colors"
-                                            />
-                                        </Link>
+                                <Link
+                                    :href="`/shop?sub_category=${sub.slug}`"
+                                    class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-lg text-xs font-bold text-slate-700 hover:text-[#00a651] transition-colors decoration-none"
+                                >
+                                    {{ sub.name }}
+                                    <ChevronRight
+                                        v-if="sub.brands?.length"
+                                        class="w-3 h-3 text-slate-400 group-hover/sub:text-[#00a651] transition-colors"
+                                    />
+                                </Link>
 
-                                        <div
-                                            v-if="sub.brands?.length"
-                                            class="absolute left-[calc(100%-4px)] top-0 bg-white p-1.5 border border-slate-100 shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px] translate-x-2 group-hover/sub:translate-x-0 rounded"
-                                        >
-                                            <Link
-                                                v-for="brand in sub.brands"
-                                                :key="brand.id"
-                                                :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                                class="block px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-[#00a651] hover:bg-slate-50 transition-colors decoration-none"
-                                            >
-                                                {{ brand.name }}
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </template>
-
-                                <template v-else>
+                                <!-- Dropdown Sub-tier Brand Matrix -->
+                                <div
+                                    v-if="sub.brands?.length"
+                                    class="absolute left-[calc(100%-4px)] top-0 bg-white p-2 border border-slate-100 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
+                                >
                                     <Link
-                                        v-for="brand in category.brands"
+                                        v-for="brand in sub.brands"
                                         :key="brand.id"
-                                        :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                                        class="block px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#00a651] hover:bg-slate-50 transition-colors decoration-none"
+                                        :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
+                                        class="block px-3 py-2 text-xs font-semibold text-slate-600 hover:text-[#00a651] hover:bg-slate-50 rounded-md transition-colors decoration-none"
                                     >
                                         {{ brand.name }}
                                     </Link>
-                                </template>
+                                </div>
                             </div>
-                        </div>
+                        </template>
+
+                        <template v-else>
+                            <Link
+                                v-for="brand in category.brands"
+                                :key="brand.id"
+                                :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
+                                class="block px-3 py-2.5 text-xs font-bold text-slate-700 hover:text-[#00a651] hover:bg-slate-50 rounded-lg transition-colors decoration-none"
+                            >
+                                {{ brand.name }}
+                            </Link>
+                        </template>
                     </div>
-
-                    <button
-                        v-if="hasNextCategories"
-                        @click="nextCategories"
-                        class="px-2 text-white bg-slate-900 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer"
-                    >
-                        <ChevronRight class="w-4 h-4" />
-                    </button>
-
-                    <Link
-                        href="/shop"
-                        class="px-3 text-white text-[11px] tracking-wide font-bold hover:bg-[#00a651] transition-colors flex items-center h-full uppercase select-none decoration-none"
-                    >
-                        Brand PC
-                    </Link>
-
-                    <Link
-                        href="/shop?type=combo"
-                        class="ml-auto h-full px-5 flex items-center gap-2 bg-[#ef4823] text-white text-xs font-black uppercase hover:bg-[#d63d1a] transition-all decoration-none"
-                    >
-                        <Zap class="w-3.5 h-3.5 text-white animate-pulse" />
-                        PC BUILDER
-                    </Link>
                 </div>
-            </nav>
-        </header>
+            </div>
+
+            <button
+                v-if="hasNextCategories"
+                @click="nextCategories"
+                class="px-2.5 text-white bg-slate-900/50 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer ml-auto"
+            >
+                <ChevronRight class="w-4 h-4" />
+            </button>
+        </div>
+    </nav>
+</header>
 
         <Transition v-bind="fadeTransition">
             <div
@@ -250,57 +244,65 @@
             ></div>
         </Transition>
 
-        <Transition v-bind="slideTransition">
-            <div
-                v-if="isMobileMenuOpen"
-                class="fixed top-0 right-0 h-full w-[260px] bg-white z-[110] shadow-xl flex flex-col"
+ <Transition v-bind="slideTransition">
+    <div 
+        v-if="isMobileMenuOpen" 
+        class="fixed inset-0 bg-black/20 backdrop-blur-xs z-[105]" 
+        @click="isMobileMenuOpen = false"
+    ></div>
+</Transition>
+
+<Transition v-bind="slideTransition">
+    <div
+        v-if="isMobileMenuOpen"
+        class="fixed top-0 right-0 h-full w-[240px] bg-white z-[110] shadow-2xl flex flex-col border-l border-slate-100"
+    >
+        <div class="px-3 py-2 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h2 class="text-xs font-normal text-[#00a651] uppercase tracking-wider pl-2">Menu</h2>
+            <button
+                @click="isMobileMenuOpen = false"
+                class="p-1 bg-white rounded-md text-slate-400 hover:text-[#00a651] transition-colors border border-slate-200 cursor-pointer"
             >
-                <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider mx-auto text-center">Menu</h2>
-                    <button
-                        @click="isMobileMenuOpen = false"
-                        class="p-1.5 bg-white rounded text-slate-400 hover:text-slate-600 transition-colors border border-slate-200"
-                    >
-                        <X class="w-3.5 h-3.5" />
-                    </button>
-                </div>
+                <X class="w-3.5 h-3.5" />
+            </button>
+        </div>
 
-                <div class="flex-grow overflow-y-auto p-4 space-y-1 custom-scrollbar">
-                    <Link
-                        href="/"
-                        class="flex items-center gap-2.5 px-3 py-2 text-[#00a651] hover:bg-[#e6f6ee] rounded transition-colors text-xs font-semibold decoration-none"
-                        @click="isMobileMenuOpen = false"
-                    >
-                        <Monitor class="w-3.5 h-3.5" /> Home
-                    </Link>
+        <div class="flex-grow overflow-y-auto px-2 py-2 space-y-0.5 custom-scrollbar">
+            <Link
+                href="/"
+                class="flex items-center gap-2 px-3 py-1.5 text-[#00a651] hover:bg-[#e6f6ee] rounded-md transition-colors text-xs font-normal decoration-none"
+                @click="isMobileMenuOpen = false"
+            >
+                <Monitor class="w-3.5 h-3.5" /> Home
+            </Link>
 
-                    <Link
-                        href="/shop?type=combo"
-                        class="flex items-center gap-2.5 px-3 py-2 text-slate-700 hover:text-[#00a651] hover:bg-[#e6f6ee] rounded transition-colors text-xs font-semibold decoration-none"
-                        @click="isMobileMenuOpen = false"
-                    >
-                        <Zap class="w-3.5 h-3.5 text-slate-400" /> PC Builder
-                    </Link>
+            <Link
+                href="/pc-builder"
+                class="flex items-center gap-2 px-3 py-1.5 text-[#00a651] hover:bg-[#e6f6ee] rounded-md transition-colors text-xs font-normal decoration-none"
+                @click="isMobileMenuOpen = false"
+            >
+                <Zap class="w-3.5 h-3.5" /> PC Builder
+            </Link>
 
-                    <div class="pt-4 pb-1 px-3 text-center border-b border-slate-100 mb-2">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Categories
-                        </span>
-                    </div>
-
-                    <Link
-                        v-for="category in allCategories"
-                        :key="category.id"
-                        :href="`/shop?category=${category.slug}`"
-                        class="flex items-center justify-between px-3 py-2 text-slate-600 hover:text-[#00a651] hover:bg-[#e6f6ee] transition-colors rounded text-xs font-normal group decoration-none"
-                        @click="isMobileMenuOpen = false"
-                    >
-                        {{ category.name }}
-                        <ChevronRight class="w-3.5 h-3.5 text-slate-300 group-hover:text-[#00a651] group-hover:translate-x-0.5 transition-all" />
-                    </Link>
-                </div>
+            <div class="pt-2 pb-1 px-3 border-b border-slate-100 mb-1 mt-1">
+                <span class="text-[9px] font-normal text-slate-400 uppercase tracking-wider">
+                    Categories
+                </span>
             </div>
-        </Transition>
+
+            <Link
+                v-for="category in allCategories"
+                :key="category.id"
+                :href="`/shop?category=${category.slug}`"
+                class="flex items-center justify-between px-3 py-1.5 text-[#00a651] hover:bg-[#e6f6ee] transition-colors rounded-md text-xs font-normal group decoration-none"
+                @click="isMobileMenuOpen = false"
+            >
+                {{ category.name }}
+                <ChevronRight class="w-3 h-3 text-[#00a651]/40 group-hover:text-[#00a651] group-hover:translate-x-0.5 transition-all" />
+            </Link>
+        </div>
+    </div>
+</Transition>
 
         <main class="flex-grow relative z-10">
             <slot />
@@ -341,7 +343,7 @@
         </Teleport>
 
         <footer class="bg-[#081621] text-slate-300 pt-14 pb-6 relative z-10 border-t-4 border-[#00a651]">
-            <div class="max-w-[1100px] mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 <!-- Column 1: Logo + About + Socials -->
                 <div class="flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
                     <Link href="/" class="flex items-center gap-3 decoration-none">
@@ -449,7 +451,7 @@
             </div>
 
             <!-- Bottom Bar -->
-            <div class="max-w-[1100px] mx-auto px-4 sm:px-6 mt-10 pt-6 border-t border-slate-700/50">
+            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-10 pt-6 border-t border-slate-700/50">
                 <div class="flex flex-col items-center text-center gap-4">
                     <div class="flex flex-col items-center gap-2">
                         <p class="text-[9px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>

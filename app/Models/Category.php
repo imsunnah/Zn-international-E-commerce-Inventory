@@ -14,6 +14,7 @@ class Category extends Model
         'description_en',
         'description_bn',
         'is_active',
+        'serial',
     ];
 
     protected $casts = [

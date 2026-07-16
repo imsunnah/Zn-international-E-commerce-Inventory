@@ -25,15 +25,15 @@
                     }}</span>
                 </nav>
 
-                <!-- Main Product Layout -->
+                <!-- Main Product Layout (3 Column Premium) -->
                 <div
-                    class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16"
+                    class="grid lg:grid-cols-12 gap-8 items-start mb-16 relative"
                 >
-                    <!-- Column 1: Image Gallery (Smarter & Sleeker Layout) -->
-                    <div class="lg:col-span-7 space-y-4">
+                    <!-- Column 1: Image Gallery (5 cols) -->
+                    <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-6">
                         <div
                             @click="openLightboxMain"
-                            class="relative aspect-square rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-6 cursor-zoom-in group transition-all duration-300 hover:bg-slate-100/70"
+                            class="relative aspect-square rounded-2xl bg-white border border-slate-200 flex items-center justify-center p-8 cursor-zoom-in group transition-all duration-300 hover:shadow-lg"
                         >
                             <img
                                 :src="
@@ -41,19 +41,19 @@
                                     `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(product.name)}`
                                 "
                                 :alt="product.name"
-                                class="w-full h-full object-contain mix-blend-multiply"
+                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                             />
                             <div
                                 v-if="product.stock <= 0"
-                                class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center font-bold text-sm text-red-500 tracking-wider uppercase rounded-xl"
+                                class="absolute inset-0 bg-white/40 backdrop-blur-[2px] flex items-center justify-center"
                             >
-                                Out of Stock
+                                <span class="px-5 py-2 bg-slate-800 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg">Out of Stock</span>
                             </div>
                         </div>
 
                         <!-- Thumbnail Slider -->
                         <div
-                            class="flex flex-wrap gap-2"
+                            class="flex flex-wrap gap-3"
                             v-if="allImages.length > 1"
                         >
                             <button
@@ -61,10 +61,10 @@
                                 :key="index"
                                 @click="activeImage = img"
                                 :class="[
-                                    'w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-slate-50 p-1',
+                                    'w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white p-2',
                                     activeImage === img
-                                        ? 'border-slate-900 scale-95'
-                                        : 'border-transparent opacity-70 hover:opacity-100',
+                                        ? 'border-[#ef4823] shadow-md scale-[0.98]'
+                                        : 'border-slate-200 hover:border-[#ef4823]/50',
                                 ]"
                             >
                                 <img
@@ -75,133 +75,114 @@
                         </div>
                     </div>
 
-                    <!-- Column 2: Elegant Product Details -->
-                    <div class="lg:col-span-5 space-y-6">
-                        <div class="border-b border-slate-100 pb-5">
-                            <div
-                                class="flex items-center justify-between gap-4 mb-2"
-                            >
-                                <span
-                                    class="text-xs font-bold uppercase tracking-wider text-slate-400"
-                                >
-                                    {{ product.brand?.name || "Accessories" }}
-                                </span>
-                                <span class="text-xs text-slate-400"
-                                    >ID: #{{
-                                        product.id.toString().padStart(6, "0")
-                                    }}</span
-                                >
-                            </div>
+                    <!-- Column 2: Key Features & Details (4 cols) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div>
                             <h1
-                                class="text-xl md:text-2xl font-semibold text-slate-900 tracking-tight leading-snug"
+                                class="text-xl lg:text-2xl font-bold text-slate-900 tracking-tight leading-snug mb-3"
                             >
                                 {{ product.name }}
                             </h1>
-
-                            <div class="flex items-baseline gap-3 mt-4">
-                                <span class="text-2xl font-bold text-slate-900"
-                                    >৳{{
-                                        discountedPrice.toLocaleString()
-                                    }}</span
-                                >
-                                <span
-                                    v-if="product.discount_type"
-                                    class="text-sm text-slate-400 line-through font-normal"
-                                    >৳{{
-                                        parseFloat(
-                                            props.product.price,
-                                        ).toLocaleString()
-                                    }}</span
-                                >
+                            <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-slate-500">
+                                <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                                    Brand: <strong class="text-slate-900">{{ product.brand?.name || "N/A" }}</strong>
+                                </span>
+                                <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                                    SKU: <strong class="text-slate-900">#{{ product.sku || product.id.toString().padStart(6, "0") }}</strong>
+                                </span>
                             </div>
                         </div>
 
-                        <!-- Smart Inline Metadata Specs -->
-                        <div
-                            class="text-xs grid grid-cols-2 gap-y-3 gap-x-4 py-1 text-slate-600"
-                        >
-                            <div
-                                class="flex justify-between border-b border-slate-50 pb-1.5"
-                            >
-                                <span class="text-slate-400">Category</span
-                                ><span class="font-medium text-slate-900">{{
-                                    product.category?.name || "N/A"
-                                }}</span>
-                            </div>
-                            <div
-                                class="flex justify-between border-b border-slate-50 pb-1.5"
-                            >
-                                <span class="text-slate-400">Type</span
-                                ><span class="font-medium text-slate-900">{{
-                                    product.sub_category?.name || "Standard"
-                                }}</span>
+                        <div class="space-y-4 pt-4 border-t border-slate-100">
+                            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Key Features</h3>
+                            <ul class="space-y-2 text-sm text-slate-700 list-disc pl-5">
+                                <li><strong>Category:</strong> {{ product.category?.name || "Uncategorized" }}</li>
+                                <li><strong>Sub Category:</strong> {{ product.sub_category?.name || "Standard" }}</li>
+                                <li v-if="product.size"><strong>Size/Dimensions:</strong> {{ product.size }}</li>
+                                <li v-if="product.weight"><strong>Weight:</strong> {{ product.weight }}</li>
+                            </ul>
+                            <div v-if="product.remarks" class="p-3 mt-4 bg-orange-50/50 border border-orange-100 text-orange-800 text-xs rounded-lg italic">
+                                {{ product.remarks }}
                             </div>
                         </div>
+                        
+                        <div class="pt-4 text-xs font-medium text-[#00a651] underline cursor-pointer hover:text-slate-900 transition-colors" @click="activeTab = 'description';">
+                            View Full Description & Specifications
+                        </div>
+                    </div>
 
-                        <!-- Purchase Controls (Simpler Controls) -->
-                        <div class="space-y-4 pt-2">
-                            <div
-                                class="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100"
-                            >
-                                <span class="text-xs font-medium text-slate-500"
-                                    >Quantity</span
-                                >
-                                <div
-                                    class="flex items-center bg-white border border-slate-200 rounded-md h-8 w-24"
-                                >
-                                    <button
-                                        @click="quantity > 1 && quantity--"
-                                        class="px-2 h-full text-slate-400 hover:text-slate-900 transition-colors"
-                                    >
-                                        <Minus class="w-3 h-3" />
-                                    </button>
-                                    <div
-                                        class="flex-1 text-center font-medium text-xs text-slate-900"
-                                    >
-                                        {{ quantity }}
+                    <!-- Column 3: Buy Box (3 cols) -->
+                    <div class="lg:col-span-3">
+                        <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 sticky top-6">
+                            
+                            <!-- Price Block -->
+                            <div class="text-center pb-6 mb-6 border-b border-slate-100">
+                                <template v-if="product.discount_type">
+                                    <div class="flex items-center justify-center gap-2 mb-1">
+                                        <span class="text-sm text-slate-400 line-through">৳{{ parseFloat(product.price).toLocaleString() }}</span>
+                                        <span class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-black uppercase rounded">
+                                            Save {{ product.discount_type === 'percentage' ? product.discount_value + '%' : '৳' + product.discount_value }}
+                                        </span>
                                     </div>
-                                    <button
-                                        @click="
-                                            quantity < (product.stock || 99) &&
-                                            quantity++
-                                        "
-                                        class="px-2 h-full text-slate-400 hover:text-slate-900 transition-colors"
-                                    >
-                                        <Plus class="w-3 h-3" />
-                                    </button>
+                                </template>
+                                <div class="text-3xl font-black text-[#ef4823] tracking-tight">৳{{ discountedPrice.toLocaleString() }}</div>
+                                
+                                <div class="mt-4 flex items-center justify-center">
+                                    <div :class="[
+                                        'px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider',
+                                        product.stock > 0 ? 'bg-[#00a651]/10 text-[#00a651]' : 'bg-slate-100 text-slate-500'
+                                    ]">
+                                        <span v-if="product.stock > 0">● In Stock ({{ product.stock }})</span>
+                                        <span v-else>● Out of Stock</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Primary CTAs -->
-                            <div class="grid sm:grid-cols-2 gap-3">
-                                <button
-                                    @click="handleAddToCart"
-                                    :disabled="product.stock <= 0"
-                                    class="h-11 border border-slate-900 text-slate-900 rounded-lg font-medium text-xs hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none"
-                                >
-                                    <ShoppingCart class="w-3.5 h-3.5" /> Add to
-                                    Cart
-                                </button>
-                                <button
-                                    @click="handleBuyNow"
-                                    :disabled="product.stock <= 0"
-                                    class="h-11 bg-slate-900 text-white rounded-lg font-medium text-xs hover:bg-slate-800 transition-colors flex items-center justify-center disabled:opacity-40 disabled:pointer-events-none"
-                                >
-                                    Buy Now
-                                </button>
-                            </div>
+                            <!-- Cart Controls -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-1 bg-slate-50 rounded-lg border border-slate-200">
+                                    <button
+                                        @click="quantity > 1 && quantity--"
+                                        type="button"
+                                        class="w-8 h-8 flex items-center justify-center rounded text-slate-500 hover:bg-white hover:shadow-sm hover:text-slate-900 transition-all"
+                                    >
+                                        <Minus class="w-3.5 h-3.5" />
+                                    </button>
+                                    <div class="text-sm font-bold text-slate-900 w-12 text-center select-none">{{ quantity }}</div>
+                                    <button
+                                        @click="quantity < (product.stock || 99) && quantity++"
+                                        type="button"
+                                        class="w-8 h-8 flex items-center justify-center rounded text-slate-500 hover:bg-white hover:shadow-sm hover:text-slate-900 transition-all"
+                                    >
+                                        <Plus class="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
 
-                            <!-- Quick Secondary Communication -->
-                            <a
-                                :href="`https://wa.me/${$page.props.settings.footer_phone}?text=Hi, I want to order ${product.name}`"
-                                target="_blank"
-                                class="flex h-11 border border-slate-200 text-slate-600 rounded-lg font-medium text-xs hover:bg-slate-50 transition-colors items-center justify-center gap-2 w-full"
-                            >
-                                <MessageSquare
-                                    class="w-3.5 h-3.5 text-emerald-500 fill-emerald-500"
-                                />
-                                Order via WhatsApp
-                            </a>
+                                <div class="space-y-2">
+                                    <button
+                                        @click="handleBuyNow"
+                                        :disabled="product.stock <= 0"
+                                        class="w-full h-12 bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white font-bold text-xs uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+                                    >
+                                        Buy Now
+                                    </button>
+                                    <button
+                                        @click="handleAddToCart"
+                                        :disabled="product.stock <= 0"
+                                        class="w-full h-12 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-bold text-xs uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                                    >
+                                        <ShoppingCart class="w-4 h-4" /> Add to Cart
+                                    </button>
+                                </div>
+
+                                <a
+                                    :href="`https://wa.me/${$page.props.settings?.footer_phone}?text=Hi, I want to order ${product.name}`"
+                                    target="_blank"
+                                    class="mt-2 w-full h-11 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-bold text-xs rounded-lg flex items-center justify-center gap-2 transition-all border border-emerald-200/50"
+                                >
+                                    <MessageSquare class="w-4 h-4" /> Order via WhatsApp
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -215,8 +196,8 @@
                             @click="activeTab = 'description'"
                             :class="
                                 activeTab === 'description'
-                                    ? 'text-slate-900 border-b-2 border-slate-900 pb-3 font-semibold'
-                                    : 'text-slate-400 pb-3 hover:text-slate-600'
+                                    ? 'text-[#ef4823] border-b-2 border-[#ef4823] pb-3 font-black shadow-[inset_0_-2px_0_0_#ef4823]'
+                                    : 'text-slate-400 pb-3 hover:text-[#ef4823]'
                             "
                         >
                             Description
@@ -225,8 +206,8 @@
                             @click="activeTab = 'reviews'"
                             :class="
                                 activeTab === 'reviews'
-                                    ? 'text-slate-900 border-b-2 border-slate-900 pb-3 font-semibold'
-                                    : 'text-slate-400 pb-3 hover:text-slate-600'
+                                    ? 'text-[#ef4823] border-b-2 border-[#ef4823] pb-3 font-black shadow-[inset_0_-2px_0_0_#ef4823]'
+                                    : 'text-slate-400 pb-3 hover:text-[#ef4823]'
                             "
                             class="flex items-center gap-1.5"
                         >
@@ -280,7 +261,7 @@
                                             class="flex-grow h-1 bg-slate-100 rounded-full overflow-hidden"
                                         >
                                             <div
-                                                class="h-full bg-slate-900 transition-all"
+                                                class="h-full bg-[#ef4823] transition-all"
                                                 :style="{
                                                     width:
                                                         getRatingPercentage(
@@ -340,7 +321,7 @@
                                                 class="w-3 h-3"
                                                 :class="
                                                     star <= r.rating
-                                                        ? 'text-slate-900 fill-current'
+                                                        ? 'text-[#ef4823] fill-current'
                                                         : 'text-slate-200'
                                                 "
                                             />
@@ -414,8 +395,8 @@
                                                     :class="
                                                         star <=
                                                         reviewForm.rating
-                                                            ? 'text-slate-900 fill-current'
-                                                            : 'text-slate-200 hover:text-slate-400'
+                                                            ? 'text-[#ef4823] fill-current'
+                                                            : 'text-slate-200 hover:text-[#ef4823]'
                                                     "
                                                 />
                                             </div>
@@ -430,13 +411,13 @@
                                             rows="3"
                                             v-model="reviewForm.comment"
                                             required
-                                            class="w-full rounded border border-slate-200 p-3 text-xs focus:ring-1 focus:ring-slate-900 focus:border-slate-900 outline-none transition-colors"
+                                            class="w-full rounded border border-slate-200 p-3 text-xs focus:ring-1 focus:ring-[#ef4823] focus:border-[#ef4823] outline-none transition-colors"
                                         ></textarea>
                                     </div>
                                     <button
                                         type="submit"
                                         :disabled="isSubmittingReview"
-                                        class="px-4 py-2 bg-slate-900 text-white rounded font-medium text-xs hover:bg-slate-800 transition-colors disabled:opacity-40"
+                                        class="px-4 py-2 bg-[#ef4823] text-white rounded font-medium text-xs hover:bg-[#d63d1a] transition-colors disabled:opacity-40"
                                     >
                                         {{
                                             isSubmittingReview

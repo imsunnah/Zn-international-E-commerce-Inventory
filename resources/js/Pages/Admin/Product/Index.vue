@@ -118,6 +118,7 @@
                         <tr class="bg-slate-50/50 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] border-b border-slate-100">
                             <th class="py-6 px-8 w-24">{{ $t('Imaging') }}</th>
                             <th class="py-6 px-8">{{ $t('Specifications') }}</th>
+                            <th class="py-6 px-4 text-center">{{ $t('Serial') }}</th>
                             <th class="py-6 px-8">{{ $t('Taxonomy') }}</th>
                             <th class="py-6 px-8">{{ $t('Price') }}</th>
                             <th class="py-6 px-8">{{ $t('Availability') }}</th>
@@ -141,6 +142,11 @@
                                         {{ product.discount_type === 'percentage' ? product.discount_value + '%' : '৳' + product.discount_value }} OFF
                                     </span>
                                 </div>
+                            </td>
+                            <td class="py-4 px-4 text-center">
+                                <span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-black text-slate-800">
+                                    {{ product.serial !== null ? product.serial : '--' }}
+                                </span>
                             </td>
                             <td class="py-4 px-6">
                                 <div class="flex flex-col gap-2">

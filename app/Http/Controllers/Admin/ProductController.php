@@ -97,6 +97,7 @@ class ProductController extends Controller
             'brand_id' => 'nullable|exists:brands,id',
             'size' => 'nullable|string|max:255',
             'weight' => 'nullable|string|max:255',
+            'serial' => 'nullable|integer',
         ]);
 
         $validated['slug'] = Str::slug($validated['name_en']);
@@ -162,6 +163,7 @@ class ProductController extends Controller
             'brand_id' => 'nullable|exists:brands,id',
             'size' => 'nullable|string|max:255',
             'weight' => 'nullable|string|max:255',
+            'serial' => 'nullable|integer',
         ]);
 
         $validated['slug'] = Str::slug($validated['name_en']);
