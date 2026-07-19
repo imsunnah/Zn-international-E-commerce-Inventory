@@ -1,14 +1,15 @@
 <template>
     <div
-        class="group bg-white rounded border border-slate-200 hover:shadow-md transition-all duration-300 flex flex-col h-full relative overflow-hidden w-full p-4 font-sans"
+        class="group bg-white border border-slate-200 hover:border-[#00a651] transition-all duration-300 flex flex-col h-full relative p-2 pb-3 text-center font-sans w-full"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
     >
-        <!-- Badges / Discount -->
         <div
             v-if="product.discount_type"
-            class="absolute top-2 left-2 z-20 pointer-events-none"
+            class="absolute top-1 left-1 z-20 pointer-events-none"
         >
             <span
-                class="px-2 py-0.5 bg-[#ef4823] text-white text-[9px] font-black uppercase rounded shadow-sm"
+                class="px-1.5 py-0.5 bg-[#e1251b] text-white text-[8px] font-black uppercase rounded shadow-sm"
             >
                 {{
                     product.discount_type === "percentage"
@@ -18,75 +19,58 @@
             </span>
         </div>
 
-        <!-- Image Area -->
-        <div
-            class="relative w-full aspect-square overflow-hidden bg-white shrink-0 mb-3 flex items-center justify-center"
-        >
+        <div class="h-36 w-full flex items-center justify-center overflow-hidden mb-1 relative shrink-0">
             <Link
                 :href="`/products/${product.slug}`"
-                class="block w-full h-full relative"
+                class="block max-h-full max-w-full"
             >
-                <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/40 backdrop-blur-[2px] flex items-center justify-center pointer-events-none">
-                    <span class="px-3 py-1 bg-slate-800 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">Out of Stock</span>
+                <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/40 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                    <span class="px-1.5 py-0.5 bg-slate-800 text-white text-[8px] font-bold uppercase tracking-wider rounded">Stock Out</span>
                 </div>
-                
+
                 <img
-                    :src="
-                        product.image ||
-                        `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(product.name)}`
-                    "
-                    class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500 ease-out"
+                    :src="displayedImage"
+                    loading="lazy"
+                    class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
                     :alt="product.name"
                 />
             </Link>
         </div>
 
-        <!-- Product Details -->
-        <div class="flex-grow flex flex-col justify-between">
-            <div class="space-y-1.5">
-                <!-- Stock Status / Availability tag (Paragon Style) -->
-                <div class="flex items-center gap-1.5 text-[11px] font-bold">
-                    <span
-                        :class="product.stock > 0 ? 'text-[#00a651]' : 'text-slate-400'"
-                    >
-                        ● {{ product.stock > 0 ? 'In Stock' : 'Out of Stock' }}
-                    </span>
-                </div>
+        <div class="flex-grow flex flex-col justify-between pt-2">
+            <div>
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5 block">
+                    {{ product.brand_name || product.category_name || 'Electronics' }}
+                </span>
 
-                <!-- Product Name -->
-                <Link :href="`/products/${product.slug}`" class="block">
+                <Link :href="`/products/${product.slug}`" class="block mb-2">
                     <h3
-                        class="text-xs md:text-sm font-bold text-slate-800 hover:text-[#00a651] transition-colors leading-snug line-clamp-2 h-9 tracking-tight"
+                        class="text-[11px] font-bold text-slate-800 group-hover:text-[#00a651] transition-colors leading-tight line-clamp-2 min-h-[32px] tracking-tight"
                     >
                         {{ product.name }}
                     </h3>
                 </Link>
-
-                <!-- Clean Pricing Section -->
-                <div class="flex items-baseline gap-2 py-1">
-                    <span
-                        class="text-sm md:text-base font-extrabold text-[#ef4823]"
-                    >
-                        {{ finalPrice.toLocaleString() }}৳
-                    </span>
-                    <span
-                        v-if="product.discount_type"
-                        class="text-xs text-slate-400 line-through font-normal"
-                    >
-                        {{ parseFloat(product.price).toLocaleString() }}৳
-                    </span>
-                </div>
             </div>
 
-            <!-- Bottom Add to Cart Button (Paragon Style) -->
-            <div class="pt-3 mt-auto">
+            <div class="mt-auto flex flex-col items-center">
+                <div class="flex flex-col items-center justify-center mb-2.5">
+                    <div class="text-xs font-black text-[#ef4823]">
+                        ৳{{ finalPrice.toLocaleString() }}
+                    </div>
+                    <div
+                        v-if="product.discount_type"
+                        class="text-[9px] text-slate-400 line-through font-normal leading-none mt-0.5"
+                    >
+                        ৳{{ parseFloat(product.price).toLocaleString() }}
+                    </div>
+                </div>
+
                 <button
                     @click.stop="handleAddToCart"
                     :disabled="product.stock <= 0"
-                    class="w-full py-2 bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white font-bold text-xs uppercase transition-all tracking-wider rounded select-none cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    class="inline-block w-full max-w-[110px] bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white text-[10px] font-bold py-1.5 px-3 rounded transition-colors uppercase tracking-wider cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed mx-auto"
                 >
-                    <ShoppingCart class="w-3.5 h-3.5" />
-                    <span>{{ product.stock > 0 ? "Add to Cart" : "Out of Stock" }}</span>
+                    {{ product.stock > 0 ? "Add to cart" : "Stock Out" }}
                 </button>
             </div>
         </div>
@@ -94,8 +78,8 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { Link, router } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import { Link } from "@inertiajs/vue3";
 import { ShoppingCart } from "lucide-vue-next";
 import { useCart } from "@/Composables/useCart";
 
@@ -106,6 +90,22 @@ const props = defineProps({
 defineEmits(["quickView"]);
 
 const { addToCart } = useCart();
+
+const isHovered = ref(false);
+
+const hoverImage = computed(() => {
+    if (props.product.gallery && props.product.gallery.length > 0) {
+        return props.product.gallery[0].image;
+    }
+    return null;
+});
+
+const displayedImage = computed(() => {
+    if (isHovered.value && hoverImage.value) {
+        return hoverImage.value;
+    }
+    return props.product.image || `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(props.product.name)}`;
+});
 
 const finalPrice = computed(() => {
     let price = parseFloat(props.product.price);
@@ -122,3 +122,13 @@ const handleAddToCart = () => {
     addToCart(props.product, 1);
 };
 </script>
+
+<style scoped>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>

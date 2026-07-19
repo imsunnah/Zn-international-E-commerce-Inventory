@@ -1,7 +1,8 @@
 <template>
-    <div class="min-h-screen flex flex-col font-sans bg-slate-50 text-slate-900">
-  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm border-t-4 border-[#00a651] transition-all">
-    <div class="max-w-[1200px] mx-auto w-full px-4 sm:px-6 h-16 flex items-center justify-between gap-4 bg-transparent">
+    <div class="min-h-screen flex flex-col font-sans bg-white text-slate-900">
+        <div class="w-full bg-white flex-grow flex flex-col min-h-screen">
+            <header class="bg-white sticky top-0 z-50 border-b border-slate-100 transition-all">
+                <div class="w-full lg:w-[50%] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4 bg-transparent">
         
         <!-- Logo Section -->
         <Link href="/" class="flex items-center flex-shrink-0 gap-2 group decoration-none">
@@ -11,27 +12,29 @@
                 :alt="siteName"
                 class="h-8 md:h-9 w-auto object-contain transition-transform group-hover:scale-105 duration-300"
             />
-            <div class="w-9 h-9 bg-[#ef4823] rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md transition-all group-hover:scale-105 group-hover:rotate-3 duration-300 select-none">
-                Z
-            </div>
-            <div class="flex flex-col justify-center">
-                <span class="text-base font-black text-[#ef4823] tracking-tight leading-none uppercase font-sans">
-                    ZN
-                </span>
-                <span class="text-[8px] font-bold text-slate-400 tracking-widest leading-none uppercase mt-1 transition-colors group-hover:text-[#ef4823]">
-                    International
-                </span>
+            <div v-else class="flex items-center">
+                <div class="w-8 h-8 bg-[#00a651] rounded-full flex items-center justify-center text-white font-black text-lg shadow-sm mr-1.5 select-none transition-transform group-hover:scale-105">
+                    Z
+                </div>
+                <div class="flex flex-col text-left">
+                    <span class="text-sm font-black text-slate-800 tracking-tight leading-none uppercase">
+                        {{ siteName }}
+                    </span>
+                    <span class="text-[8px] font-bold text-slate-400 tracking-wide leading-none uppercase mt-0.5">
+                        E-Commerce
+                    </span>
+                </div>
             </div>
         </Link>
 
         <!-- Desktop Search Bar -->
-        <div class="hidden md:flex flex-grow max-w-md relative group/search">
+        <div class="hidden md:flex flex-grow max-w-lg xl:max-w-xl relative group/search">
             <div class="flex w-full items-center border border-slate-200 focus-within:border-[#00a651] focus-within:ring-2 focus-within:ring-[#00a651]/10 rounded-lg bg-slate-50/50 transition-all overflow-hidden">
                 <input
                     v-model="searchQuery"
                     type="text"
                     placeholder="Search products, brands, categories..."
-                    class="w-full pl-3 pr-4 py-2 bg-transparent text-slate-800 focus:outline-none border-none text-xs font-medium placeholder:text-slate-400"
+                    class="w-full pl-3 pr-4 py-2.5 bg-transparent text-slate-800 focus:outline-none border-none text-xs font-medium placeholder:text-slate-400"
                     @keyup.enter="handleSearch"
                 />
                 <button
@@ -44,7 +47,7 @@
         </div>
 
         <!-- Right Side Actions Wrapper -->
-        <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 h-full">
+        <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 h-full">
             <!-- Mobile Search Toggle -->
             <button
                 @click="isMobileSearchOpen = !isMobileSearchOpen"
@@ -53,53 +56,54 @@
                 <Search class="w-4 h-4" />
             </button>
 
-            <!-- Quick Links -->
+            <!-- Price List Button -->
             <Link
-                href="/shop?category=printer"
-                class="hidden sm:flex items-center px-3 py-2 bg-transparent text-[#00a651] border border-[#00a651] rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#00a651] hover:text-white transition-all select-none decoration-none"
+                href="/shop"
+                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
             >
-                Printers
+                <ClipboardList class="w-3.5 h-3.5" />
+                <span>Price List</span>
             </Link>
 
+            <!-- PC Builder Button -->
             <Link
                 href="/pc-builder"
-                class="hidden sm:flex items-center px-3 py-2 bg-[#00a651] text-white border border-[#00a651] rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] hover:border-[#008541] transition-all select-none decoration-none shadow-sm shadow-[#00a651]/20"
+                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
             >
-                PC Builder
+                <Zap class="w-3.5 h-3.5" />
+                <span>PC Builder</span>
             </Link>
 
-       
-
-            <!-- Authentication State -->
+            <!-- Authentication State / Login Button -->
             <Link
                 v-if="currentUser"
                 :href="accountHref"
                 class="flex items-center gap-1.5 h-9 px-3 text-slate-700 bg-white border border-slate-200 rounded-lg transition-colors hover:bg-slate-50 font-bold text-[10px] decoration-none"
             >
-                <User class="w-3.5 h-3.5 text-[#00a651]" />
-                <span class="hidden lg:inline truncate max-w-[80px]">
+                <User class="w-3.5 h-3.5 text-[#ef4823]" />
+                <span class="truncate max-w-[90px]">
                     {{ currentUser.name }}
                 </span>
             </Link>
-            
             <button
                 v-else
                 @click="openAuthModal('login')"
-                class="flex items-center h-9 px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-slate-800 border-none transition-all select-none"
+                class="flex items-center gap-1.5 h-9 px-4 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#d63d1a] border-none transition-all select-none"
             >
-                Login
+                <User class="w-3.5 h-3.5" />
+                <span>Login / Register</span>
             </button>
 
             <!-- Mini Cart Dropdown Trigger -->
             <button
                 @click="isCartOpen = true"
-                class="flex items-center gap-2 h-9 px-3 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
+                class="flex items-center gap-2 h-9 px-3.5 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
             >
-                <span>৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
                 <ShoppingBag class="w-3.5 h-3.5 transition-transform group-hover/cart:scale-110" />
                 <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[9px] shadow-sm">
                     {{ cartCount }}
                 </span>
+                <span class="hidden md:inline">৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
             </button>
 
             <!-- Mobile Hamburger Menu Toggle -->
@@ -136,104 +140,89 @@
         </div>
     </Transition>
 
-    <!-- Desktop Navigation Layer -->
-    <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
-        <div class="max-w-[1200px] mx-auto flex items-center h-11 px-4">
-            <Link
-                href="/"
-                class="px-4 text-white text-[11px] font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
-            >
-                Home
-            </Link>
+<nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
+    <div class="w-full lg:w-[50%] mx-auto flex items-center h-9 px-4">
+        <!-- Home Link -->
+        <Link
+            href="/"
+            class="px-4 text-[#00a651] text-[11px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+        >
+            Home
+        </Link>
 
-            <button
-                v-if="hasPrevCategories"
-                @click="prevCategories"
-                class="px-2.5 text-white bg-slate-900/50 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer"
+        <!-- Dynamic Category List Map -->
+        <div class="flex items-center h-full overflow-visible">
+            <div
+                v-for="category in visibleCategories"
+                :key="category.id"
+                class="relative group/category h-full flex"
             >
-                <ChevronLeft class="w-4 h-4" />
-            </button>
-
-            <!-- Dynamic Category List Map -->
-            <div class="flex items-center h-full overflow-visible">
-                <div
-                    v-for="category in visibleCategories"
-                    :key="category.id"
-                    class="relative group/category h-full flex"
+                <Link
+                    :href="`/shop?category=${category.slug}`"
+                    class="px-4 text-[#00a651] text-[11px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
                 >
-                    <Link
-                        :href="`/shop?category=${category.slug}`"
-                        class="px-4 text-white text-[11px] tracking-wider font-bold hover:bg-[#00a651] transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
-                    >
-                        {{ category.name }}
-                        <ChevronDown
-                            v-if="categoryHasChildren(category)"
-                            class="w-3 h-3 text-slate-400 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
-                        />
-                    </Link>
-
-                    <!-- Mega Dropdown Column Tier 1 -->
-                    <div
+                    {{ category.name }}
+                    <ChevronDown
                         v-if="categoryHasChildren(category)"
-                        class="absolute left-0 top-full bg-white p-2 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[250px] border border-slate-100 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
-                    >
-                        <template v-if="category.sub_categories?.length">
+                        class="w-3 h-3 text-[#00a651]/75 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
+                    />
+                </Link>
+
+                <!-- Mega Dropdown Column Tier 1 (Pure Solid Black Background) -->
+                <div
+                    v-if="categoryHasChildren(category)"
+                    class="absolute left-0 top-full bg-black p-1.5 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[250px] border border-slate-900 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
+                >
+                    <template v-if="category.sub_categories?.length">
+                        <div
+                            v-for="sub in category.sub_categories"
+                            :key="sub.id"
+                            class="relative group/sub"
+                        >
+                            <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
+                            <Link
+                                :href="`/shop?sub_category=${sub.slug}`"
+                                class="flex items-center justify-between px-3 py-1.5 hover:bg-slate-900 rounded-lg text-[11px] font-normal text-white hover:text-[#00a651] transition-colors decoration-none"
+                            >
+                                {{ sub.name }}
+                                <ChevronRight
+                                    v-if="sub.brands?.length"
+                                    class="w-3 h-3 text-slate-600 group-hover/sub:text-[#00a651] transition-colors"
+                                />
+                            </Link>
+
+                            <!-- Dropdown Sub-tier Brand Matrix (Pure Solid Black Background) -->
                             <div
-                                v-for="sub in category.sub_categories"
-                                :key="sub.id"
-                                class="relative group/sub"
+                                v-if="sub.brands?.length"
+                                class="absolute left-[calc(100%-4px)] top-0 bg-black p-1.5 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
                             >
                                 <Link
-                                    :href="`/shop?sub_category=${sub.slug}`"
-                                    class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-50 rounded-lg text-xs font-bold text-slate-700 hover:text-[#00a651] transition-colors decoration-none"
+                                    v-for="brand in sub.brands"
+                                    :key="brand.id"
+                                    :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
+                                    class="block px-3 py-1.5 text-[11px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-md transition-colors decoration-none"
                                 >
-                                    {{ sub.name }}
-                                    <ChevronRight
-                                        v-if="sub.brands?.length"
-                                        class="w-3 h-3 text-slate-400 group-hover/sub:text-[#00a651] transition-colors"
-                                    />
+                                    {{ brand.name }}
                                 </Link>
-
-                                <!-- Dropdown Sub-tier Brand Matrix -->
-                                <div
-                                    v-if="sub.brands?.length"
-                                    class="absolute left-[calc(100%-4px)] top-0 bg-white p-2 border border-slate-100 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
-                                >
-                                    <Link
-                                        v-for="brand in sub.brands"
-                                        :key="brand.id"
-                                        :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                        class="block px-3 py-2 text-xs font-semibold text-slate-600 hover:text-[#00a651] hover:bg-slate-50 rounded-md transition-colors decoration-none"
-                                    >
-                                        {{ brand.name }}
-                                    </Link>
-                                </div>
                             </div>
-                        </template>
+                        </div>
+                    </template>
 
-                        <template v-else>
-                            <Link
-                                v-for="brand in category.brands"
-                                :key="brand.id"
-                                :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                                class="block px-3 py-2.5 text-xs font-bold text-slate-700 hover:text-[#00a651] hover:bg-slate-50 rounded-lg transition-colors decoration-none"
-                            >
-                                {{ brand.name }}
-                            </Link>
-                        </template>
-                    </div>
+                    <template v-else>
+                        <Link
+                            v-for="brand in category.brands"
+                            :key="brand.id"
+                            :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
+                            class="block px-3 py-1.5 text-[11px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
+                        >
+                            {{ brand.name }}
+                        </Link>
+                    </template>
                 </div>
             </div>
-
-            <button
-                v-if="hasNextCategories"
-                @click="nextCategories"
-                class="px-2.5 text-white bg-slate-900/50 hover:bg-[#00a651] border-none transition-colors h-full flex items-center cursor-pointer ml-auto"
-            >
-                <ChevronRight class="w-4 h-4" />
-            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 </header>
 
         <Transition v-bind="fadeTransition">
@@ -304,14 +293,14 @@
     </div>
 </Transition>
 
-        <main class="flex-grow relative z-10">
+        <main class="w-full lg:w-[50%] mx-auto flex-grow relative z-10 bg-white">
             <slot />
         </main>
 
         <Teleport to="body">
             <div
                 class="fixed top-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none"
-                style="min-width: 280px; max-w-sm: 340px"
+                style="min-width: 280px; max-width: 340px"
             >
                 <TransitionGroup name="toast">
                     <div
@@ -343,7 +332,7 @@
         </Teleport>
 
         <footer class="bg-[#081621] text-slate-300 pt-14 pb-6 relative z-10 border-t-4 border-[#00a651]">
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="w-full mx-auto px-4 md:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 <!-- Column 1: Logo + About + Socials -->
                 <div class="flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
                     <Link href="/" class="flex items-center gap-3 decoration-none">
@@ -381,77 +370,49 @@
                 </div>
 
                 <!-- Column 2: Quick Links -->
-                <div class="flex flex-col space-y-3">
-                    <h4 class="text-[11px] font-bold text-[#00a651] uppercase tracking-widest mb-1 flex items-center gap-2">
-                        <span class="w-4 h-0.5 bg-[#00a651] inline-block rounded"></span>
-                        Quick Links
-                    </h4>
-                    <ul class="space-y-2 text-[11px] font-medium">
-                        <li><Link href="/about" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">About Us</Link></li>
-                        <li><Link href="/return-refund-policy" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">Return &amp; Refund Policy</Link></li>
-                        <li><Link href="/warranty-policy" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">Warranty Support</Link></li>
-                        <li><Link href="/privacy-policy" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">Privacy Policy</Link></li>
-                        <li><Link href="/terms-conditions" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">Terms &amp; Conditions</Link></li>
-                        <li><Link href="/contact" class="text-slate-400 hover:text-[#00a651] hover:pl-1 transition-all decoration-none">Contact Us</Link></li>
+                <div class="flex flex-col items-center lg:items-start space-y-4">
+                    <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Quick Links</h4>
+                    <ul class="space-y-2 text-[11px] font-bold text-center lg:text-left list-none p-0 m-0">
+                        <li><Link href="/shop" class="hover:text-[#00a651] transition-colors decoration-none">All Products</Link></li>
+                        <li><Link href="/offers" class="hover:text-[#00a651] transition-colors decoration-none">Special Offers</Link></li>
+                        <li><Link href="/pc-builder" class="hover:text-[#00a651] transition-colors decoration-none">PC Builder</Link></li>
+                        <li><Link href="/reviews" class="hover:text-[#00a651] transition-colors decoration-none">Reviews & Feedback</Link></li>
                     </ul>
                 </div>
 
-                <!-- Column 3: Contact Info -->
-                <div class="flex flex-col space-y-3">
-                    <h4 class="text-[11px] font-bold text-[#00a651] uppercase tracking-widest mb-1 flex items-center gap-2">
-                        <span class="w-4 h-0.5 bg-[#00a651] inline-block rounded"></span>
-                        Contact Info
-                    </h4>
-                    <div class="space-y-3 text-[11px]">
-                        <div class="flex items-start gap-2">
-                            <MapPin class="w-3.5 h-3.5 text-[#00a651] mt-0.5 shrink-0" />
-                            <p class="text-slate-400 leading-relaxed">
-                                54, Multi Plan, Level-5 (Lift-5),
-                                Beside Multiplan Center, New Elephant Road, Dhaka-1205.
-                            </p>
+                <!-- Column 3: Contact & Support -->
+                <div class="flex flex-col items-center lg:items-start space-y-4">
+                    <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Head Office</h4>
+                    <div class="space-y-3 text-[11px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
+                        <div class="flex items-start gap-2 max-w-xs">
+                            <MapPin class="w-4 h-4 text-[#00a651] shrink-0 mt-0.5" />
+                            <span>{{ settings.footer_address || "Multiplan Center, Level 9, Suite 935, Elephant Road, Dhaka-1205" }}</span>
                         </div>
-                        <div class="flex items-start gap-2">
-                            <Phone class="w-3.5 h-3.5 text-[#00a651] mt-0.5 shrink-0" />
-                            <div class="text-slate-400">
-                                <p class="font-bold text-slate-300 text-[10px] uppercase tracking-wider mb-0.5">Hotline</p>
-                                <p>{{ settings.footer_phone || "01322-893290" }}</p>
-                                <p>01322-893296</p>
-                            </div>
+                        <div class="flex items-center gap-2">
+                            <Phone class="w-4 h-4 text-[#00a651] shrink-0" />
+                            <a :href="`tel:${settings.footer_phone || '01322893290'}`" class="text-white hover:text-[#00a651] transition-colors decoration-none font-bold">
+                                {{ settings.footer_phone || "01322893290" }}
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Column 4: Branch + Map -->
-                <div class="flex flex-col space-y-3">
-                    <h4 class="text-[11px] font-bold text-[#00a651] uppercase tracking-widest mb-1 flex items-center gap-2">
-                        <span class="w-4 h-0.5 bg-[#00a651] inline-block rounded"></span>
-                        Our Branches
-                    </h4>
-                    <div class="space-y-3 text-[11px]">
-                        <div>
-                            <p class="font-bold text-slate-300 text-[10px] uppercase tracking-wider mb-0.5">Motijheel Branch</p>
-                            <p class="text-slate-400 leading-relaxed">Shop 5-B, 1st Floor, Rahmania Complex, Motijheel, Dhaka-1000.</p>
-                        </div>
-                        <div>
-                            <p class="font-bold text-slate-300 text-[10px] uppercase tracking-wider mb-0.5">Elephant Road Branch</p>
-                            <p class="text-slate-400 leading-relaxed">Shop 843-844, Level 8, Multiplan Center, New Elephant Road, Dhaka-1205.</p>
-                            <p class="text-slate-400 mt-0.5">01322-893291, 01322-893292</p>
-                        </div>
-                    </div>
-                    <div class="w-full h-[100px] rounded-lg overflow-hidden border border-slate-700/50 shadow-md mt-1">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.2858169970984!2d90.38384217615024!3d23.737181089293444!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b6099ae573%3A0xe6fd9bfdd7817b!2sMultiplan%20Center!5e0!3m2!1sen!2sbd!4v1716947620138!5m2!1sen!2sbd" 
-                            class="w-full h-full border-0 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade"
+                <!-- Column 4: Branches & Map -->
+                <div class="flex flex-col items-center lg:items-start space-y-4 w-full">
+                    <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Elephant Road Branch</h4>
+                    <div class="w-full rounded-xl overflow-hidden shadow-2xl border border-slate-800 h-28">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.2785466497746!2d90.383182876063!3d23.737452389275037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8dc40d6e641%3A0xe54d9c79fa2d4bb6!2sMultiplan%20Center!5e0!3m2!1sen!2sbd!4v1714000000000!5m2!1sen!2sbd"
+                            class="w-full h-full border-none opacity-85 hover:opacity-100 transition-opacity"
+                            allowfullscreen=""
+                            loading="lazy"
                         ></iframe>
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Bar -->
-            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 mt-10 pt-6 border-t border-slate-700/50">
+            <div class="w-full mx-auto px-4 md:px-6 mt-10 pt-6 border-t border-slate-700/50">
                 <div class="flex flex-col items-center text-center gap-4">
                     <div class="flex flex-col items-center gap-2">
                         <p class="text-[9px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>
@@ -479,6 +440,7 @@
                 </div>
             </div>
         </footer>
+        </div>
 
         <CartDrawer :isOpen="isCartOpen" @close="isCartOpen = false" />
         <AuthModal
@@ -486,6 +448,16 @@
             :initialMode="authModalMode"
             @close="isAuthModalOpen = false"
         />
+
+        <!-- Floating Chat Button -->
+        <a
+            href="https://wa.me/8801322893290"
+            target="_blank"
+            class="fixed bottom-6 right-6 z-[999] bg-[#00a651] text-white px-3.5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 hover:bg-[#008541] transition-all cursor-pointer font-bold text-xs uppercase select-none decoration-none hover:scale-105"
+        >
+            <MessageCircle class="w-4 h-4" />
+            <span>Need Help?</span>
+        </a>
     </div>
 </template>
 
@@ -509,6 +481,8 @@ import {
     Menu,
     CheckCircle,
     XCircle,
+    ClipboardList,
+    MessageCircle,
 } from "lucide-vue-next";
 import { useCart } from "@/Composables/useCart";
 import { useToast } from "@/Composables/useToast";
@@ -528,33 +502,11 @@ const accountHref = computed(() =>
         : "/customer/orders",
 );
 
-// --- Categories + nav pagination ---
-const CATEGORY_PAGE_SIZE = 8;
-const categoryStartIndex = ref(0);
-
+// --- Categories ---
 const allCategories = computed(() => page.props.categories || []);
 const visibleCategories = computed(() =>
-    allCategories.value.slice(
-        categoryStartIndex.value,
-        categoryStartIndex.value + CATEGORY_PAGE_SIZE,
-    ),
+    allCategories.value.slice(0, 6),
 );
-const hasPrevCategories = computed(() => categoryStartIndex.value > 0);
-const hasNextCategories = computed(
-    () =>
-        categoryStartIndex.value + CATEGORY_PAGE_SIZE <
-        allCategories.value.length,
-);
-
-const nextCategories = () => {
-    if (hasNextCategories.value) categoryStartIndex.value += CATEGORY_PAGE_SIZE;
-};
-const prevCategories = () => {
-    categoryStartIndex.value = Math.max(
-        0,
-        categoryStartIndex.value - CATEGORY_PAGE_SIZE,
-    );
-};
 
 const categoryHasChildren = (category) =>
     !!(category.sub_categories?.length || category.brands?.length);

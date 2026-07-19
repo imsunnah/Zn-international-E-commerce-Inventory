@@ -18,32 +18,50 @@ class StoreController extends Controller
 {
     public function home()
     {
-        $topSelling = Product::with(['category', 'brand'])->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->take(5)->get();
-        $latestProducts = Product::with(['category', 'brand'])->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->latest()->take(10)->get();
-        $discountedProducts = Product::with(['category', 'brand'])->where('is_active', true)->whereNotNull('discount_type')->latest()->take(10)->get();
-        $combos = \App\Models\Combo::with('products')->where('is_active', true)->latest()->take(6)->get();
-        $featuredCategories = Category::withCount('products')->orderByRaw('serial IS NULL, serial ASC')->take(5)->get();
-        $brands = \App\Models\Brand::where('is_active', true)->take(12)->get();
-        $reviews = Review::where('is_active', true)->latest()->take(9)->get();
+        // --- New Products (latest arrivals) ---
+        $latestProducts = Product::with(['category', 'brand', 'gallery'])
+            ->where('is_active', true)
+            ->orderByRaw('serial IS NULL, serial ASC')
+            ->latest()
+            ->take(15)
+            ->get();
+
+        // --- Printers (by category slug) ---
+        $printerCategory = Category::where('slug', 'like', '%printer%')->first();
+        $printersProducts = $printerCategory
+            ? Product::with(['category', 'brand', 'gallery'])
+                ->where('is_active', true)
+                ->where('category_id', $printerCategory->id)
+                ->orderByRaw('serial IS NULL, serial ASC')
+                ->take(15)
+                ->get()
+            : collect();
+
+        // --- Scanners (by category slug) ---
+        $scannerCategory = Category::where('slug', 'like', '%scanner%')->first();
+        $scannersProducts = $scannerCategory
+            ? Product::with(['category', 'brand', 'gallery'])
+                ->where('is_active', true)
+                ->where('category_id', $scannerCategory->id)
+                ->orderByRaw('serial IS NULL, serial ASC')
+                ->take(15)
+                ->get()
+            : collect();
+
+        // --- Featured Categories & Notice ---
+        $featuredCategories = Category::withCount('products')
+            ->orderByRaw('serial IS NULL, serial ASC')
+            ->take(6)
+            ->get();
+
         $notice = Notice::where('is_active', true)->latest()->take(9)->get();
 
-        $categorySections = Category::with([
-            'products' => function ($query) {
-                $query->where('is_active', true)->orderByRaw('serial IS NULL, serial ASC')->take(8);
-            }
-        ])->has('products', '>', 0)->orderByRaw('serial IS NULL, serial ASC')->get();
-
         return Inertia::render('Home', [
-            'topSelling'         => $topSelling,
             'latestProducts'     => $latestProducts,
-            'discountedProducts' => $discountedProducts,
-            'combos'             => $combos,
+            'printersProducts'   => $printersProducts,
+            'scannersProducts'   => $scannersProducts,
             'featuredCategories' => $featuredCategories,
-            'brands'             => $brands,
-            'categorySections'   => $categorySections,
-            'reviews'            => $reviews,
-            'notice'            => $notice,
-
+            'notice'             => $notice,
         ]);
     }
 
