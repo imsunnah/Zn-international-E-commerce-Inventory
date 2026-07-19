@@ -4,118 +4,118 @@
         <!-- ══════════════════════════════════════════
              HERO BANNER (single full-width banner, optional auto-rotate)
         ═══════════════════════════════════════════ -->
-        <section class="bg-white py-4 md:py-6 border-b border-slate-100">
-            <div class="w-full mx-auto px-4 md:px-6">
-                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-                    <!-- Left: Slider (75% or 3 cols out of 4) -->
-                    <div
-                        class="relative lg:col-span-3 w-full h-[140px] sm:h-[200px] md:h-[260px] lg:h-[300px] overflow-hidden rounded-xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 border border-emerald-900 group shadow-sm"
-                        @mouseenter="pauseSlider"
-                        @mouseleave="resumeSlider"
+        <section class="bg-white py-1 md:py-3 border-b border-slate-100">
+    <div class="w-full mx-auto px-4 md:px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-1.5">
+            <!-- Left: Slider (75% or 3 cols out of 4) -->
+            <div
+                class="relative lg:col-span-3 w-full h-[160px] sm:h-[230px] md:h-[300px] lg:h-[340px] overflow-hidden rounded-xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 border border-emerald-900 group shadow-sm"
+                @mouseenter="pauseSlider"
+                @mouseleave="resumeSlider"
+            >
+                <div
+                    v-if="!bannerImages.length"
+                    class="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-emerald-700/20 pointer-events-none"
+                />
+
+                <div
+                    class="absolute inset-0 flex transition-transform duration-700 ease-out"
+                    :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
+                >
+                    <Link
+                        v-for="(banner, i) in bannerImages"
+                        :key="i"
+                        :href="banner.href || '/shop'"
+                        class="min-w-full h-full relative block"
                     >
-                        <div
-                            v-if="!bannerImages.length"
-                            class="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-emerald-700/20 pointer-events-none"
+                        <img
+                            :src="banner.image"
+                            class="absolute inset-0 w-full h-full object-cover"
+                            :alt="banner.alt || `Banner ${i + 1}`"
                         />
+                    </Link>
 
-                        <div
-                            class="absolute inset-0 flex transition-transform duration-700 ease-out"
-                            :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
-                        >
+                    <!-- Fallback banner when no image is configured -->
+                    <div
+                        v-if="!bannerImages.length"
+                        class="min-w-full h-full flex items-center px-6 md:px-14 gap-8 relative z-10"
+                    >
+                        <div class="flex-1">
+                            <span
+                                class="inline-block bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3"
+                                >{{ storeSettings.hero_eyebrow || 'New Arrivals' }}</span
+                            >
+                            <h1 class="text-2xl md:text-4xl font-black text-white leading-tight mb-2 tracking-tight">
+                                {{ storeSettings.hero_title || 'Genuine Printers & Scanners' }}
+                            </h1>
+                            <p class="text-emerald-200/80 text-xs md:text-sm mb-4 font-medium max-w-[320px] leading-relaxed">
+                                {{ storeSettings.hero_subtitle || '100% original products, official warranty, nationwide delivery.' }}
+                            </p>
                             <Link
-                                v-for="(banner, i) in bannerImages"
-                                :key="i"
-                                :href="banner.href || '/shop'"
-                                class="min-w-full h-full relative block"
+                                href="/shop"
+                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 text-white rounded-lg text-sm font-bold hover:bg-emerald-400 shadow-md shadow-emerald-950/30 transition-all active:scale-95"
                             >
-                                <img
-                                    :src="banner.image"
-                                    class="absolute inset-0 w-full h-full object-cover"
-                                    :alt="banner.alt || `Banner ${i + 1}`"
-                                />
+                                Shop now <ArrowRight class="w-4 h-4" />
                             </Link>
-
-                            <!-- Fallback banner when no image is configured -->
-                            <div
-                                v-if="!bannerImages.length"
-                                class="min-w-full h-full flex items-center px-6 md:px-14 gap-8 relative z-10"
-                            >
-                                <div class="flex-1">
-                                    <span
-                                        class="inline-block bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3"
-                                        >{{ storeSettings.hero_eyebrow || 'New Arrivals' }}</span
-                                    >
-                                    <h1 class="text-2xl md:text-4xl font-black text-white leading-tight mb-2 tracking-tight">
-                                        {{ storeSettings.hero_title || 'Genuine Printers & Scanners' }}
-                                    </h1>
-                                    <p class="text-emerald-200/80 text-xs md:text-sm mb-4 font-medium max-w-[320px] leading-relaxed">
-                                        {{ storeSettings.hero_subtitle || '100% original products, official warranty, nationwide delivery.' }}
-                                    </p>
-                                    <Link
-                                        href="/shop"
-                                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 text-white rounded-lg text-sm font-bold hover:bg-emerald-400 shadow-md shadow-emerald-950/30 transition-all active:scale-95"
-                                    >
-                                        Shop now <ArrowRight class="w-4 h-4" />
-                                    </Link>
-                                </div>
-                            </div>
                         </div>
-
-                        <!-- Arrows -->
-                        <button
-                            v-if="bannerImages.length > 1"
-                            @click="goToSlide(currentSlide - 1)"
-                            class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
-                        >
-                            <ChevronLeft class="w-4 h-4" />
-                        </button>
-                        <button
-                            v-if="bannerImages.length > 1"
-                            @click="goToSlide(currentSlide + 1)"
-                            class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
-                        >
-                            <ChevronRight class="w-4 h-4" />
-                        </button>
-
-                        <div
-                            v-if="bannerImages.length > 1"
-                            class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
-                        >
-                            <button
-                                v-for="(_, i) in bannerImages"
-                                :key="i"
-                                @click="goToSlide(i)"
-                                :class="currentSlide === i ? 'w-5 bg-emerald-400' : 'w-1.5 bg-white/30 hover:bg-white/50'"
-                                class="h-1.5 rounded-full transition-all duration-300 border-none cursor-pointer"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- Right: Static Promo (25% or 1 col out of 4) -->
-                    <div class="relative lg:col-span-1 w-full h-[140px] sm:h-[200px] md:h-[260px] lg:h-[300px] overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-100 shadow-sm group">
-                        <Link :href="storeSettings.hero_promo_1_url || '/shop'" class="w-full h-full block relative decoration-none border-none">
-                            <img
-                                :src="storeSettings.hero_promo_1_image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600'"
-                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80"
-                                alt="Promo Banner"
-                            />
-                            <!-- Elegant overlay text directly positioned -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent p-5 flex flex-col justify-end">
-                                <span class="bg-[#00a651] text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full w-max mb-2">
-                                    Special Offer
-                                </span>
-                                <h3 class="text-sm font-black text-white leading-tight truncate">
-                                    {{ storeSettings.hero_promo_1_title || 'Smart Printing Hub' }}
-                                </h3>
-                                <p class="text-[10px] text-slate-300 mt-1 font-bold leading-normal truncate">
-                                    {{ storeSettings.hero_promo_1_subtitle || 'Get premium laser printers' }}
-                                </p>
-                            </div>
-                        </Link>
                     </div>
                 </div>
+
+                <!-- Arrows -->
+                <button
+                    v-if="bannerImages.length > 1"
+                    @click="goToSlide(currentSlide - 1)"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
+                >
+                    <ChevronLeft class="w-4 h-4" />
+                </button>
+                <button
+                    v-if="bannerImages.length > 1"
+                    @click="goToSlide(currentSlide + 1)"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border-none cursor-pointer backdrop-blur-sm"
+                >
+                    <ChevronRight class="w-4 h-4" />
+                </button>
+
+                <div
+                    v-if="bannerImages.length > 1"
+                    class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10"
+                >
+                    <button
+                        v-for="(_, i) in bannerImages"
+                        :key="i"
+                        @click="goToSlide(i)"
+                        :class="currentSlide === i ? 'w-5 bg-emerald-400' : 'w-1.5 bg-white/30 hover:bg-white/50'"
+                        class="h-1.5 rounded-full transition-all duration-300 border-none cursor-pointer"
+                    />
+                </div>
             </div>
-        </section>
+
+            <!-- Right: Static Promo (25% or 1 col out of 4) -->
+            <div class="relative lg:col-span-1 w-full h-[160px] sm:h-[230px] md:h-[300px] lg:h-[340px] overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-100 shadow-sm group">
+                <Link :href="storeSettings.hero_promo_1_url || '/shop'" class="w-full h-full block relative decoration-none border-none">
+                    <img
+                        :src="storeSettings.hero_promo_1_image || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600'"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-80"
+                        alt="Promo Banner"
+                    />
+                    <!-- Elegant overlay text directly positioned -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent p-5 flex flex-col justify-end">
+                        <span class="bg-[#00a651] text-white text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full w-max mb-2">
+                            Special Offer
+                        </span>
+                        <h3 class="text-sm font-black text-white leading-tight truncate">
+                            {{ storeSettings.hero_promo_1_title || 'Smart Printing Hub' }}
+                        </h3>
+                        <p class="text-[10px] text-slate-300 mt-1 font-bold leading-normal truncate">
+                            {{ storeSettings.hero_promo_1_subtitle || 'Get premium laser printers' }}
+                        </p>
+                    </div>
+                </Link>
+            </div>
+        </div>
+    </div>
+</section>
 
         <!-- ══════════════════════════════════════════
              SCROLLING NOTICE
@@ -150,47 +150,44 @@
         </div>
 
         <!-- ══════════════════════════════════════════
-             FEATURED CATEGORIES (full-bleed gray bg)
+             FEATURED CATEGORIES (full-bleed gray bg, centered title)
         ═══════════════════════════════════════════ -->
-        <section v-if="displayedCategories.length" class="full-bleed-section py-8 bg-[#f5f5f5] border-b border-slate-200">
+        <section v-if="displayedCategories.length" class="full-bleed-section py-10 bg-[#f3f4f6] border-b border-slate-200/60">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-[#00a651] rounded-full inline-block"></span>
-                            Featured Categories
-                        </h2>
-                        <p class="text-slate-400 text-[10px] mt-0.5 font-medium">
-                            Browse by product type
-                        </p>
-                    </div>
-                    <Link href="/shop" class="text-xs font-bold text-[#00a651] hover:text-[#008541] transition-colors decoration-none">
-                        View All
-                    </Link>
+                <!-- Centered Header -->
+                <div class="text-center mb-8">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                        Featured <span class="text-[#00a651]">Categories</span>
+                    </h2>
+                    <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
-                <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                <!-- Centered Items Grid -->
+                <div class="flex flex-wrap justify-center gap-4">
                     <Link
                         v-for="cat in displayedCategories"
                         :key="cat.id"
                         :href="`/shop?category=${cat.slug}`"
-                        class="group flex flex-col items-center gap-1.5 decoration-transparent w-full"
+                        class="group flex flex-col items-center decoration-transparent w-[100px] h-[100px] md:w-[110px] md:h-[110px] bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#00a651] transition-all duration-200 p-3 justify-between"
                     >
-                        <div class="w-full aspect-square rounded-xl bg-white hover:bg-white border border-slate-200/80 hover:border-[#00a651] flex items-center justify-center overflow-hidden transition-all duration-200 group-hover:shadow-md">
+                        <!-- Image / Icon Container -->
+                        <div class="flex-1 flex items-center justify-center w-full min-h-0">
                             <img
                                 v-if="cat.image"
                                 :src="cat.image"
                                 :alt="cat.name"
-                                class="w-12 h-12 md:w-16 md:h-16 object-contain transition-transform duration-200 group-hover:scale-110"
+                                class="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-200 group-hover:scale-105"
                             />
                             <component
                                 v-else
                                 :is="categoryIcon(cat)"
-                                class="w-8 h-8 md:w-10 md:h-10 text-slate-400 group-hover:text-[#00a651] transition-colors"
+                                class="w-8 h-8 md:w-9 md:h-9 text-slate-400 group-hover:text-[#00a651] transition-colors"
                                 stroke-width="1.5"
                             />
                         </div>
-                        <span class="text-[10px] md:text-[11px] font-bold text-slate-600 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wide truncate block w-full">
+
+                        <!-- Text Container inside the Card -->
+                        <span class="text-[9px] md:text-[10px] font-bold text-slate-500 group-hover:text-[#00a651] transition-colors text-center leading-none uppercase tracking-wider block w-full mt-2 truncate">
                             {{ cat.name }}
                         </span>
                     </Link>
@@ -199,23 +196,18 @@
         </section>
 
         <!-- ══════════════════════════════════════════
-             NEW PRODUCTS
+             NEW PRODUCTS (full-bleed white, centered title)
         ═══════════════════════════════════════════ -->
-        <section v-if="latestProducts.length" class="py-10 bg-white border-b border-slate-100">
+        <section v-if="latestProducts.length" class=" py-10 bg-white border-b border-slate-200/60">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-left mb-6 border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-[#00a651] rounded-full inline-block"></span>
-                            New Products
-                        </h2>
-                        <p class="text-slate-400 text-[10px] mt-0.5 font-medium">
-                            Latest arrivals fresh in stock
-                        </p>
-                    </div>
-                    <Link href="/shop" class="text-xs font-bold text-[#00a651] hover:text-[#008541] transition-colors decoration-none">
-                        View All
-                    </Link>
+                <div class="text-center mb-8">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                        New <span class="text-[#00a651]">Products</span>
+                    </h2>
+                    <p class="text-slate-400 text-[11px] mt-1 font-medium">
+                        Latest arrivals fresh in stock
+                    </p>
+                    <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
@@ -226,27 +218,31 @@
                         @quickView="openQuickView"
                     />
                 </div>
+
+                <div class="text-center mt-7">
+                    <Link
+                        href="/shop"
+                        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-[#00a651] text-[#00a651] text-xs font-bold uppercase tracking-wider hover:bg-[#00a651] hover:text-white transition-all decoration-none"
+                    >
+                        View All Products <ArrowRight class="w-3.5 h-3.5" />
+                    </Link>
+                </div>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             PRINTERS PRODUCTS
+             PRINTERS PRODUCTS (full-bleed gray, centered title)
         ═══════════════════════════════════════════ -->
-        <section v-if="printersProducts && printersProducts.length" class="py-10 bg-white border-b border-slate-100">
+        <section v-if="printersProducts && printersProducts.length" class=" py-10  border-b border-slate-200/60">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-left mb-6 border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-[#00a651] rounded-full inline-block"></span>
-                            Printers
-                        </h2>
-                        <p class="text-slate-400 text-[10px] mt-0.5 font-medium">
-                            High performance and dynamic printing hardware
-                        </p>
-                    </div>
-                    <Link href="/shop?category=printer" class="text-xs font-bold text-[#00a651] hover:text-[#008541] transition-colors decoration-none">
-                        View All
-                    </Link>
+                <div class="text-center mb-8">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                        Enterprise <span class="text-[#00a651]">Printer</span>
+                    </h2>
+                    <p class="text-slate-400 text-[11px] mt-1 font-medium">
+                        High performance and dynamic printing hardware
+                    </p>
+                    <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
@@ -257,27 +253,31 @@
                         @quickView="openQuickView"
                     />
                 </div>
+
+                <div class="text-center mt-7">
+                    <Link
+                        href="/shop?category=printer"
+                        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-[#00a651] text-[#00a651] text-xs font-bold uppercase tracking-wider hover:bg-[#00a651] hover:text-white transition-all decoration-none"
+                    >
+                        View All Printers <ArrowRight class="w-3.5 h-3.5" />
+                    </Link>
+                </div>
             </div>
         </section>
 
         <!-- ══════════════════════════════════════════
-             SCANNERS PRODUCTS
+             SCANNERS PRODUCTS (full-bleed white, centered title)
         ═══════════════════════════════════════════ -->
-        <section v-if="scannersProducts && scannersProducts.length" class="py-10 bg-white border-b border-slate-100">
+        <section v-if="scannersProducts && scannersProducts.length" class=" py-10 bg-white border-b border-slate-200/60">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-left mb-6 border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-[#00a651] rounded-full inline-block"></span>
-                            Scanners
-                        </h2>
-                        <p class="text-slate-400 text-[10px] mt-0.5 font-medium">
-                            Premium scanners for official and smart digitization
-                        </p>
-                    </div>
-                    <Link href="/shop?category=scanner" class="text-xs font-bold text-[#00a651] hover:text-[#008541] transition-colors decoration-none">
-                        View All
-                    </Link>
+                <div class="text-center mb-8">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                        Enterprise <span class="text-[#00a651]">Scanner</span>
+                    </h2>
+                    <p class="text-slate-400 text-[11px] mt-1 font-medium">
+                        Premium scanners for official and smart digitization
+                    </p>
+                    <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
@@ -287,6 +287,15 @@
                         :product="p"
                         @quickView="openQuickView"
                     />
+                </div>
+
+                <div class="text-center mt-7">
+                    <Link
+                        href="/shop?category=scanner"
+                        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-[#00a651] text-[#00a651] text-xs font-bold uppercase tracking-wider hover:bg-[#00a651] hover:text-white transition-all decoration-none"
+                    >
+                        View All Scanners <ArrowRight class="w-3.5 h-3.5" />
+                    </Link>
                 </div>
             </div>
         </section>
@@ -506,6 +515,16 @@ const toggleAccordion = (i) => {
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* Full-bleed helper: breaks a section out of any centered/padded parent
+   so its background spans the entire viewport width, while the inner
+   content wrapper (.w-full.mx-auto with max width from layout) stays
+   aligned with the rest of the page. */
+.full-bleed-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
 }
 
 /* Scrolling notice ticker */
