@@ -145,7 +145,7 @@
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-4 text-[#00a651] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-4 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>
@@ -159,12 +159,12 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-4 text-[#00a651] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
+                    class="px-4 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
                         v-if="categoryHasChildren(category)"
-                        class="w-3 h-3 text-[#00a651]/75 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
+                        class="w-3 h-3 text-[#0fd33a]/75 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
                     />
                 </Link>
 
@@ -187,7 +187,7 @@
                                 {{ sub.name }}
                                 <ChevronRight
                                     v-if="sub.brands?.length"
-                                    class="w-3 h-3 text-slate-600 group-hover/sub:text-[#00a651] transition-colors"
+                                    class="w-3 h-3 text-slate-600 group-hover/sub:text-[#0fd33a] transition-colors"
                                 />
                             </Link>
 
@@ -200,7 +200,7 @@
                                     v-for="brand in sub.brands"
                                     :key="brand.id"
                                     :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-md transition-colors decoration-none"
+                                    class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -213,7 +213,7 @@
                             v-for="brand in category.brands"
                             :key="brand.id"
                             :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
+                            class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
                         >
                             {{ brand.name }}
                         </Link>
@@ -224,6 +224,30 @@
     </div>
 </nav>
 </header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <Transition v-bind="fadeTransition">
             <div
@@ -505,7 +529,7 @@ const accountHref = computed(() =>
 // --- Categories ---
 const allCategories = computed(() => page.props.categories || []);
 const visibleCategories = computed(() =>
-    allCategories.value.slice(0, 8),
+    allCategories.value.slice(0, 12),
 );
 
 const categoryHasChildren = (category) =>
