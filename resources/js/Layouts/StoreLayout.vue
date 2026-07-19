@@ -145,7 +145,7 @@
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-4 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-3 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>
@@ -159,7 +159,7 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-4 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
+                    class="px-2 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
@@ -171,7 +171,7 @@
                 <!-- Mega Dropdown Column Tier 1 (Pure Solid Black Background) -->
                 <div
                     v-if="categoryHasChildren(category)"
-                    class="absolute left-0 top-full bg-black p-1.5 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[250px] border border-slate-900 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
+                    class="absolute left-0 top-full bg-black p-1 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[220px] border border-slate-900 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
                 >
                     <template v-if="category.sub_categories?.length">
                         <div
@@ -182,7 +182,7 @@
                             <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
                             <Link
                                 :href="`/shop?sub_category=${sub.slug}`"
-                                class="flex items-center justify-between px-3 py-1.5 hover:bg-slate-900 rounded-lg text-[9px] font-normal text-white hover:text-[#00a651] transition-colors decoration-none"
+                                class="flex items-center justify-between px-2.5 py-1 hover:bg-slate-900 rounded-lg text-[9px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
                             >
                                 {{ sub.name }}
                                 <ChevronRight
@@ -191,16 +191,16 @@
                                 />
                             </Link>
 
-                            <!-- Dropdown Sub-tier Brand Matrix (Pure Solid Black Background) -->
+                            <!-- Dropdown Sub-tier Brand Matrix -->
                             <div
                                 v-if="sub.brands?.length"
-                                class="absolute left-[calc(100%-4px)] top-0 bg-black p-1.5 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[200px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
+                                class="absolute left-[calc(100%-4px)] top-0 bg-black p-1 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[180px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
                             >
                                 <Link
                                     v-for="brand in sub.brands"
                                     :key="brand.id"
                                     :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
+                                    class="block px-2.5 py-1 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -213,7 +213,7 @@
                             v-for="brand in category.brands"
                             :key="brand.id"
                             :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
+                            class="block px-2.5 py-1 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
                         >
                             {{ brand.name }}
                         </Link>
