@@ -141,11 +141,11 @@
     </Transition>
 
 <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
-    <div class="w-full lg:w-[50%] mx-auto flex items-center h-9 px-4">
+    <div class="w-full lg:w-[50%] mx-auto flex items-center h-7 px-2">
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-3 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-2 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>
@@ -159,19 +159,19 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-2 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none"
+                    class="px-1.5 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-0.5 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
                         v-if="categoryHasChildren(category)"
-                        class="w-3 h-3 text-[#0fd33a]/75 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
+                        class="w-2.5 h-2.5 text-[#0fd33a]/75 group-hover/category:text-white group-hover/category:rotate-180 transition-transform duration-200"
                     />
                 </Link>
 
                 <!-- Mega Dropdown Column Tier 1 (Pure Solid Black Background) -->
                 <div
                     v-if="categoryHasChildren(category)"
-                    class="absolute left-0 top-full bg-black p-1 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[220px] border border-slate-900 translate-y-2 group-hover/category:translate-y-0 rounded-b-xl"
+                    class="absolute left-0 top-full bg-black p-0.5 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[200px] border border-slate-900 translate-y-1 group-hover/category:translate-y-0 rounded-b-lg"
                 >
                     <template v-if="category.sub_categories?.length">
                         <div
@@ -182,25 +182,25 @@
                             <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
                             <Link
                                 :href="`/shop?sub_category=${sub.slug}`"
-                                class="flex items-center justify-between px-2.5 py-1 hover:bg-slate-900 rounded-lg text-[9px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
+                                class="flex items-center justify-between px-2 py-0.5 hover:bg-slate-900 rounded text-[9px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
                             >
                                 {{ sub.name }}
                                 <ChevronRight
                                     v-if="sub.brands?.length"
-                                    class="w-3 h-3 text-slate-600 group-hover/sub:text-[#0fd33a] transition-colors"
+                                    class="w-2.5 h-2.5 text-slate-600 group-hover/sub:text-[#0fd33a] transition-colors"
                                 />
                             </Link>
 
                             <!-- Dropdown Sub-tier Brand Matrix -->
                             <div
                                 v-if="sub.brands?.length"
-                                class="absolute left-[calc(100%-4px)] top-0 bg-black p-1 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[180px] translate-x-2 group-hover/sub:translate-x-0 rounded-xl"
+                                class="absolute left-[calc(100%-2px)] top-0 bg-black p-0.5 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[165px] translate-x-1 group-hover/sub:translate-x-0 rounded-lg"
                             >
                                 <Link
                                     v-for="brand in sub.brands"
                                     :key="brand.id"
                                     :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-2.5 py-1 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
+                                    class="block px-2 py-0.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -213,7 +213,7 @@
                             v-for="brand in category.brands"
                             :key="brand.id"
                             :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-2.5 py-1 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
+                            class="block px-2 py-0.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
                         >
                             {{ brand.name }}
                         </Link>
