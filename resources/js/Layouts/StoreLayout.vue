@@ -145,7 +145,7 @@
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-4 text-[#00a651] text-[11px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-4 text-[#00a651] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>
@@ -159,7 +159,7 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-4 text-[#00a651] text-[11px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
+                    class="px-4 text-[#00a651] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-1.5 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
@@ -182,7 +182,7 @@
                             <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
                             <Link
                                 :href="`/shop?sub_category=${sub.slug}`"
-                                class="flex items-center justify-between px-3 py-1.5 hover:bg-slate-900 rounded-lg text-[11px] font-normal text-white hover:text-[#00a651] transition-colors decoration-none"
+                                class="flex items-center justify-between px-3 py-1.5 hover:bg-slate-900 rounded-lg text-[9px] font-normal text-white hover:text-[#00a651] transition-colors decoration-none"
                             >
                                 {{ sub.name }}
                                 <ChevronRight
@@ -200,7 +200,7 @@
                                     v-for="brand in sub.brands"
                                     :key="brand.id"
                                     :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-3 py-1.5 text-[11px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-md transition-colors decoration-none"
+                                    class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-md transition-colors decoration-none"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -213,7 +213,7 @@
                             v-for="brand in category.brands"
                             :key="brand.id"
                             :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-3 py-1.5 text-[11px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
+                            class="block px-3 py-1.5 text-[9px] font-normal text-white hover:text-[#00a651] hover:bg-slate-900 rounded-lg transition-colors decoration-none"
                         >
                             {{ brand.name }}
                         </Link>
@@ -356,7 +356,7 @@
                             </div>
                         </div>
                     </Link>
-                    <p class="text-[11px] text-slate-400 leading-relaxed max-w-xs">
+                    <p class="text-[9px] text-slate-400 leading-relaxed max-w-xs">
                         {{ settings.footer_about || "Your trusted partner for genuine corporate IT frameworks, premium printing hardware, and verified computer components across Bangladesh." }}
                     </p>
                     <div class="flex items-center gap-2 pt-1">
@@ -372,7 +372,7 @@
                 <!-- Column 2: Quick Links -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Quick Links</h4>
-                    <ul class="space-y-2 text-[11px] font-bold text-center lg:text-left list-none p-0 m-0">
+                    <ul class="space-y-2 text-[9px] font-bold text-center lg:text-left list-none p-0 m-0">
                         <li><Link href="/shop" class="hover:text-[#00a651] transition-colors decoration-none">All Products</Link></li>
                         <li><Link href="/offers" class="hover:text-[#00a651] transition-colors decoration-none">Special Offers</Link></li>
                         <li><Link href="/pc-builder" class="hover:text-[#00a651] transition-colors decoration-none">PC Builder</Link></li>
@@ -383,7 +383,7 @@
                 <!-- Column 3: Contact & Support -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Head Office</h4>
-                    <div class="space-y-3 text-[11px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
+                    <div class="space-y-3 text-[9px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
                         <div class="flex items-start gap-2 max-w-xs">
                             <MapPin class="w-4 h-4 text-[#00a651] shrink-0 mt-0.5" />
                             <span>{{ settings.footer_address || "Multiplan Center, Level 9, Suite 935, Elephant Road, Dhaka-1205" }}</span>
@@ -431,7 +431,7 @@
                         <span>✓ Nationwide Shipping</span>
                     </div>
 
-                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[11px]">
+                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[9px]">
                         <p>© {{ new Date().getFullYear() }} {{ siteName }}. All rights reserved.</p>
                         <span class="uppercase tracking-widest text-[8px] font-black text-slate-600 bg-slate-900/50 px-2 py-0.5 rounded">
                             Developed by admin systems
