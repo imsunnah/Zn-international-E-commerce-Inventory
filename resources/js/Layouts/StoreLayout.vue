@@ -505,7 +505,7 @@ const accountHref = computed(() =>
 // --- Categories ---
 const allCategories = computed(() => page.props.categories || []);
 const visibleCategories = computed(() =>
-    allCategories.value.slice(0, 6),
+    allCategories.value.slice(0, 10),
 );
 
 const categoryHasChildren = (category) =>
