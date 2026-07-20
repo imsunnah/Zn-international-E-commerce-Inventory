@@ -201,7 +201,7 @@ class StoreController extends Controller
             ->get();
 
         return Inertia::render('ProductData', [
-            'product' => $product->load(['category', 'gallery', 'reviews']),
+            'product' => $product->load(['category', 'subCategory', 'brand', 'gallery', 'reviews']),
             'relatedProducts' => $relatedProducts
         ]);
     }

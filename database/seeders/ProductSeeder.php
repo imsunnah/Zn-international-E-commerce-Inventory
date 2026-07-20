@@ -111,6 +111,8 @@ class ProductSeeder extends Seeder
                 'sku'             => 'PRN-' . rand(10000, 99999),
                 'description_en'  => $pData['desc'],
                 'description_bn'  => $pData['desc'],
+                'short_description' => "Print Speed (A4): Up to 20ppm\nPrint Resolution: 1200 x 1200dpi\nMonthly Duty Cycle: 10000 Pages\nConnectivity: USB 2.0\nDuplex Printing: Manual",
+                'long_description'  => "Brand: " . $pData['brand'] . "\nModel: " . $pData['name'] . "\nFunctions: Print, Scan, Copy\nPrint Speed Black (ISO, letter): Up to 21 ppm\nPrint Speed Black (ISO, A4): Up to 20 ppm\nPrint Resolution Technologies: ReCP\nPrint languages: SPL\nDisplay: 2-Line LCD (16 characters per line)\nProcessor speed: 600 MHz\nConnectivity: High-Speed USB 2.0\nMemory: 128 MB\nPaper handling input, standard: 150 sheet input tray\nPaper handling output, standard: 100 sheet output bin\nPower consumption: 300 watts (Active Printing), 38 watts (Ready), 1.9 watts (Sleep)",
                 'price'           => $pData['price'],
                 'buying_price'    => $pData['price'] * 0.82,
                 'stock'           => rand(5, 30),

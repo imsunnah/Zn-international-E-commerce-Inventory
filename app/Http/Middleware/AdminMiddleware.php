@@ -19,11 +19,11 @@ class AdminMiddleware
             if (session('admin_last_activity')) {
                 $lastActivity = session('admin_last_activity');
                 $lastActivity = $lastActivity instanceof \Carbon\Carbon ? $lastActivity : \Carbon\Carbon::parse($lastActivity);
-                if (now()->diffInMinutes($lastActivity, true) >= 180) {
+                if (now()->diffInMinutes($lastActivity, true) >= 60) {
                     auth()->logout();
                     session()->forget('admin_last_activity');
                     return redirect()->route('admin.login')->withErrors([
-                        'email' => 'Your session has expired due to 3 hours of inactivity.'
+                        'email' => 'Your session has expired due to 1 hour of inactivity.'
                     ]);
                 }
             }

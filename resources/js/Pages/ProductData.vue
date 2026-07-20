@@ -1,479 +1,257 @@
 <template>
     <StoreLayout>
-        <div
-            class="bg-white min-h-screen py-6 font-sans antialiased text-slate-800"
-        >
+        <div class="bg-white min-h-screen py-6 font-sans antialiased text-slate-800">
+            <!-- Top Container: Breadcrumbs & Product Main Info -->
             <div class="max-w-6xl mx-auto px-4 md:px-6">
                 <!-- Breadcrumbs -->
-                <nav
-                    class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-8 overflow-x-auto whitespace-nowrap"
-                >
-                    <Link
-                        href="/"
-                        class="hover:text-slate-900 transition-colors"
-                        >Home</Link
-                    >
-                    <ChevronRight class="w-3 h-3 text-slate-300 shrink-0" />
-                    <Link
-                        href="/shop"
-                        class="hover:text-slate-900 transition-colors"
-                        >Products</Link
-                    >
-                    <ChevronRight class="w-3 h-3 text-slate-300 shrink-0" />
-                    <span class="text-slate-900 truncate max-w-[200px]">{{
-                        product.name
-                    }}</span>
+                <nav class="flex items-center gap-1.5 text-xs text-slate-500 mb-6 overflow-x-auto whitespace-nowrap">
+                    <Link href="/" class="hover:text-slate-900 transition-colors">Home</Link>
+                    <span>/</span>
+                    <Link v-if="product.category" :href="`/shop?category=${product.category.slug}`" class="hover:text-slate-900 transition-colors">{{ product.category.name_en }}</Link>
+                    <span v-if="product.category">/</span>
+                    <Link v-if="product.sub_category" :href="`/shop?subcategory=${product.sub_category.slug}`" class="hover:text-slate-900 transition-colors">{{ product.sub_category.name_en }}</Link>
+                    <span v-if="product.sub_category">/</span>
+                    <span class="text-slate-600 truncate">{{ product.name }}</span>
                 </nav>
 
-                <!-- Main Product Layout (3 Column Premium) -->
-                <div
-                    class="grid lg:grid-cols-12 gap-8 items-start mb-16 relative"
-                >
-                    <!-- Column 1: Image Gallery (5 cols) -->
-                    <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-6">
-                        <div
+                <!-- Main Top Section (Clean & Borderless) -->
+                <div class="grid lg:grid-cols-12 gap-8 items-start mb-12">
+                    <!-- Column 1: Image Gallery -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div 
                             @click="openLightboxMain"
-                            class="relative aspect-square rounded-2xl bg-white border border-slate-200 flex items-center justify-center p-8 cursor-zoom-in group transition-all duration-300 hover:shadow-lg"
+                            class="relative aspect-square flex items-center justify-center cursor-zoom-in group"
                         >
                             <img
-                                :src="
-                                    activeImage ||
-                                    `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(product.name)}`
-                                "
+                                :src="activeImage || `https://placehold.co/800x800/f8fafc/64748b?text=${encodeURIComponent(product.name)}`"
                                 :alt="product.name"
-                                class="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                                class="w-full h-full object-contain max-h-[380px]"
                             />
                             <div
                                 v-if="product.stock <= 0"
-                                class="absolute inset-0 bg-white/40 backdrop-blur-[2px] flex items-center justify-center"
+                                class="absolute inset-0 bg-white/60 flex items-center justify-center"
                             >
-                                <span class="px-5 py-2 bg-slate-800 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg">Out of Stock</span>
+                                <span class="px-4 py-1.5 bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded">Out of Stock</span>
                             </div>
                         </div>
 
-                        <!-- Thumbnail Slider -->
-                        <div
-                            class="flex flex-wrap gap-3"
-                            v-if="allImages.length > 1"
-                        >
+                        <!-- Gallery Thumbnails -->
+                        <div class="flex flex-wrap gap-2 pt-2" v-if="allImages.length > 1">
                             <button
                                 v-for="(img, index) in allImages"
                                 :key="index"
                                 @click="activeImage = img"
                                 :class="[
-                                    'w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white p-2',
-                                    activeImage === img
-                                        ? 'border-[#ef4823] shadow-md scale-[0.98]'
-                                        : 'border-slate-200 hover:border-[#ef4823]/50',
+                                    'w-16 h-16 border transition-all bg-white p-1',
+                                    activeImage === img ? 'border-emerald-600' : 'border-slate-200 hover:border-slate-300',
                                 ]"
                             >
-                                <img
-                                    :src="img"
-                                    class="w-full h-full object-contain mix-blend-multiply"
-                                />
+                                <img :src="img" class="w-full h-full object-contain" />
                             </button>
                         </div>
                     </div>
 
-                    <!-- Column 2: Key Features & Details (4 cols) -->
-                    <div class="lg:col-span-4 space-y-6">
-                        <div>
-                            <h1
-                                class="text-xl lg:text-2xl font-bold text-slate-900 tracking-tight leading-snug mb-3"
-                            >
-                                {{ product.name }}
-                            </h1>
-                            <div class="flex flex-wrap items-center gap-3 text-xs font-medium text-slate-500">
-                                <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded">
-                                    Brand: <strong class="text-slate-900">{{ product.brand?.name || "N/A" }}</strong>
-                                </span>
-                                <span class="bg-slate-100 text-slate-700 px-2 py-1 rounded">
-                                    SKU: <strong class="text-slate-900">#{{ product.sku || product.id.toString().padStart(6, "0") }}</strong>
-                                </span>
+                    <!-- Column 2: Product Info & Actions -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <h1 class="text-xl lg:text-2xl font-bold text-slate-800 leading-snug">
+                            {{ product.name }}
+                        </h1>
+
+                        <!-- Price -->
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-lg font-bold text-emerald-600">৳{{ discountedPrice.toLocaleString() }}</span>
+                            <span v-if="product.discount_type" class="text-sm text-slate-400 line-through">৳{{ parseFloat(product.price).toLocaleString() }}</span>
+                        </div>
+
+                        <!-- Key Bullet Points -->
+                        <div class="pt-2 text-xs text-slate-700 space-y-1.5" v-if="parsedFeatures.length > 0">
+                            <div v-for="(feature, i) in parsedFeatures" :key="i" class="flex items-start gap-2">
+                                <span class="text-slate-400">•</span>
+                                <span>{{ feature }}</span>
                             </div>
                         </div>
 
-                        <div class="space-y-4 pt-4 border-t border-slate-100">
-                            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Key Features</h3>
-                            <ul class="space-y-2 text-sm text-slate-700 list-disc pl-5">
-                                <li><strong>Category:</strong> {{ product.category?.name || "Uncategorized" }}</li>
-                                <li><strong>Sub Category:</strong> {{ product.sub_category?.name || "Standard" }}</li>
-                                <li v-if="product.size"><strong>Size/Dimensions:</strong> {{ product.size }}</li>
-                                <li v-if="product.weight"><strong>Weight:</strong> {{ product.weight }}</li>
-                            </ul>
-                            <div v-if="product.remarks" class="p-3 mt-4 bg-orange-50/50 border border-orange-100 text-orange-800 text-xs rounded-lg italic">
-                                {{ product.remarks }}
-                            </div>
-                        </div>
-                        
-                        <div class="pt-4 text-xs font-medium text-[#00a651] underline cursor-pointer hover:text-slate-900 transition-colors" @click="activeTab = 'description';">
-                            View Full Description & Specifications
-                        </div>
-                    </div>
-
-                    <!-- Column 3: Buy Box (3 cols) -->
-                    <div class="lg:col-span-3">
-                        <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-6 sticky top-6">
-                            
-                            <!-- Price Block -->
-                            <div class="text-center pb-6 mb-6 border-b border-slate-100">
-                                <template v-if="product.discount_type">
-                                    <div class="flex items-center justify-center gap-2 mb-1">
-                                        <span class="text-sm text-slate-400 line-through">৳{{ parseFloat(product.price).toLocaleString() }}</span>
-                                        <span class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-black uppercase rounded">
-                                            Save {{ product.discount_type === 'percentage' ? product.discount_value + '%' : '৳' + product.discount_value }}
-                                        </span>
-                                    </div>
-                                </template>
-                                <div class="text-3xl font-black text-[#ef4823] tracking-tight">৳{{ discountedPrice.toLocaleString() }}</div>
-                                
-                                <div class="mt-4 flex items-center justify-center">
-                                    <div :class="[
-                                        'px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider',
-                                        product.stock > 0 ? 'bg-[#00a651]/10 text-[#00a651]' : 'bg-slate-100 text-slate-500'
-                                    ]">
-                                        <span v-if="product.stock > 0">● In Stock ({{ product.stock }})</span>
-                                        <span v-else>● Out of Stock</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Cart Controls -->
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between p-1 bg-slate-50 rounded-lg border border-slate-200">
-                                    <button
-                                        @click="quantity > 1 && quantity--"
-                                        type="button"
-                                        class="w-8 h-8 flex items-center justify-center rounded text-slate-500 hover:bg-white hover:shadow-sm hover:text-slate-900 transition-all"
-                                    >
-                                        <Minus class="w-3.5 h-3.5" />
-                                    </button>
-                                    <div class="text-sm font-bold text-slate-900 w-12 text-center select-none">{{ quantity }}</div>
-                                    <button
-                                        @click="quantity < (product.stock || 99) && quantity++"
-                                        type="button"
-                                        class="w-8 h-8 flex items-center justify-center rounded text-slate-500 hover:bg-white hover:shadow-sm hover:text-slate-900 transition-all"
-                                    >
-                                        <Plus class="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-
-                                <div class="space-y-2">
-                                    <button
-                                        @click="handleBuyNow"
-                                        :disabled="product.stock <= 0"
-                                        class="w-full h-12 bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white font-bold text-xs uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
-                                    >
-                                        Buy Now
-                                    </button>
-                                    <button
-                                        @click="handleAddToCart"
-                                        :disabled="product.stock <= 0"
-                                        class="w-full h-12 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 font-bold text-xs uppercase tracking-widest rounded-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-                                    >
-                                        <ShoppingCart class="w-4 h-4" /> Add to Cart
-                                    </button>
-                                </div>
-
+                        <!-- Contact / Hotline -->
+                        <div class="pt-2 space-y-2">
+                            <p class="text-xs font-bold text-emerald-600">
+                                Hotline: 01322-893290-3 (10:00AM TO 8:00PM)
+                            </p>
+                            <div>
                                 <a
-                                    :href="`https://wa.me/${$page.props.settings?.footer_phone}?text=Hi, I want to order ${product.name}`"
+                                    :href="`https://wa.me/${$page.props.settings?.footer_phone || '8801322893290'}?text=${encodeURIComponent('Hi, I want to order: ' + product.name)}`"
                                     target="_blank"
-                                    class="mt-2 w-full h-11 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 font-bold text-xs rounded-lg flex items-center justify-center gap-2 transition-all border border-emerald-200/50"
+                                    class="inline-flex items-center gap-1.5 bg-[#00a651] hover:bg-[#008c44] text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
                                 >
-                                    <MessageSquare class="w-4 h-4" /> Order via WhatsApp
+                                    Chat Through WhatsApp
                                 </a>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Dynamic Content Tabs Section -->
-                <div class="mt-12 border-t border-slate-100 pt-8">
-                    <div
-                        class="flex gap-6 border-b border-slate-100 text-xs font-medium uppercase tracking-wider"
-                    >
-                        <button
-                            @click="activeTab = 'description'"
-                            :class="
-                                activeTab === 'description'
-                                    ? 'text-[#ef4823] border-b-2 border-[#ef4823] pb-3 font-black shadow-[inset_0_-2px_0_0_#ef4823]'
-                                    : 'text-slate-400 pb-3 hover:text-[#ef4823]'
-                            "
-                        >
-                            Description
-                        </button>
-                        <button
-                            @click="activeTab = 'reviews'"
-                            :class="
-                                activeTab === 'reviews'
-                                    ? 'text-[#ef4823] border-b-2 border-[#ef4823] pb-3 font-black shadow-[inset_0_-2px_0_0_#ef4823]'
-                                    : 'text-slate-400 pb-3 hover:text-[#ef4823]'
-                            "
-                            class="flex items-center gap-1.5"
-                        >
-                            Reviews
-                            <span
-                                class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px] lowercase font-normal"
-                                >{{
-                                    product.reviews ? product.reviews.length : 0
-                                }}</span
+                        <!-- Purchase Form -->
+                        <div class="flex items-center gap-2 pt-2">
+                            <div class="flex items-center border border-slate-300 rounded h-8 bg-white">
+                                <button
+                                    @click="quantity > 1 && quantity--"
+                                    type="button"
+                                    class="w-7 h-full text-slate-500 hover:bg-slate-100 flex items-center justify-center text-sm font-bold"
+                                >
+                                    -
+                                </button>
+                                <input
+                                    type="text"
+                                    readonly
+                                    :value="quantity"
+                                    class="w-10 text-center text-xs font-bold text-slate-800 border-none outline-none p-0 focus:ring-0"
+                                />
+                                <button
+                                    @click="quantity < (product.stock || 99) && quantity++"
+                                    type="button"
+                                    class="w-7 h-full text-slate-500 hover:bg-slate-100 flex items-center justify-center text-sm font-bold"
+                                >
+                                    +
+                                </button>
+                            </div>
+
+                            <button
+                                @click="handleAddToCart"
+                                :disabled="product.stock <= 0"
+                                class="h-8 px-4 bg-[#00a651] hover:bg-[#008c44] text-white font-bold text-xs rounded transition-colors disabled:bg-slate-300"
                             >
-                        </button>
-                    </div>
+                                Add to cart
+                            </button>
 
-                    <div class="py-8">
-                        <!-- Plain-text Clean Description -->
-                        <div
-                            v-if="activeTab === 'description'"
-                            class="max-w-3xl text-slate-600 text-sm leading-relaxed whitespace-pre-line font-normal"
-                        >
-                            {{ product.description }}
+                            <button
+                                @click="handleBuyNow"
+                                :disabled="product.stock <= 0"
+                                class="h-8 px-4 bg-[#ef4823] hover:bg-[#d63d1a] text-white font-bold text-xs rounded transition-colors disabled:bg-slate-300"
+                            >
+                                Buy now
+                            </button>
                         </div>
 
-                        <!-- Intelligent Review Block -->
-                        <div v-if="activeTab === 'reviews'" class="max-w-3xl">
-                            <div
-                                class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 pb-8 border-b border-slate-100"
-                            >
-                                <div class="flex items-baseline gap-2 shrink-0">
-                                    <span
-                                        class="text-4xl font-bold text-slate-900 tracking-tight"
-                                        >{{ averageRating }}</span
-                                    >
-                                    <span
-                                        class="text-xs text-slate-400 font-medium"
-                                        >out of 5</span
-                                    >
-                                </div>
-                                <div
-                                    class="flex-grow w-full space-y-1.5 max-w-sm"
-                                >
-                                    <div
-                                        v-for="star in 5"
-                                        :key="star"
-                                        class="flex items-center gap-3"
-                                    >
-                                        <span
-                                            class="text-[10px] font-medium text-slate-400 w-3"
-                                            >{{ 6 - star }} ★</span
-                                        >
-                                        <div
-                                            class="flex-grow h-1 bg-slate-100 rounded-full overflow-hidden"
-                                        >
-                                            <div
-                                                class="h-full bg-[#ef4823] transition-all"
-                                                :style="{
-                                                    width:
-                                                        getRatingPercentage(
-                                                            6 - star,
-                                                        ) + '%',
-                                                }"
-                                            ></div>
-                                        </div>
-                                        <span
-                                            class="text-[10px] font-medium text-slate-400 w-6 text-right"
-                                            >{{
-                                                getRatingPercentage(
-                                                    6 - star,
-                                                ).toFixed(0)
-                                            }}%</span
-                                        >
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Meta Info -->
+                        <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+                            <div>Categories: <span class="text-slate-700">{{ product.category?.name_en }}</span></div>
+                            <div v-if="product.brand">Brand: <span class="text-slate-700">{{ product.brand.name_en }}</span></div>
+                            <div v-if="product.sku">SKU: <span class="text-slate-700">{{ product.sku }}</span></div>
+                        </div>
 
-                            <!-- Reviews Feed -->
-                            <div
-                                v-if="
-                                    product.reviews &&
-                                    product.reviews.length > 0
-                                "
-                                class="space-y-4 mb-10"
-                            >
-                                <div
-                                    v-for="r in product.reviews"
-                                    :key="r.id"
-                                    class="p-5 bg-slate-50/50 rounded-xl border border-slate-100"
-                                >
-                                    <div
-                                        class="flex justify-between items-start mb-2"
-                                    >
-                                        <div>
-                                            <h4
-                                                class="text-xs font-semibold text-slate-900"
-                                            >
-                                                {{ r.customer_name }}
-                                            </h4>
-                                            <p
-                                                class="text-[10px] text-slate-400"
-                                            >
-                                                {{
-                                                    new Date(
-                                                        r.created_at,
-                                                    ).toLocaleDateString()
-                                                }}
-                                            </p>
-                                        </div>
-                                        <div class="flex gap-0.5">
-                                            <Star
-                                                v-for="star in 5"
-                                                :key="star"
-                                                class="w-3 h-3"
-                                                :class="
-                                                    star <= r.rating
-                                                        ? 'text-[#ef4823] fill-current'
-                                                        : 'text-slate-200'
-                                                "
-                                            />
-                                        </div>
-                                    </div>
-                                    <p
-                                        class="text-xs text-slate-600 font-normal leading-relaxed"
-                                    >
-                                        "{{ r.comment }}"
-                                    </p>
-                                </div>
-                            </div>
-                            <div
-                                v-else
-                                class="text-center py-8 mb-10 bg-slate-50/50 rounded-xl border border-dashed border-slate-200"
-                            >
-                                <p class="text-xs text-slate-400 font-medium">
-                                    Be the first to review this product.
-                                </p>
-                            </div>
-
-                            <!-- Clean Form -->
-                            <div
-                                class="border border-slate-100 p-6 rounded-xl max-w-xl"
-                            >
-                                <h3
-                                    class="text-sm font-semibold text-slate-900 mb-4"
-                                >
-                                    Write a Review
-                                </h3>
-                                <div
-                                    v-if="reviewSuccessMessage"
-                                    class="p-3 mb-4 bg-slate-900 text-white text-xs font-medium rounded"
-                                >
-                                    {{ reviewSuccessMessage }}
-                                </div>
-                                <form
-                                    @submit.prevent="submitReview"
-                                    class="space-y-4"
-                                >
-                                    <div class="grid sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label
-                                                class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5"
-                                                >Your Name</label
-                                            >
-                                            <input
-                                                type="text"
-                                                v-model="
-                                                    reviewForm.customer_name
-                                                "
-                                                required
-                                                class="w-full rounded border border-slate-200 px-3 py-2 text-xs focus:ring-1 focus:ring-slate-900 focus:border-slate-900 outline-none transition-colors"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label
-                                                class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5"
-                                                >Rating</label
-                                            >
-                                            <div
-                                                class="flex gap-1 h-8 items-center"
-                                            >
-                                                <Star
-                                                    v-for="star in 5"
-                                                    :key="star"
-                                                    @click="
-                                                        reviewForm.rating = star
-                                                    "
-                                                    class="w-4 h-4 cursor-pointer transition-colors"
-                                                    :class="
-                                                        star <=
-                                                        reviewForm.rating
-                                                            ? 'text-[#ef4823] fill-current'
-                                                            : 'text-slate-200 hover:text-[#ef4823]'
-                                                    "
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label
-                                            class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5"
-                                            >Comment</label
-                                        >
-                                        <textarea
-                                            rows="3"
-                                            v-model="reviewForm.comment"
-                                            required
-                                            class="w-full rounded border border-slate-200 p-3 text-xs focus:ring-1 focus:ring-[#ef4823] focus:border-[#ef4823] outline-none transition-colors"
-                                        ></textarea>
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        :disabled="isSubmittingReview"
-                                        class="px-4 py-2 bg-[#ef4823] text-white rounded font-medium text-xs hover:bg-[#d63d1a] transition-colors disabled:opacity-40"
-                                    >
-                                        {{
-                                            isSubmittingReview
-                                                ? "Submitting..."
-                                                : "Submit Review"
-                                        }}
-                                    </button>
-                                </form>
-                            </div>
+                        <!-- Social Share Icons -->
+                        <div class="pt-2 flex items-center gap-2 text-slate-400 text-xs">
+                            <a href="#" class="hover:text-slate-600">FB</a>
+                            <a href="#" class="hover:text-slate-600">TW</a>
+                            <a href="#" class="hover:text-slate-600">LN</a>
+                            <a href="#" class="hover:text-slate-600">PN</a>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Related Products Area -->
-                <div
-                    v-if="relatedProducts && relatedProducts.length > 0"
-                    class="mt-12 pb-12 border-t border-slate-100 pt-12"
-                >
-                    <h2
-                        class="text-sm font-bold uppercase tracking-wider text-slate-900 mb-6"
-                    >
-                        Related Products
-                    </h2>
-                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                        <ProductCard
-                            v-for="p in relatedProducts"
-                            :key="p.id"
-                            :product="p"
-                        />
+            <!-- FULL WIDTH Description Section Background (breaks out of parent container) -->
+            <div class="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen bg-slate-50 border-t border-slate-200/80 py-10">
+                <div class="max-w-6xl mx-auto px-4 md:px-6">
+                    <div class="grid lg:grid-cols-12 gap-8 items-start">
+                        
+                        <!-- Main Content Details (8 cols) -->
+                        <div class="lg:col-span-8">
+                            <!-- Clean Tab Header -->
+                            <div class="flex gap-4 border-b border-slate-200 text-xs font-bold mb-6">
+                                <button
+                                    @click="activeTab = 'description'"
+                                    :class="[
+                                        'pb-2 px-1 transition-all',
+                                        activeTab === 'description' ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-slate-500 hover:text-slate-800'
+                                    ]"
+                                >
+                                    Description
+                                </button>
+                                <button
+                                    @click="activeTab = 'reviews'"
+                                    :class="[
+                                        'pb-2 px-1 transition-all',
+                                        activeTab === 'reviews' ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-slate-500 hover:text-slate-800'
+                                    ]"
+                                >
+                                    Reviews ({{ product.reviews ? product.reviews.length : 0 }})
+                                </button>
+                            </div>
+
+                            <!-- Description Tab -->
+                            <div v-show="activeTab === 'description'" class="space-y-6">
+                                <h2 class="text-base font-bold text-slate-800">{{ product.name }}</h2>
+
+                                <!-- Specifications Table -->
+                                <div v-if="parsedSpecs.length > 0" class="bg-white border border-slate-200 rounded overflow-hidden">
+                                    <table class="w-full text-xs text-left border-collapse">
+                                        <tbody>
+                                            <tr v-for="(spec, i) in parsedSpecs" :key="i" class="border-b border-slate-100 last:border-0 odd:bg-slate-50/50">
+                                                <td class="py-2.5 px-4 font-bold text-slate-700 w-1/3 border-r border-slate-100">{{ spec.key }}</td>
+                                                <td class="py-2.5 px-4 text-slate-600">{{ spec.value }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div v-else class="text-xs text-slate-600 leading-relaxed whitespace-pre-line bg-white p-4 border border-slate-200 rounded">
+                                    {{ product.description || 'No description available for this product.' }}
+                                </div>
+                            </div>
+
+                            <!-- Reviews Tab -->
+                            <div v-show="activeTab === 'reviews'" class="space-y-4 bg-white p-6 border border-slate-200 rounded">
+                                <div v-if="product.reviews && product.reviews.length > 0" class="space-y-3">
+                                    <div v-for="r in product.reviews" :key="r.id" class="border-b border-slate-100 pb-3">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <span class="text-xs font-bold text-slate-800">{{ r.customer_name }}</span>
+                                            <span class="text-[10px] text-amber-500 font-bold">{{ r.rating }} ★</span>
+                                        </div>
+                                        <p class="text-xs text-slate-600">{{ r.comment }}</p>
+                                    </div>
+                                </div>
+                                <p v-else class="text-xs text-slate-400">There are no reviews yet.</p>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Widgets (4 cols) -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <!-- Similar Products -->
+                            <div class="bg-white p-4 border border-slate-200 rounded space-y-3">
+                                <h3 class="text-xs font-bold text-slate-800 border-b border-slate-100 pb-2">You may also like...</h3>
+                                <div class="space-y-3">
+                                    <Link v-for="rp in relatedProducts" :key="rp.id" :href="`/products/${rp.slug}`" class="flex items-center gap-3 group">
+                                        <img :src="rp.image" class="w-12 h-12 object-contain shrink-0" />
+                                        <div class="min-w-0">
+                                            <h4 class="text-xs font-semibold text-slate-700 truncate group-hover:text-emerald-600">{{ rp.name }}</h4>
+                                            <p class="text-xs font-bold text-emerald-600 mt-0.5">৳{{ parseFloat(rp.price).toLocaleString() }}</p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            <!-- Promo Box Banner -->
+                            <div class="bg-emerald-50 border border-emerald-300 rounded p-5 text-center space-y-3">
+                                <div class="w-10 h-10 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto text-base">
+                                    📖
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-800">ব্লগে নিয়মিত লেখা পড়ুন</h4>
+                                <p class="text-xs text-slate-600 leading-relaxed">Printer, Scanner, Laptop & Tech Reviews জানতে আমাদের ব্লগ ভিজিট করুন।</p>
+                                <Link href="#" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-4 rounded inline-block transition-colors">
+                                    সব ব্লগ দেখুন
+                                </Link>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        <ImageLightbox
-            :show="showLightbox"
-            :product="lightboxProduct"
-            @close="showLightbox = false"
-        />
     </StoreLayout>
 </template>
-
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 import StoreLayout from "@/Layouts/StoreLayout.vue";
-import ProductCard from "@/Components/ProductCard.vue";
-import ImageLightbox from "@/Components/ImageLightbox.vue";
 import { useCart } from "@/Composables/useCart";
-import {
-    Plus,
-    Minus,
-    ShoppingCart,
-    Star,
-    ChevronRight,
-    MessageSquare,
-} from "lucide-vue-next";
 
 const props = defineProps({
     product: Object,
@@ -485,6 +263,7 @@ const quantity = ref(1);
 const activeTab = ref("description");
 const showLightbox = ref(false);
 const lightboxProduct = ref(null);
+const recentlyViewed = ref([]);
 
 const reviewForm = ref({
     customer_name: "",
@@ -494,6 +273,39 @@ const reviewForm = ref({
 
 const isSubmittingReview = ref(false);
 const reviewSuccessMessage = ref("");
+
+// Save and load recently viewed products
+onMounted(() => {
+    if (props.product && props.product.id) {
+        let list = [];
+        try {
+            list = JSON.parse(localStorage.getItem('recently_viewed_products') || '[]');
+        } catch (e) {
+            list = [];
+        }
+        
+        // Remove current product to prevent duplication
+        list = list.filter(item => item.id !== props.product.id);
+        
+        // Push current product to top
+        list.unshift({
+            id: props.product.id,
+            name: props.product.name,
+            price: props.product.price,
+            slug: props.product.slug,
+            image: props.product.image
+        });
+        
+        // Slice max 4 products
+        list = list.slice(0, 4);
+        
+        // Store
+        localStorage.setItem('recently_viewed_products', JSON.stringify(list));
+        
+        // Put other products in reactive ref for display
+        recentlyViewed.value = list.filter(item => item.id !== props.product.id).slice(0, 3);
+    }
+});
 
 const averageRating = computed(() => {
     if (!props.product.reviews || props.product.reviews.length === 0)
@@ -507,8 +319,33 @@ const getRatingPercentage = (stars) => {
     const count = props.product.reviews.filter(
         (r) => r.rating === stars,
     ).length;
-    return (count / props.product.reviews.length) * 100;
+    return (count / props.product.reviews.length) * 15;
 };
+
+// Features split by newline helper
+const parsedFeatures = computed(() => {
+    if (!props.product.short_description) return [];
+    return props.product.short_description.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+});
+
+// Technical specs parser helper
+const parsedSpecs = computed(() => {
+    if (!props.product.long_description) return [];
+    return props.product.long_description.split('\n')
+        .map(line => {
+            const index = line.indexOf(':');
+            if (index !== -1) {
+                return {
+                    key: line.substring(0, index).trim(),
+                    value: line.substring(index + 1).trim()
+                };
+            }
+            return null;
+        })
+        .filter(item => item !== null);
+});
 
 const submitReview = async () => {
     isSubmittingReview.value = true;
@@ -582,7 +419,7 @@ const handleAddToCart = async () => {
 
 const handleBuyNow = async () => {
     await addToCart(props.product, quantity.value);
-    router.visit("/checkout");
+    router.visit("/cart");
 };
 
 const openLightboxMain = () => {

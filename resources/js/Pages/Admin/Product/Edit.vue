@@ -115,6 +115,16 @@
                                 <textarea v-model="form.description_bn" rows="5" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium"></textarea>
                                 <p v-if="form.errors.description_bn" class="mt-1 text-xs text-red-500">{{ form.errors.description_bn }}</p>
                             </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Short Description / Key Features</label>
+                                <textarea v-model="form.short_description" rows="4" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="Enter key features (one per line)..."></textarea>
+                                <p v-if="form.errors.short_description" class="mt-1 text-xs text-red-500">{{ form.errors.short_description }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Long Description / Technical Specs</label>
+                                <textarea v-model="form.long_description" rows="6" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="Enter detailed specifications (one parameter per line, e.g. Brand: HP)..."></textarea>
+                                <p v-if="form.errors.long_description" class="mt-1 text-xs text-red-500">{{ form.errors.long_description }}</p>
+                            </div>
                         </div>
                         </div>
 
@@ -267,6 +277,8 @@ const form = useForm({
     brand_id: props.product.brand_id,
     description_en: props.product.description_en || '',
     description_bn: props.product.description_bn || '',
+    short_description: props.product.short_description || '',
+    long_description: props.product.long_description || '',
     price: props.product.price,
     buying_price: props.product.buying_price,
     package_cost: props.product.package_cost,

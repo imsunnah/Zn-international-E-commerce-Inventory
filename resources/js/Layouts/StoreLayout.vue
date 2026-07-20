@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col font-sans bg-white text-slate-900">
         <div class="w-full bg-white flex-grow flex flex-col min-h-screen">
             <header class="bg-white sticky top-0 z-50 border-b border-slate-100 transition-all">
-                <div class="w-full lg:w-[50%] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4 bg-transparent">
+                <div class="w-full lg:w-[60%] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4 bg-transparent">
         
         <!-- Logo Section -->
         <Link href="/" class="flex items-center flex-shrink-0 gap-2 group decoration-none">
@@ -59,7 +59,7 @@
             <!-- Price List Button -->
             <Link
                 href="/shop"
-                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
+                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[11px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
             >
                 <ClipboardList class="w-3.5 h-3.5" />
                 <span>Price List</span>
@@ -68,7 +68,7 @@
             <!-- PC Builder Button -->
             <Link
                 href="/pc-builder"
-                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
+                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[11px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
             >
                 <Zap class="w-3.5 h-3.5" />
                 <span>PC Builder</span>
@@ -78,7 +78,7 @@
             <Link
                 v-if="currentUser"
                 :href="accountHref"
-                class="flex items-center gap-1.5 h-9 px-3 text-slate-700 bg-white border border-slate-200 rounded-lg transition-colors hover:bg-slate-50 font-bold text-[10px] decoration-none"
+                class="flex items-center gap-1.5 h-9 px-3 text-slate-700 bg-white border border-slate-200 rounded-lg transition-colors hover:bg-slate-50 font-bold text-[11px] decoration-none"
             >
                 <User class="w-3.5 h-3.5 text-[#ef4823]" />
                 <span class="truncate max-w-[90px]">
@@ -88,7 +88,7 @@
             <button
                 v-else
                 @click="openAuthModal('login')"
-                class="flex items-center gap-1.5 h-9 px-4 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] uppercase cursor-pointer hover:bg-[#d63d1a] border-none transition-all select-none"
+                class="flex items-center gap-1.5 h-9 px-4 bg-[#ef4823] text-white rounded-lg font-bold text-[11px] uppercase cursor-pointer hover:bg-[#d63d1a] border-none transition-all select-none"
             >
                 <User class="w-3.5 h-3.5" />
                 <span>Login / Register</span>
@@ -97,10 +97,10 @@
             <!-- Mini Cart Dropdown Trigger -->
             <button
                 @click="isCartOpen = true"
-                class="flex items-center gap-2 h-9 px-3.5 bg-[#ef4823] text-white rounded-lg font-bold text-[10px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
+                class="flex items-center gap-2 h-9 px-3.5 bg-[#ef4823] text-white rounded-lg font-bold text-[11px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
             >
                 <ShoppingBag class="w-3.5 h-3.5 transition-transform group-hover/cart:scale-110" />
-                <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[9px] shadow-sm">
+                <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[10px] shadow-sm">
                     {{ cartCount }}
                 </span>
                 <span class="hidden md:inline">৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
@@ -141,11 +141,11 @@
     </Transition>
 
 <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
-    <div class="w-full lg:w-[50%] mx-auto flex items-center h-7 px-2">
+    <div class="w-full lg:w-[60%] mx-auto flex items-center h-8 px-2">
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-2 text-[#0fd33a] text-[9px] font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-2 text-[#0fd33a] text-[11px] font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>
@@ -159,7 +159,7 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-1.5 text-[#0fd33a] text-[9px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-0.5 h-full uppercase select-none decoration-none"
+                    class="px-1.5 text-[#0fd33a] text-[10px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-0.5 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
@@ -182,7 +182,7 @@
                             <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
                             <Link
                                 :href="`/shop?sub_category=${sub.slug}`"
-                                class="flex items-center justify-between px-2 py-0.5 hover:bg-slate-900 rounded text-[9px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
+                                class="flex items-center justify-between px-2 py-0.5 hover:bg-slate-900 rounded text-[10px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
                             >
                                 {{ sub.name }}
                                 <ChevronRight
@@ -200,7 +200,7 @@
                                     v-for="brand in sub.brands"
                                     :key="brand.id"
                                     :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-2 py-0.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
+                                    class="block px-2 py-0.5 text-[10px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
                                 >
                                     {{ brand.name }}
                                 </Link>
@@ -213,7 +213,7 @@
                             v-for="brand in category.brands"
                             :key="brand.id"
                             :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-2 py-0.5 text-[9px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
+                            class="block px-2 py-0.5 text-[10px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
                         >
                             {{ brand.name }}
                         </Link>
@@ -298,7 +298,7 @@
             </Link>
 
             <div class="pt-2 pb-1 px-3 border-b border-slate-100 mb-1 mt-1">
-                <span class="text-[9px] font-normal text-slate-400 uppercase tracking-wider">
+                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-wider">
                     Categories
                 </span>
             </div>
@@ -317,7 +317,7 @@
     </div>
 </Transition>
 
-        <main class="w-full lg:w-[50%] mx-auto flex-grow relative z-10 bg-white">
+        <main class="w-full lg:w-[60%] mx-auto flex-grow relative z-10 bg-white">
             <slot />
         </main>
 
@@ -374,13 +374,13 @@
                                 <span class="text-base font-black text-white tracking-tight leading-none uppercase">
                                     {{ siteName }}
                                 </span>
-                                <span class="text-[9px] font-bold text-slate-400 tracking-wider leading-none uppercase mt-0.5">
+                                <span class="text-[10px] font-bold text-slate-400 tracking-wider leading-none uppercase mt-0.5">
                                     E-Commerce
                                 </span>
                             </div>
                         </div>
                     </Link>
-                    <p class="text-[9px] text-slate-400 leading-relaxed max-w-xs">
+                    <p class="text-[10px] text-slate-400 leading-relaxed max-w-xs">
                         {{ settings.footer_about || "Your trusted partner for genuine corporate IT frameworks, premium printing hardware, and verified computer components across Bangladesh." }}
                     </p>
                     <div class="flex items-center gap-2 pt-1">
@@ -396,7 +396,7 @@
                 <!-- Column 2: Quick Links -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Quick Links</h4>
-                    <ul class="space-y-2 text-[9px] font-bold text-center lg:text-left list-none p-0 m-0">
+                    <ul class="space-y-2 text-[10px] font-bold text-center lg:text-left list-none p-0 m-0">
                         <li><Link href="/shop" class="hover:text-[#00a651] transition-colors decoration-none">All Products</Link></li>
                         <li><Link href="/offers" class="hover:text-[#00a651] transition-colors decoration-none">Special Offers</Link></li>
                         <li><Link href="/pc-builder" class="hover:text-[#00a651] transition-colors decoration-none">PC Builder</Link></li>
@@ -407,7 +407,7 @@
                 <!-- Column 3: Contact & Support -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Head Office</h4>
-                    <div class="space-y-3 text-[9px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
+                    <div class="space-y-3 text-[10px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
                         <div class="flex items-start gap-2 max-w-xs">
                             <MapPin class="w-4 h-4 text-[#00a651] shrink-0 mt-0.5" />
                             <span>{{ settings.footer_address || "Multiplan Center, Level 9, Suite 935, Elephant Road, Dhaka-1205" }}</span>
@@ -439,23 +439,23 @@
             <div class="w-full mx-auto px-4 md:px-6 mt-10 pt-6 border-t border-slate-700/50">
                 <div class="flex flex-col items-center text-center gap-4">
                     <div class="flex flex-col items-center gap-2">
-                        <p class="text-[9px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>
+                        <p class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>
                         <div class="flex flex-wrap justify-center gap-1.5">
-                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[9px] font-black tracking-tight">VISA</span>
-                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[9px] font-black tracking-tight">Mastercard</span>
-                            <span class="px-2.5 py-1 bg-[#e11d48] text-white rounded text-[9px] font-black tracking-tight">bKash</span>
-                            <span class="px-2.5 py-1 bg-[#ea580c] text-white rounded text-[9px] font-black tracking-tight">Nagad</span>
-                            <span class="px-2.5 py-1 bg-[#4f46e5] text-white rounded text-[9px] font-black tracking-tight">Rocket</span>
+                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[10px] font-black tracking-tight">VISA</span>
+                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[10px] font-black tracking-tight">Mastercard</span>
+                            <span class="px-2.5 py-1 bg-[#e11d48] text-white rounded text-[10px] font-black tracking-tight">bKash</span>
+                            <span class="px-2.5 py-1 bg-[#ea580c] text-white rounded text-[10px] font-black tracking-tight">Nagad</span>
+                            <span class="px-2.5 py-1 bg-[#4f46e5] text-white rounded text-[10px] font-black tracking-tight">Rocket</span>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-[10px] text-slate-400 font-bold uppercase tracking-wide">
+                    <div class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-[11px] text-slate-400 font-bold uppercase tracking-wide">
                         <span>✓ Genuine Products</span>
                         <span>✓ Brand Warranty</span>
                         <span>✓ Nationwide Shipping</span>
                     </div>
 
-                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[9px]">
+                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[10px]">
                         <p>© {{ new Date().getFullYear() }} {{ siteName }}. All rights reserved.</p>
                         <span class="uppercase tracking-widest text-[8px] font-black text-slate-600 bg-slate-900/50 px-2 py-0.5 rounded">
                             Developed by admin systems

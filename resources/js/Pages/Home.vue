@@ -152,49 +152,48 @@
         <!-- ══════════════════════════════════════════
              FEATURED CATEGORIES (full-bleed gray bg, centered title)
         ═══════════════════════════════════════════ -->
-        <section v-if="displayedCategories.length" class="full-bleed-section py-10 bg-[#f3f4f6] border-b border-slate-200/60">
-            <div class="w-full mx-auto px-4 md:px-6">
-                <!-- Centered Header -->
-                <div class="text-center mb-8">
-                    <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
-                        Featured <span class="text-[#00a651]">Categories</span>
-                    </h2>
-                    <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
+     <section v-if="displayedCategories.length" class="full-bleed-section py-10 bg-[#f3f4f6] border-b border-slate-200/60">
+    <div class="w-full mx-auto px-4 md:px-6">
+        <!-- Centered Header -->
+        <div class="text-center mb-8">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+                Featured <span class="text-[#00a651]">Categories</span>
+            </h2>
+            <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
+        </div>
+
+        <!-- Centered Items Grid -->
+        <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+            <Link
+                v-for="cat in displayedCategories"
+                :key="cat.id"
+                :href="`/shop?category=${cat.slug}`"
+                class="group flex flex-col items-center decoration-transparent w-[140px] h-[140px] md:w-[160px] md:h-[160px] bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#00a651] transition-all duration-200 p-4 justify-between"
+            >
+                <!-- Image / Icon Container -->
+                <div class="flex-1 flex items-center justify-center w-full min-h-0">
+                    <img
+                        v-if="cat.image"
+                        :src="cat.image"
+                        :alt="cat.name"
+                        class="w-20 h-20 md:w-24 md:h-24 object-contain transition-transform duration-200 group-hover:scale-105"
+                    />
+                    <component
+                        v-else
+                        :is="categoryIcon(cat)"
+                        class="w-12 h-12 md:w-14 md:h-14 text-[#00a651] group-hover:scale-105 transition-transform"
+                        stroke-width="1.5"
+                    />
                 </div>
 
-                <!-- Centered Items Grid -->
-                <div class="flex flex-wrap justify-center gap-4">
-                    <Link
-                        v-for="cat in displayedCategories"
-                        :key="cat.id"
-                        :href="`/shop?category=${cat.slug}`"
-                        class="group flex flex-col items-center decoration-transparent w-[100px] h-[100px] md:w-[110px] md:h-[110px] bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#00a651] transition-all duration-200 p-3 justify-between"
-                    >
-                        <!-- Image / Icon Container -->
-                        <div class="flex-1 flex items-center justify-center w-full min-h-0">
-                            <img
-                                v-if="cat.image"
-                                :src="cat.image"
-                                :alt="cat.name"
-                                class="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-200 group-hover:scale-105"
-                            />
-                            <component
-                                v-else
-                                :is="categoryIcon(cat)"
-                                class="w-8 h-8 md:w-9 md:h-9 text-slate-400 group-hover:text-[#00a651] transition-colors"
-                                stroke-width="1.5"
-                            />
-                        </div>
-
-                        <!-- Text Container inside the Card -->
-                        <span class="text-[9px] md:text-[10px] font-bold text-slate-500 group-hover:text-[#00a651] transition-colors text-center leading-none uppercase tracking-wider block w-full mt-2 truncate">
-                            {{ cat.name }}
-                        </span>
-                    </Link>
-                </div>
-            </div>
-        </section>
-
+                <!-- Text Container inside the Card -->
+                <span class="text-[11px] md:text-[12px] font-bold text-slate-800 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wide block w-full mt-2 truncate">
+                    {{ cat.name }}
+                </span>
+            </Link>
+        </div>
+    </div>
+</section>
         <!-- ══════════════════════════════════════════
              NEW PRODUCTS (full-bleed white, centered title)
         ═══════════════════════════════════════════ -->

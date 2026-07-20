@@ -27,9 +27,9 @@ class AdminSessionInactivityTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        // Log in and access with 179 minutes of inactivity (less than 180)
+        // Log in and access with 59 minutes of inactivity (less than 60)
         $response = $this->actingAs($admin)
-            ->withSession(['admin_last_activity' => now()->subMinutes(179)])
+            ->withSession(['admin_last_activity' => now()->subMinutes(59)])
             ->get('/_test_admin_dashboard');
 
         $response->assertStatus(200);
@@ -37,13 +37,13 @@ class AdminSessionInactivityTest extends TestCase
         $this->assertNotNull(session('admin_last_activity'));
     }
 
-    public function test_admin_middleware_logs_out_after_3_hours_inactivity()
+    public function test_admin_middleware_logs_out_after_1_hour_inactivity()
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        // Accessing with 180 minutes of inactivity
+        // Accessing with 60 minutes of inactivity
         $response = $this->actingAs($admin)
-            ->withSession(['admin_last_activity' => now()->subMinutes(181)]) // use 181 to be safe
+            ->withSession(['admin_last_activity' => now()->subMinutes(61)]) // use 61 to be safe
             ->get('/_test_admin_dashboard');
 
         $response->assertRedirect(route('admin.login'));
@@ -52,7 +52,7 @@ class AdminSessionInactivityTest extends TestCase
         
         // Assert specific session expiration message
         $response->assertSessionHasErrors([
-            'email' => 'Your session has expired due to 3 hours of inactivity.'
+            'email' => 'Your session has expired due to 1 hour of inactivity.'
         ]);
     }
 
