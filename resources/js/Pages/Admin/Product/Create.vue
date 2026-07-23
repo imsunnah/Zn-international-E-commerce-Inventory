@@ -1,221 +1,262 @@
 <template>
     <AdminLayout>
-        <div class="mb-8 flex items-center justify-between bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <div>
-                <h1 class="text-2xl font-bold text-[#003366]">Add New Product</h1>
-                <p class="text-xs text-slate-500 mt-1">Upload a new item to your shop</p>
+        <form @submit.prevent="submit" class="max-w-7xl mx-auto space-y-6 pb-16">
+            
+            <!-- Sticky Header Bar -->
+            <div class="sticky top-0 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-4 bg-slate-50/80 backdrop-blur-md border-b border-slate-200/80 transition-all">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <Link 
+                            href="/admin/products" 
+                            class="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-200/60 rounded-lg transition-colors"
+                            title="Back to products"
+                        >
+                            <ArrowLeft class="w-5 h-5" />
+                        </Link>
+                        <div>
+                            <h1 class="text-lg font-bold text-slate-900 leading-tight">Add New Product</h1>
+                            <p class="text-xs text-slate-500">Create and publish a new item to your store</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2.5">
+                        <Link 
+                            href="/admin/products" 
+                            class="px-4 py-2 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-sm"
+                        >
+                            Cancel
+                        </Link>
+                        
+                        <!-- Top Submit Button -->
+                        <button 
+                            type="submit" 
+                            :disabled="form.processing" 
+                            class="inline-flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-slate-800 active:bg-black text-white rounded-lg text-xs font-semibold shadow-sm hover:shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
+                            <Check v-else class="w-4 h-4 text-emerald-400" />
+                            <span>{{ form.processing ? 'Saving Product...' : 'Save Product' }}</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <Link href="/admin/products" class="text-xs font-bold text-slate-500 hover:text-[#003366] flex items-center transition-all">
-                <ArrowLeft class="w-4 h-4 mr-2" /> Back to List
-            </Link>
-        </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-            <form @submit.prevent="submit" class="p-8 space-y-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <!-- Left Column -->
-                    <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Form Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left Main Column (2 Cols wide on desktop) -->
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <!-- Card 1: Basic Information -->
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-6 space-y-5">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h2 class="text-sm font-bold text-slate-800">General Details</h2>
+                            <p class="text-xs text-slate-500">Title and description options for your product.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Product Name (English)</label>
-                                <input v-model="form.name_en" type="text" placeholder="e.g. Pure Organic Honey" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.name_en" class="mt-1 text-xs text-red-500">{{ form.errors.name_en }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Product Name (English) <span class="text-red-500">*</span></label>
+                                <input v-model="form.name_en" type="text" placeholder="e.g. Pure Organic Honey" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all">
+                                <p v-if="form.errors.name_en" class="mt-1 text-xs font-medium text-red-500">{{ form.errors.name_en }}</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Product Name (Bangla)</label>
-                                <input v-model="form.name_bn" type="text" placeholder="e.g. খাঁটি অর্গানিক মধু" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.name_bn" class="mt-1 text-xs text-red-500">{{ form.errors.name_bn }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Product Name (Bangla)</label>
+                                <input v-model="form.name_bn" type="text" placeholder="e.g. খাঁটি অর্গানিক মধু" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all">
+                                <p v-if="form.errors.name_bn" class="mt-1 text-xs font-medium text-red-500">{{ form.errors.name_bn }}</p>
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-6">
-                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Product Classification</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2 ml-1">Main Category</label>
-                                    <select v-model="form.category_id" class="w-full px-4 py-3 rounded-xl bg-white border-none shadow-sm focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold appearance-none">
-                                        <option value="" disabled>Select Category</option>
-                                        <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name_en }}</option>
-                                    </select>
-                                </div>
-                                <div v-if="selectedCategorySubs.length > 0">
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2 ml-1">Subcategory</label>
-                                    <select v-model="form.sub_category_id" class="w-full px-4 py-3 rounded-xl bg-white border-none shadow-sm focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold appearance-none">
-                                        <option :value="null">Select Subcategory</option>
-                                        <option v-for="sub in selectedCategorySubs" :key="sub.id" :value="sub.id">{{ sub.name_en }}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div v-if="availableBrands.length > 0 || (form.category_id && !form.sub_category_id && selectedCategorySubs.length === 0) || (form.category_id && form.sub_category_id)">
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-2 ml-1">Brand Association</label>
-                                <select v-model="form.brand_id" class="w-full px-4 py-3 rounded-xl bg-white border-none shadow-sm focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold appearance-none cursor-pointer">
-                                    <option :value="null">No Brand / Universal</option>
-                                    <option v-for="brand in availableBrands" :key="brand.id" :value="brand.id">{{ brand.name_en }}</option>
-                                </select>
-                                <p v-if="availableBrands.length === 0 && form.category_id" class="mt-2 text-[9px] text-slate-400 font-bold uppercase tracking-widest italic ml-1">
-                                    {{ (selectedCategorySubs.length > 0 && !form.sub_category_id) ? 'Please select a subcategory to view brands' : 'No brands linked to this classification' }}
-                                </p>
-                            </div>
-
-                            <p v-if="form.errors.category_id" class="text-xs text-red-500 font-bold ml-1">{{ form.errors.category_id }}</p>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="space-y-4 pt-2">
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Sell Price (৳)</label>
-                                <input v-model="form.price" type="number" step="0.01" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.price" class="mt-1 text-xs text-red-500">{{ form.errors.price }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Description (English)</label>
+                                <textarea v-model="form.description_en" rows="3" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all" placeholder="Briefly describe what makes this product special..."></textarea>
+                                <p v-if="form.errors.description_en" class="mt-1 text-xs font-medium text-red-500">{{ form.errors.description_en }}</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Buy Price (৳)</label>
-                                <input v-model="form.buying_price" type="number" step="0.01" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.buying_price" class="mt-1 text-xs text-red-500">{{ form.errors.buying_price }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Description (Bangla)</label>
+                                <textarea v-model="form.description_bn" rows="3" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all" placeholder="পণ্যের বিবরণ লিখুন..."></textarea>
+                                <p v-if="form.errors.description_bn" class="mt-1 text-xs font-medium text-red-500">{{ form.errors.description_bn }}</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Pack Cost (৳)</label>
-                                <input v-model="form.package_cost" type="number" step="0.01" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.package_cost" class="mt-1 text-xs text-red-500">{{ form.errors.package_cost }}</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Display Serial</label>
-                                <input v-model="form.serial" type="number" placeholder="e.g. 1" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.serial" class="mt-1 text-xs text-red-500">{{ form.errors.serial }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Key Highlights / Features</label>
+                                <textarea v-model="form.short_description" rows="3" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all" placeholder="Enter key features (one point per line)..."></textarea>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Stock Amount</label>
-                                <input v-model="form.stock" type="number" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                <p v-if="form.errors.stock" class="mt-1 text-xs text-red-500">{{ form.errors.stock }}</p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Size</label>
-                                    <input v-model="form.size" type="text" placeholder="e.g. 10x20cm" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                    <p v-if="form.errors.size" class="mt-1 text-xs text-red-500">{{ form.errors.size }}</p>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Weight</label>
-                                    <input v-model="form.weight" type="text" placeholder="e.g. 1.5kg" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-bold">
-                                    <p v-if="form.errors.weight" class="mt-1 text-xs text-red-500">{{ form.errors.weight }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description (English)</label>
-                                <textarea v-model="form.description_en" rows="5" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="Describe your product..."></textarea>
-                                <p v-if="form.errors.description_en" class="mt-1 text-xs text-red-500">{{ form.errors.description_en }}</p>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description (Bangla)</label>
-                                <textarea v-model="form.description_bn" rows="5" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="পণ্যের বিবরণ লিখুন..."></textarea>
-                                <p v-if="form.errors.description_bn" class="mt-1 text-xs text-red-500">{{ form.errors.description_bn }}</p>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Short Description / Key Features</label>
-                                <textarea v-model="form.short_description" rows="4" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="Enter key features (one per line)..."></textarea>
-                                <p v-if="form.errors.short_description" class="mt-1 text-xs text-red-500">{{ form.errors.short_description }}</p>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Long Description / Technical Specs</label>
-                                <textarea v-model="form.long_description" rows="6" class="w-full px-4 py-3 rounded-lg bg-slate-50 border-none focus:ring-2 focus:ring-[#003366]/10 outline-none transition-all font-medium" placeholder="Enter detailed specifications (one parameter per line, e.g. Brand: HP)..."></textarea>
-                                <p v-if="form.errors.long_description" class="mt-1 text-xs text-red-500">{{ form.errors.long_description }}</p>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Technical Specifications</label>
+                                <textarea v-model="form.long_description" rows="4" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-slate-800 transition-all" placeholder="Enter detailed specs (e.g. Brand: HP, RAM: 16GB)..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right Column -->
-                    <div class="space-y-6">
-                        <!-- Premium Image Upload Section -->
-                        <div class="bg-slate-50 p-8 rounded-[2rem] border border-slate-100 space-y-8">
-                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-200 pb-4">Media Assets</h3>
-                            
-                            <!-- Main Product Image -->
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Primary Display Image</label>
-                                    <button @click.prevent="showMainPicker = true" class="text-[9px] font-black text-[#FF6600] uppercase tracking-widest hover:underline flex items-center gap-1">
-                                        <Library class="w-3 h-3" /> Choose from Gallery
-                                    </button>
-                                </div>
-                                <div class="relative group">
-                                    <div class="w-full aspect-video rounded-3xl bg-white border-2 border-dashed border-slate-200 flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-[#003366]/30">
-                                        <img v-if="mainPreview" :src="mainPreview" class="w-full h-full object-cover" />
-                                        <div v-else class="flex flex-col items-center gap-3 opacity-40 group-hover:opacity-60 transition-opacity">
-                                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center">
-                                                <ImageIcon class="w-8 h-8 text-[#003366]" />
-                                            </div>
-                                            <span class="text-[10px] font-black uppercase tracking-widest">Click or Drop Main Image</span>
-                                        </div>
-                                        <input type="file" @input="handleMainImage" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
-                                    </div>
-                                    <div v-if="mainPreview" class="absolute top-4 right-4 flex gap-2">
-                                        <button @click.prevent="mainPreview = null; form.image = null" class="p-2 bg-red-500 text-white rounded-xl shadow-lg hover:bg-red-600 transition-colors">
-                                            <Trash2 class="w-4 h-4" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <p v-if="form.errors.image" class="text-[10px] text-red-500 font-bold uppercase mt-1 ml-1">{{ form.errors.image }}</p>
-                            </div>
+                    <!-- Card 2: Pricing & Inventory -->
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-6 space-y-5">
+                        <div class="border-b border-slate-100 pb-3">
+                            <h2 class="text-sm font-bold text-slate-800">Pricing & Inventory</h2>
+                            <p class="text-xs text-slate-500">Manage your product cost, retail price, and stock levels.</p>
+                        </div>
 
-                            <!-- Gallery Section -->
-                            <div class="space-y-4 pt-6 border-t border-slate-200">
-                                <div class="flex justify-between items-center px-1">
-                                    <div class="flex items-center gap-3">
-                                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest">Product Gallery</label>
-                                        <button @click.prevent="showGalleryPicker = true" class="text-[9px] font-black text-[#FF6600] uppercase tracking-widest hover:underline flex items-center gap-1">
-                                            <Library class="w-3 h-3" /> Add from Gallery
-                                        </button>
-                                    </div>
-                                    <span class="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{{ galleryPreviews.length }} Images Added</span>
-                                </div>
-                                
-                                <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                                    <div v-for="(img, idx) in galleryPreviews" :key="idx" class="relative aspect-square rounded-2xl overflow-hidden group border border-slate-200">
-                                        <img :src="img" class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                            <button @click.prevent="removeGalleryImage(idx)" class="p-2 bg-red-500 text-white rounded-lg">
-                                                <X class="w-3 h-3" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <button @click.prevent="triggerGalleryUpload" class="aspect-square rounded-2xl bg-white border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-2 hover:border-[#FF6600]/30 hover:bg-orange-50 transition-all group">
-                                        <Plus class="w-5 h-5 text-slate-300 group-hover:text-[#FF6600]" />
-                                        <span class="text-[8px] font-black text-slate-300 group-hover:text-[#FF6600] uppercase tracking-widest">Add More</span>
-                                    </button>
-                                </div>
-                                <input type="file" multiple ref="galleryInput" @input="handleGalleryImages" class="hidden" accept="image/*" />
-                                <div v-if="form.errors.gallery_images" class="text-[10px] text-red-500 font-bold uppercase mt-1 ml-1">{{ form.errors.gallery_images }}</div>
+                        <!-- Price grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Sell Price (৳) <span class="text-red-500">*</span></label>
+                                <input v-model="form.price" type="number" step="0.01" placeholder="0.00" class="w-full px-3 py-1.5 rounded-md border border-slate-300 bg-white text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-800">
+                                <p v-if="form.errors.price" class="mt-1 text-xs text-red-500">{{ form.errors.price }}</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Buy Price (৳)</label>
+                                <input v-model="form.buying_price" type="number" step="0.01" placeholder="0.00" class="w-full px-3 py-1.5 rounded-md border border-slate-300 bg-white text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-800">
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60">
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Package Cost (৳)</label>
+                                <input v-model="form.package_cost" type="number" step="0.01" placeholder="0.00" class="w-full px-3 py-1.5 rounded-md border border-slate-300 bg-white text-sm font-semibold text-slate-900 focus:outline-none focus:border-slate-800">
                             </div>
                         </div>
 
-        <!-- Media Picker Modals -->
-        <MediaPicker :show="showMainPicker" @close="showMainPicker = false" @select="handleMainGallerySelect" />
-        <MediaPicker :show="showGalleryPicker" @close="showGalleryPicker = false" @select="handleGalleryItemsSelect" />
+                        <!-- Stock & Attributes Grid -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Stock Quantity</label>
+                                <input v-model="form.stock" type="number" placeholder="0" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:border-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Display Order</label>
+                                <input v-model="form.serial" type="number" placeholder="1" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:border-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Dimensions/Size</label>
+                                <input v-model="form.size" type="text" placeholder="e.g. 10x20cm" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:border-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1.5">Weight</label>
+                                <input v-model="form.weight" type="text" placeholder="e.g. 1.5kg" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:border-slate-800">
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="pt-6 border-t border-slate-100">
-                            <label class="flex items-center space-x-3 cursor-pointer">
-                                <input v-model="form.is_active" type="checkbox" class="w-5 h-5 text-[#003366] rounded border-slate-300 focus:ring-[#003366]">
-                                <span class="text-sm font-bold text-slate-700">Active (Visible on Store)</span>
+                </div>
+
+                <!-- Right Sidebar Column (1 Col wide on desktop) -->
+                <div class="space-y-6">
+                    
+                    <!-- Card 3: Organization & Category -->
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+                        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Organization</h2>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Category <span class="text-red-500">*</span></label>
+                            <select v-model="form.category_id" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white text-slate-800 focus:outline-none focus:border-slate-800">
+                                <option value="" disabled>Select Category</option>
+                                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name_en }}</option>
+                            </select>
+                            <p v-if="form.errors.category_id" class="mt-1 text-xs text-red-500">{{ form.errors.category_id }}</p>
+                        </div>
+
+                        <div v-if="selectedCategorySubs.length > 0">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Subcategory</label>
+                            <select v-model="form.sub_category_id" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white text-slate-800 focus:outline-none focus:border-slate-800">
+                                <option :value="null">Select Subcategory</option>
+                                <option v-for="sub in selectedCategorySubs" :key="sub.id" :value="sub.id">{{ sub.name_en }}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1.5">Brand</label>
+                            <select v-model="form.brand_id" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white text-slate-800 focus:outline-none focus:border-slate-800">
+                                <option :value="null">No Brand / Universal</option>
+                                <option v-for="brand in availableBrands" :key="brand.id" :value="brand.id">{{ brand.name_en }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Media Uploads -->
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+                        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-2">Product Media</h2>
+
+                        <!-- Main Cover Image -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="text-xs font-semibold text-slate-700">Cover Image</label>
+                                <button @click.prevent="showMainPicker = true" type="button" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                                    From Gallery
+                                </button>
+                            </div>
+
+                            <div class="relative group w-full h-44 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 hover:bg-slate-100/60 hover:border-slate-300 transition-all flex flex-col items-center justify-center overflow-hidden cursor-pointer">
+                                <img v-if="mainPreview" :src="mainPreview" class="w-full h-full object-cover" />
+                                <div v-else class="text-center p-4">
+                                    <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-slate-500">
+                                        <Upload class="w-5 h-5" />
+                                    </div>
+                                    <p class="text-xs font-semibold text-slate-700">Click to upload cover</p>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">PNG, JPG, WEBP up to 5MB</p>
+                                </div>
+                                <input type="file" @input="handleMainImage" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
+
+                                <button 
+                                    v-if="mainPreview" 
+                                    @click.prevent="mainPreview = null; form.image = null" 
+                                    type="button" 
+                                    class="absolute top-2 right-2 p-1.5 bg-slate-900/80 hover:bg-red-600 text-white rounded-lg shadow transition-colors backdrop-blur-sm"
+                                >
+                                    <Trash2 class="w-3.5 h-3.5" />
+                                </button>
+                            </div>
+                            <p v-if="form.errors.image" class="mt-1 text-xs text-red-500">{{ form.errors.image }}</p>
+                        </div>
+
+                        <!-- Gallery Thumbnails -->
+                        <div class="pt-2">
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="text-xs font-semibold text-slate-700">Gallery Images</label>
+                                <button @click.prevent="showGalleryPicker = true" type="button" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                                    From Gallery
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-4 gap-2">
+                                <div v-for="(img, idx) in galleryPreviews" :key="idx" class="relative aspect-square rounded-lg overflow-hidden border border-slate-200 group">
+                                    <img :src="img" class="w-full h-full object-cover">
+                                    <button @click.prevent="removeGalleryImage(idx)" type="button" class="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                                        <X class="w-4 h-4" />
+                                    </button>
+                                </div>
+
+                                <button 
+                                    @click.prevent="triggerGalleryUpload" 
+                                    type="button" 
+                                    class="aspect-square rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 transition-all flex flex-col items-center justify-center text-slate-400 hover:text-slate-600"
+                                >
+                                    <Plus class="w-5 h-5" />
+                                </button>
+                            </div>
+                            <input type="file" multiple ref="galleryInput" @input="handleGalleryImages" class="hidden" accept="image/*" />
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Visibility Toggle -->
+                    <div class="bg-white rounded-xl border border-slate-200/80 shadow-sm p-5">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-800">Store Visibility</h3>
+                                <p class="text-[11px] text-slate-500">Enable to publish immediately on shop.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input v-model="form.is_active" type="checkbox" class="sr-only peer">
+                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-900"></div>
                             </label>
                         </div>
                     </div>
-                </div>
 
-                <div class="pt-8 border-t border-slate-100 flex justify-end">
-                    <button type="submit" :disabled="form.processing" class="w-full md:w-auto bg-[#003366] text-white px-12 py-4 rounded-lg font-bold text-sm uppercase tracking-widest hover:bg-slate-800 transition-all disabled:opacity-50">
-                        {{ form.processing ? 'Saving...' : 'Save Product' }}
-                    </button>
                 </div>
-            </form>
-        </div>
+            </div>
+
+            <!-- Modals -->
+            <MediaPicker :show="showMainPicker" @close="showMainPicker = false" @select="handleMainGallerySelect" />
+            <MediaPicker :show="showGalleryPicker" @close="showGalleryPicker = false" @select="handleGalleryItemsSelect" />
+        </form>
     </AdminLayout>
 </template>
-
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';

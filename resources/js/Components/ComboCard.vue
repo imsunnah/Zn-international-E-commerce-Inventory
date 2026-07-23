@@ -1,5 +1,5 @@
 <template>
-    <div class="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col relative h-full">
+    <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative h-full hover:-translate-y-0.5">
         <!-- Visual Section -->
         <div class="relative h-56 bg-slate-50 p-6 flex items-center justify-center mix-blend-multiply">
             <Link :href="`/combo/${combo.slug}`" class="w-full h-full flex items-center justify-center relative">
@@ -16,7 +16,7 @@
         </div>
 
         <!-- Content Section -->
-        <div class="p-6 flex flex-col flex-grow bg-white border-t border-slate-100">
+        <div class="p-6 flex flex-col flex-grow bg-white">
             <div class="flex flex-col h-full text-left">
                 <h3 class="text-sm md:text-base font-bold text-slate-900 leading-snug mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
                     {{ combo.name }}

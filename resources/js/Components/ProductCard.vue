@@ -1,15 +1,15 @@
 <template>
     <div
-        class="group bg-white border border-slate-200 hover:border-[#00a651] transition-all duration-300 flex flex-col h-full relative p-2 pb-3 text-center font-sans w-full"
+        class="group bg-white shadow-md hover:shadow-2xl active:shadow-lg active:scale-[0.98] transition-all duration-300 flex flex-col min-h-[380px] sm:min-h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
     >
         <div
             v-if="product.discount_type"
-            class="absolute top-1 left-1 z-20 pointer-events-none"
+            class="absolute top-2 left-2 z-20 pointer-events-none"
         >
             <span
-                class="px-1.5 py-0.5 bg-[#e1251b] text-white text-[8px] font-black uppercase rounded shadow-sm"
+                class="px-2 py-0.5 bg-[#e1251b] text-white text-[9px] font-black uppercase shadow-sm"
             >
                 {{
                     product.discount_type === "percentage"
@@ -19,13 +19,14 @@
             </span>
         </div>
 
-        <div class="h-36 w-full flex items-center justify-center overflow-hidden mb-1 relative shrink-0">
+        <!-- Taller Image Section -->
+        <div class="h-56 sm:h-64 w-full flex items-center justify-center overflow-hidden mb-2 relative shrink-0 p-2">
             <Link
                 :href="`/products/${product.slug}`"
-                class="block max-h-full max-w-full"
+                class="block max-h-full max-w-full flex items-center justify-center"
             >
-                <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/40 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
-                    <span class="px-1.5 py-0.5 bg-slate-800 text-white text-[8px] font-bold uppercase tracking-wider rounded">Stock Out</span>
+                <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/50 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
+                    <span class="px-2 py-1 bg-slate-800 text-white text-[9px] font-extrabold uppercase tracking-wider">Stock Out</span>
                 </div>
 
                 <img
@@ -35,17 +36,25 @@
                     :alt="product.name"
                 />
             </Link>
+
+            <!-- Quick View overlay: slides up from bottom of image on hover, no extra layout space -->
+            <button
+                @click.stop="handleQuickView"
+                class="absolute bottom-0 left-0 right-0 z-20 bg-[#00a651] hover:bg-[#008541] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider py-1.5 transition-all duration-300 cursor-pointer border-none shadow-sm translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+            >
+                Quick View
+            </button>
         </div>
 
-        <div class="flex-grow flex flex-col justify-between pt-2">
+        <div class="flex-grow flex flex-col justify-between pt-1">
             <div>
-                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5 block">
+                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
                     {{ product.brand_name || product.category_name || 'Electronics' }}
                 </span>
 
                 <Link :href="`/products/${product.slug}`" class="block mb-2">
                     <h3
-                        class="text-[11px] font-bold text-slate-800 group-hover:text-[#00a651] transition-colors leading-tight line-clamp-2 min-h-[32px] tracking-tight"
+                        class="text-xs font-bold text-slate-800 group-hover:text-[#00a651] transition-colors leading-snug line-clamp-2 min-h-[36px] tracking-tight"
                     >
                         {{ product.name }}
                     </h3>
@@ -53,13 +62,13 @@
             </div>
 
             <div class="mt-auto flex flex-col items-center">
-                <div class="flex flex-col items-center justify-center mb-2.5">
-                    <div class="text-xs font-black text-[#ef4823]">
+                <div class="flex flex-col items-center justify-center mb-2">
+                    <div class="text-sm font-black text-[#ef4823]">
                         ৳{{ finalPrice.toLocaleString() }}
                     </div>
                     <div
                         v-if="product.discount_type"
-                        class="text-[9px] text-slate-400 line-through font-normal leading-none mt-0.5"
+                        class="text-[10px] text-slate-400 line-through font-normal leading-none mt-0.5"
                     >
                         ৳{{ parseFloat(product.price).toLocaleString() }}
                     </div>
@@ -68,7 +77,7 @@
                 <button
                     @click.stop="handleAddToCart"
                     :disabled="product.stock <= 0"
-                    class="inline-block w-full max-w-[110px] bg-[#ef4823] hover:bg-[#d63d1a] border-none text-white text-[10px] font-bold py-1.5 px-3 rounded transition-colors uppercase tracking-wider cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed mx-auto"
+                    class="inline-flex items-center justify-center gap-1 w-full max-w-[100px] bg-[#00a651] hover:bg-[#008541] active:bg-[#007a3d] border-none text-white text-[9px] font-extrabold py-1.5 px-2 transition-all uppercase tracking-wider cursor-pointer shadow-sm hover:shadow active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed mx-auto"
                 >
                     {{ product.stock > 0 ? "Add to cart" : "Stock Out" }}
                 </button>
@@ -87,7 +96,11 @@ const props = defineProps({
     product: Object,
 });
 
-defineEmits(["quickView"]);
+const emit = defineEmits(["quickView"]);
+
+const handleQuickView = () => {
+    emit("quickView", props.product);
+};
 
 const { addToCart } = useCart();
 

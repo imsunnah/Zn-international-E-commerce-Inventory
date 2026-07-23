@@ -444,6 +444,39 @@ class StoreController extends Controller
     }
 
     /**
+     * Instant search API for live front-page search suggestions.
+     */
+    public function searchApi(Request $request)
+    {
+        $q = trim($request->get('q', ''));
+        if (strlen($q) < 1) {
+            return response()->json([]);
+        }
+
+        $products = Product::query()
+            ->where(function ($b) {
+                $b->where('is_active', true)
+                  ->orWhere('is_active', 1)
+                  ->orWhereNull('is_active');
+            })
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('sku', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%")
+                    ->orWhereHas('category', function ($cat) use ($q) {
+                        $cat->where('name', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('brand', function ($b) use ($q) {
+                        $b->where('name', 'like', "%{$q}%");
+                    });
+            })
+            ->take(10)
+            ->get(['id', 'name', 'slug', 'price', 'discount_type', 'discount_value', 'image', 'stock']);
+
+        return response()->json($products);
+    }
+
+    /**
      * Retrieve the cart for the current user or guest session.
      */
     private function getCart(): ?Cart

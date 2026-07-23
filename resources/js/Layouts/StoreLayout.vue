@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col font-sans bg-white text-slate-900">
         <div class="w-full bg-white flex-grow flex flex-col min-h-screen">
             <header class="bg-white sticky top-0 z-50 border-b border-slate-100 transition-all">
-                <div class="w-full lg:w-[60%] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4 bg-transparent">
+                <div class="w-full lg:w-[65%] mx-auto px-4 md:px-6 h-14 flex items-center justify-between gap-4 bg-transparent">
         
         <!-- Logo Section -->
         <Link href="/" class="flex items-center flex-shrink-0 gap-2 group decoration-none">
@@ -27,7 +27,7 @@
             </div>
         </Link>
 
-        <!-- Desktop Search Bar -->
+        <!-- Desktop Search Bar with Instant Dropdown -->
         <div class="hidden md:flex flex-grow max-w-lg xl:max-w-xl relative group/search">
             <div class="flex w-full items-center border border-slate-200 focus-within:border-[#00a651] focus-within:ring-2 focus-within:ring-[#00a651]/10 rounded-lg bg-slate-50/50 transition-all overflow-hidden">
                 <input
@@ -35,6 +35,9 @@
                     type="text"
                     placeholder="Search products, brands, categories..."
                     class="w-full pl-3 pr-4 py-2.5 bg-transparent text-slate-800 focus:outline-none border-none text-xs font-medium placeholder:text-slate-400"
+                    @input="onSearchInput"
+                    @focus="onSearchInput"
+                    @blur="closeSearchDropdown"
                     @keyup.enter="handleSearch"
                 />
                 <button
@@ -43,6 +46,46 @@
                 >
                     <Search class="w-3.5 h-3.5" />
                 </button>
+            </div>
+
+            <!-- Desktop Instant Search Dropdown -->
+            <div
+                v-if="showSearchDropdown && searchQuery.trim().length >= 2"
+                class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-200/80 rounded-xl shadow-2xl z-[100] max-h-96 overflow-y-auto custom-scrollbar p-2"
+            >
+                <div v-if="isSearching" class="p-3 text-center text-xs text-slate-400 font-medium">
+                    Searching matching products...
+                </div>
+                <div v-else-if="!searchResults.length" class="p-3 text-center text-xs text-slate-400 font-medium">
+                    No matching products found for "{{ searchQuery }}"
+                </div>
+                <div v-else class="space-y-1">
+                    <Link
+                        v-for="item in searchResults"
+                        :key="item.id"
+                        :href="`/products/${item.slug}`"
+                        @mousedown="router.get(`/products/${item.slug}`); showSearchDropdown = false;"
+                        class="flex items-center gap-3 p-2 hover:bg-emerald-50/60 rounded-lg transition-colors group/item text-left decoration-none"
+                    >
+                        <div class="w-10 h-10 rounded-md bg-slate-50 p-1 flex items-center justify-center border border-slate-100 shrink-0">
+                            <img :src="item.image || 'https://placehold.co/100'" :alt="item.name" class="max-h-full max-w-full object-contain" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 group-hover/item:text-[#00a651] transition-colors truncate">
+                                {{ item.name }}
+                            </h4>
+                            <span class="text-[11px] font-black text-[#ef4823]">
+                                ৳{{ parseFloat(item.price).toLocaleString() }}
+                            </span>
+                        </div>
+                    </Link>
+                    <button
+                        @mousedown="handleSearch(); showSearchDropdown = false;"
+                        class="w-full text-center py-2 text-xs font-bold text-[#00a651] hover:bg-emerald-50 rounded-lg transition-colors border-t border-slate-100 mt-1 cursor-pointer bg-transparent"
+                    >
+                        View all results for "{{ searchQuery }}" →
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -63,15 +106,6 @@
             >
                 <ClipboardList class="w-3.5 h-3.5" />
                 <span>Price List</span>
-            </Link>
-
-            <!-- PC Builder Button -->
-            <Link
-                href="/pc-builder"
-                class="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-[#00a651] text-white rounded-lg font-bold text-[11px] uppercase cursor-pointer hover:bg-[#008541] transition-all select-none decoration-none"
-            >
-                <Zap class="w-3.5 h-3.5" />
-                <span>PC Builder</span>
             </Link>
 
             <!-- Authentication State / Login Button -->
@@ -97,13 +131,13 @@
             <!-- Mini Cart Dropdown Trigger -->
             <button
                 @click="isCartOpen = true"
-                class="flex items-center gap-2 h-9 px-3.5 bg-[#ef4823] text-white rounded-lg font-bold text-[11px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
+                class="flex items-center gap-1.5 sm:gap-2 h-9 px-3 sm:px-3.5 bg-[#ef4823] text-white rounded-lg font-bold text-[11px] hover:bg-[#d63d1a] transition-all border-none relative cursor-pointer select-none shadow-sm shadow-[#ef4823]/20 group/cart"
             >
                 <ShoppingBag class="w-3.5 h-3.5 transition-transform group-hover/cart:scale-110" />
-                <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[10px] shadow-sm">
+                <span class="bg-white text-[#ef4823] px-1.5 py-0.5 rounded font-black min-w-[16px] text-center text-[13px] shadow-sm">
                     {{ cartCount }}
                 </span>
-                <span class="hidden md:inline">৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
+                <span class="inline-block font-extrabold text-xs">৳{{ parseFloat(cartTotal || 0).toLocaleString() }}</span>
             </button>
 
             <!-- Mobile Hamburger Menu Toggle -->
@@ -120,7 +154,7 @@
     <Transition v-bind="fadeSlideTransition">
         <div
             v-if="isMobileSearchOpen"
-            class="md:hidden px-4 pb-4 pt-2 bg-white border-t border-slate-100 shadow-inner"
+            class="md:hidden px-4 pb-4 pt-2 bg-white border-t border-slate-100 shadow-inner relative"
         >
             <div class="relative">
                 <input
@@ -128,6 +162,7 @@
                     type="text"
                     placeholder="Search for items..."
                     class="w-full pl-4 pr-12 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#00a651]/20 focus:border-[#00a651] transition-all outline-none text-xs font-medium placeholder:text-slate-400"
+                    @input="onSearchInput"
                     @keyup.enter="handleSearch(); isMobileSearchOpen = false;"
                 />
                 <button
@@ -137,11 +172,45 @@
                     <Search class="w-3.5 h-3.5" />
                 </button>
             </div>
+
+            <!-- Mobile Instant Search Dropdown -->
+            <div
+                v-if="showSearchDropdown && searchQuery.trim().length >= 2"
+                class="mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-72 overflow-y-auto custom-scrollbar p-2"
+            >
+                <div v-if="isSearching" class="p-3 text-center text-xs text-slate-400 font-medium">
+                    Searching matching products...
+                </div>
+                <div v-else-if="!searchResults.length" class="p-3 text-center text-xs text-slate-400 font-medium">
+                    No matching products found for "{{ searchQuery }}"
+                </div>
+                <div v-else class="space-y-1">
+                    <Link
+                        v-for="item in searchResults"
+                        :key="item.id"
+                        :href="`/products/${item.slug}`"
+                        @click="showSearchDropdown = false; isMobileSearchOpen = false;"
+                        class="flex items-center gap-3 p-2 hover:bg-emerald-50/60 rounded-lg transition-colors text-left decoration-none"
+                    >
+                        <div class="w-9 h-9 rounded-md bg-slate-50 p-1 flex items-center justify-center border border-slate-100 shrink-0">
+                            <img :src="item.image || 'https://placehold.co/100'" :alt="item.name" class="max-h-full max-w-full object-contain" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-slate-800 truncate">
+                                {{ item.name }}
+                            </h4>
+                            <span class="text-[11px] font-black text-[#ef4823]">
+                                ৳{{ parseFloat(item.price).toLocaleString() }}
+                            </span>
+                        </div>
+                    </Link>
+                </div>
+            </div>
         </div>
     </Transition>
 
 <nav class="bg-[#081621] relative hidden md:block border-t border-slate-800/60 shadow-md">
-    <div class="w-full lg:w-[60%] mx-auto flex items-center h-8 px-2">
+    <div class="w-full lg:w-[60%] mx-auto flex items-center h-10 px-4">
         <!-- Home Link -->
         <Link
             href="/"
@@ -159,7 +228,7 @@
             >
                 <Link
                     :href="`/shop?category=${category.slug}`"
-                    class="px-1.5 text-[#0fd33a] text-[10px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-0.5 h-full uppercase select-none decoration-none"
+                    class="px-1.5 text-[#0fd33a] text-[13px] tracking-wider font-bold hover:text-white transition-colors flex items-center gap-0.5 h-full uppercase select-none decoration-none"
                 >
                     {{ category.name }}
                     <ChevronDown
@@ -168,57 +237,60 @@
                     />
                 </Link>
 
-                <!-- Mega Dropdown Column Tier 1 (Pure Solid Black Background) -->
-                <div
-                    v-if="categoryHasChildren(category)"
-                    class="absolute left-0 top-full bg-black p-0.5 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[200px] border border-slate-900 translate-y-1 group-hover/category:translate-y-0 rounded-b-lg"
+         <!-- Mega Dropdown Column Tier 1 (Pure Solid Black Background) -->
+<div
+    v-if="categoryHasChildren(category)"
+    class="absolute left-0 top-full bg-black p-1 shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 z-[60] min-w-[230px] border border-slate-900 translate-y-1 group-hover/category:translate-y-0 rounded-b-lg"
+>
+    <template v-if="category.sub_categories?.length">
+        <div
+            v-for="sub in category.sub_categories"
+            :key="sub.id"
+            :class="[
+                'relative group/sub',
+                sub.brands?.length ? 'has-flyout' : ''
+            ]"
+        >
+            <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
+            <Link
+                :href="`/shop?sub_category=${sub.slug}`"
+                class="flex items-center justify-between px-3.5 py-2 hover:bg-slate-900 rounded-md text-[14px] font-medium text-white hover:text-[#0fd33a] transition-colors decoration-none"
+            >
+                <span>{{ sub.name }}</span>
+                <ChevronRight
+                    v-if="sub.brands?.length"
+                    class="w-3.5 h-3.5 text-slate-400 group-hover/sub:text-[#0fd33a] transition-colors ml-2 shrink-0"
+                />
+            </Link>
+
+            <!-- Dropdown Sub-tier Brand Matrix -->
+            <div
+                v-if="sub.brands?.length"
+                class="absolute left-[calc(100%-2px)] top-0 bg-black p-1 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[190px] translate-x-1 group-hover/sub:translate-x-0 rounded-lg"
+            >
+                <Link
+                    v-for="brand in sub.brands"
+                    :key="brand.id"
+                    :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
+                    class="block px-3.5 py-2 text-[14px] font-medium text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
                 >
-                    <template v-if="category.sub_categories?.length">
-                        <div
-                            v-for="sub in category.sub_categories"
-                            :key="sub.id"
-                            class="relative group/sub"
-                        >
-                            <!-- Dropdown Item: Text White, Hover BG Charcoal & Text Green -->
-                            <Link
-                                :href="`/shop?sub_category=${sub.slug}`"
-                                class="flex items-center justify-between px-2 py-0.5 hover:bg-slate-900 rounded text-[10px] font-normal text-white hover:text-[#0fd33a] transition-colors decoration-none"
-                            >
-                                {{ sub.name }}
-                                <ChevronRight
-                                    v-if="sub.brands?.length"
-                                    class="w-2.5 h-2.5 text-slate-600 group-hover/sub:text-[#0fd33a] transition-colors"
-                                />
-                            </Link>
+                    {{ brand.name }}
+                </Link>
+            </div>
+        </div>
+    </template>
 
-                            <!-- Dropdown Sub-tier Brand Matrix -->
-                            <div
-                                v-if="sub.brands?.length"
-                                class="absolute left-[calc(100%-2px)] top-0 bg-black p-0.5 border border-slate-900 shadow-2xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 min-w-[165px] translate-x-1 group-hover/sub:translate-x-0 rounded-lg"
-                            >
-                                <Link
-                                    v-for="brand in sub.brands"
-                                    :key="brand.id"
-                                    :href="`/shop?sub_category=${sub.slug}&brand=${brand.slug}`"
-                                    class="block px-2 py-0.5 text-[10px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
-                                >
-                                    {{ brand.name }}
-                                </Link>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template v-else>
-                        <Link
-                            v-for="brand in category.brands"
-                            :key="brand.id"
-                            :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
-                            class="block px-2 py-0.5 text-[10px] font-normal text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded transition-colors decoration-none"
-                        >
-                            {{ brand.name }}
-                        </Link>
-                    </template>
-                </div>
+    <template v-else>
+        <Link
+            v-for="brand in category.brands"
+            :key="brand.id"
+            :href="`/shop?category=${category.slug}&brand=${brand.slug}`"
+            class="block px-3.5 py-2 text-[14px] font-medium text-white hover:text-[#0fd33a] hover:bg-slate-900 rounded-md transition-colors decoration-none"
+        >
+            {{ brand.name }}
+        </Link>
+    </template>
+</div>
             </div>
         </div>
     </div>
@@ -289,16 +361,8 @@
                 <Monitor class="w-3.5 h-3.5" /> Home
             </Link>
 
-            <Link
-                href="/pc-builder"
-                class="flex items-center gap-2 px-3 py-1.5 text-[#00a651] hover:bg-[#e6f6ee] rounded-md transition-colors text-xs font-normal decoration-none"
-                @click="isMobileMenuOpen = false"
-            >
-                <Zap class="w-3.5 h-3.5" /> PC Builder
-            </Link>
-
             <div class="pt-2 pb-1 px-3 border-b border-slate-100 mb-1 mt-1">
-                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-wider">
+                <span class="text-[13px] font-normal text-slate-400 uppercase tracking-wider">
                     Categories
                 </span>
             </div>
@@ -317,7 +381,7 @@
     </div>
 </Transition>
 
-        <main class="w-full lg:w-[60%] mx-auto flex-grow relative z-10 bg-white">
+        <main class="w-full lg:w-[65%] mx-auto flex-grow relative z-10 bg-white">
             <slot />
         </main>
 
@@ -356,7 +420,7 @@
         </Teleport>
 
         <footer class="bg-[#081621] text-slate-300 pt-14 pb-6 relative z-10 border-t-4 border-[#00a651]">
-            <div class="w-full mx-auto px-4 md:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div class="w-full lg:w-[65%] mx-auto px-4 md:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
                 <!-- Column 1: Logo + About + Socials -->
                 <div class="flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
                     <Link href="/" class="flex items-center gap-3 decoration-none">
@@ -374,13 +438,13 @@
                                 <span class="text-base font-black text-white tracking-tight leading-none uppercase">
                                     {{ siteName }}
                                 </span>
-                                <span class="text-[10px] font-bold text-slate-400 tracking-wider leading-none uppercase mt-0.5">
+                                <span class="text-[13px] font-bold text-slate-400 tracking-wider leading-none uppercase mt-0.5">
                                     E-Commerce
                                 </span>
                             </div>
                         </div>
                     </Link>
-                    <p class="text-[10px] text-slate-400 leading-relaxed max-w-xs">
+                    <p class="text-[13px] text-slate-400 leading-relaxed max-w-xs">
                         {{ settings.footer_about || "Your trusted partner for genuine corporate IT frameworks, premium printing hardware, and verified computer components across Bangladesh." }}
                     </p>
                     <div class="flex items-center gap-2 pt-1">
@@ -396,10 +460,9 @@
                 <!-- Column 2: Quick Links -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Quick Links</h4>
-                    <ul class="space-y-2 text-[10px] font-bold text-center lg:text-left list-none p-0 m-0">
+                    <ul class="space-y-2 text-[13px] font-bold text-center lg:text-left list-none p-0 m-0">
                         <li><Link href="/shop" class="hover:text-[#00a651] transition-colors decoration-none">All Products</Link></li>
                         <li><Link href="/offers" class="hover:text-[#00a651] transition-colors decoration-none">Special Offers</Link></li>
-                        <li><Link href="/pc-builder" class="hover:text-[#00a651] transition-colors decoration-none">PC Builder</Link></li>
                         <li><Link href="/reviews" class="hover:text-[#00a651] transition-colors decoration-none">Reviews & Feedback</Link></li>
                     </ul>
                 </div>
@@ -407,7 +470,7 @@
                 <!-- Column 3: Contact & Support -->
                 <div class="flex flex-col items-center lg:items-start space-y-4">
                     <h4 class="text-xs font-black uppercase text-white tracking-wider border-b-2 border-[#00a651] pb-1.5 inline-block">Head Office</h4>
-                    <div class="space-y-3 text-[10px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
+                    <div class="space-y-3 text-[13px] font-medium text-center lg:text-left flex flex-col items-center lg:items-start">
                         <div class="flex items-start gap-2 max-w-xs">
                             <MapPin class="w-4 h-4 text-[#00a651] shrink-0 mt-0.5" />
                             <span>{{ settings.footer_address || "Multiplan Center, Level 9, Suite 935, Elephant Road, Dhaka-1205" }}</span>
@@ -436,16 +499,16 @@
             </div>
 
             <!-- Bottom Bar -->
-            <div class="w-full mx-auto px-4 md:px-6 mt-10 pt-6 border-t border-slate-700/50">
+            <div class="w-full lg:w-[65%] mx-auto px-4 md:px-6 mt-10 pt-6 border-t border-slate-700/50">
                 <div class="flex flex-col items-center text-center gap-4">
                     <div class="flex flex-col items-center gap-2">
-                        <p class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>
+                        <p class="text-[13px] font-bold uppercase text-slate-500 tracking-widest">Secure Payment Methods</p>
                         <div class="flex flex-wrap justify-center gap-1.5">
-                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[10px] font-black tracking-tight">VISA</span>
-                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[10px] font-black tracking-tight">Mastercard</span>
-                            <span class="px-2.5 py-1 bg-[#e11d48] text-white rounded text-[10px] font-black tracking-tight">bKash</span>
-                            <span class="px-2.5 py-1 bg-[#ea580c] text-white rounded text-[10px] font-black tracking-tight">Nagad</span>
-                            <span class="px-2.5 py-1 bg-[#4f46e5] text-white rounded text-[10px] font-black tracking-tight">Rocket</span>
+                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[13px] font-black tracking-tight">VISA</span>
+                            <span class="px-2.5 py-1 bg-white text-slate-900 rounded text-[13px] font-black tracking-tight">Mastercard</span>
+                            <span class="px-2.5 py-1 bg-[#e11d48] text-white rounded text-[13px] font-black tracking-tight">bKash</span>
+                            <span class="px-2.5 py-1 bg-[#ea580c] text-white rounded text-[13px] font-black tracking-tight">Nagad</span>
+                            <span class="px-2.5 py-1 bg-[#4f46e5] text-white rounded text-[13px] font-black tracking-tight">Rocket</span>
                         </div>
                     </div>
 
@@ -455,7 +518,7 @@
                         <span>✓ Nationwide Shipping</span>
                     </div>
 
-                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[10px]">
+                    <div class="w-full flex flex-col md:flex-row justify-between items-center gap-3 pt-3 border-t border-slate-800 text-slate-500 font-semibold text-[13px]">
                         <p>© {{ new Date().getFullYear() }} {{ siteName }}. All rights reserved.</p>
                         <span class="uppercase tracking-widest text-[8px] font-black text-slate-600 bg-slate-900/50 px-2 py-0.5 rounded">
                             Developed by admin systems
@@ -558,6 +621,42 @@ const isMobileSearchOpen = ref(false);
 const authModalMode = ref("login");
 const searchQuery = ref("");
 
+// Instant search state & logic
+const searchResults = ref([]);
+const isSearching = ref(false);
+const showSearchDropdown = ref(false);
+let searchDebounceTimer = null;
+
+const onSearchInput = () => {
+    if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+    const q = searchQuery.value.trim();
+    if (q.length < 2) {
+        searchResults.value = [];
+        showSearchDropdown.value = false;
+        return;
+    }
+    isSearching.value = true;
+    showSearchDropdown.value = true;
+    searchDebounceTimer = setTimeout(async () => {
+        try {
+            const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+            if (res.ok) {
+                searchResults.value = await res.json();
+            }
+        } catch (e) {
+            console.error('Instant search fetch error:', e);
+        } finally {
+            isSearching.value = false;
+        }
+    }, 250);
+};
+
+const closeSearchDropdown = () => {
+    setTimeout(() => {
+        showSearchDropdown.value = false;
+    }, 250);
+};
+
 const openAuthModal = (mode = "login") => {
     authModalMode.value = mode;
     isAuthModalOpen.value = true;
@@ -565,6 +664,7 @@ const openAuthModal = (mode = "login") => {
 
 const handleSearch = () => {
     if (searchQuery.value.trim()) {
+        showSearchDropdown.value = false;
         router.get("/shop", { search: searchQuery.value });
     }
 };

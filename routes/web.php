@@ -115,12 +115,14 @@ Route::post('/api/cart/add', [\App\Http\Controllers\CartController::class, 'addI
 Route::put('/api/cart/update/{itemId}', [\App\Http\Controllers\CartController::class, 'updateItem']);
 Route::delete('/api/cart/remove/{itemId}', [\App\Http\Controllers\CartController::class, 'removeItem']);
 
-// Auth Routes
+// Search & Auth Routes
+Route::get('/api/search', [StoreController::class, 'searchApi'])->name('api.search');
 Route::get('/login', [\App\Http\Controllers\AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::get('/register', [\App\Http\Controllers\AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
-Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/admin/logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('admin.logout');
 Route::get('/forgot-password', [\App\Http\Controllers\AuthController::class, 'showForgotPassword'])->name('password.request');
 Route::post('/forgot-password', [\App\Http\Controllers\AuthController::class, 'sendResetOtp'])->name('password.otp');
 Route::post('/reset-password', [\App\Http\Controllers\AuthController::class, 'resetPassword'])->name('password.reset.submit');

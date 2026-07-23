@@ -12,11 +12,22 @@
 
     <!-- Favicon Configuration -->
     @php
-        $siteFavicon = \App\Models\Setting::get('site_favicon') ?? \App\Models\Setting::get('site_logo') ?? '/favicon.ico';
-        $siteFaviconUrl = str_starts_with($siteFavicon, 'http') ? $siteFavicon : asset($siteFavicon);
+        $rawFavicon = \App\Models\Setting::get('site_favicon') ?? \App\Models\Setting::get('site_logo');
+        if ($rawFavicon) {
+            if (str_starts_with($rawFavicon, 'http://') || str_starts_with($rawFavicon, 'https://')) {
+                $siteFaviconUrl = $rawFavicon;
+            } elseif (str_starts_with($rawFavicon, '/storage/') || str_starts_with($rawFavicon, 'storage/')) {
+                $siteFaviconUrl = asset(ltrim($rawFavicon, '/'));
+            } else {
+                $siteFaviconUrl = asset(ltrim($rawFavicon, '/'));
+            }
+        } else {
+            $siteFaviconUrl = asset('favicon.ico');
+        }
     @endphp
-    <link rel="shortcut icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
-    <link rel="icon" type="image/png" href="{{ $siteFaviconUrl }}">
+    <link rel="icon" href="{{ $siteFaviconUrl }}">
+    <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+    <link rel="apple-touch-icon" href="{{ $siteFaviconUrl }}">
 
     @routes
     @vite(['resources/js/app.js', 'resources/css/app.css'])

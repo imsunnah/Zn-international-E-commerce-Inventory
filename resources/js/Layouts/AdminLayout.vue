@@ -54,12 +54,11 @@
 
                 <!-- ==================== INVENTORY & CATALOG ==================== -->
                 <div>
-                    <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('Product Matrix') }}</div>
+                    <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('Products & Catalog') }}</div>
                     <ul class="space-y-1">
                         <li v-for="item in [
                             { href: '/admin/products', icon: Package, label: 'Products' },
                             { href: '/admin/combos', icon: Zap, label: 'Combos' },
-                            { href: '/admin/pc-builder-categories', icon: Monitor, label: 'PC Builder' },
                             { href: '/admin/categories', icon: Tags, label: 'Categories' },
                             { href: '/admin/subcategories', icon: ListTree, label: 'Subcategories' },
                             { href: '/admin/brands', icon: Award, label: 'Brands' }
@@ -74,7 +73,7 @@
 
                 <!-- ==================== CUSTOMER RELATIONSHIP ==================== -->
                 <div>
-                    <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('Relations') }}</div>
+                    <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('Management & Services') }}</div>
                     <ul class="space-y-1">
                         <li>
                             <Link href="/admin/customers" :class="[$page.url.startsWith('/admin/customers') ? 'bg-green-50 text-[#00a651]' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900']" class="flex items-center px-4 py-3 rounded-2xl transition-all group">
@@ -100,13 +99,11 @@
 
                 <!-- ==================== SYSTEM & CONTENT ==================== -->
                 <div>
-                     <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('Infrastructure') }}</div>
+                     <div class="px-4 mb-3 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{{ $t('System Settings') }}</div>
                      <ul class="space-y-1">
                         <li v-for="item in [
-                            { href: '/admin/notices', icon: Bell, label: 'Notice Board' },
-                            { href: '/admin/discounts', icon: Percent, label: 'Discount Manager' },
-                            { href: '/admin/pages', icon: FileText, label: 'Pages' },
-                            { href: '/admin/gallery', icon: Image, label: 'Media' },
+                            { href: '/admin/notices', icon: Bell, label: 'Notices' },
+                            { href: '/admin/discounts', icon: Percent, label: 'Discounts' },
                             { href: '/admin/settings', icon: Settings, label: 'Settings' }
                         ]" :key="item.href">
                             <Link :href="item.href" :class="[$page.url.startsWith(item.href) ? 'bg-green-50 text-[#00a651]' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900']" class="flex items-center px-4 py-3 rounded-2xl transition-all group">
@@ -115,10 +112,10 @@
                             </Link>
                         </li>
                         <li>
-                            <Link href="/" class="flex items-center px-4 py-3 text-slate-400 hover:text-[#00a651] transition-all group">
+                            <a href="/" target="_blank" class="flex items-center px-4 py-3 text-slate-400 hover:text-[#00a651] transition-all group decoration-none">
                                 <ExternalLink class="w-4 h-4 mr-3.5" />
                                 <span class="font-bold text-[11px] uppercase tracking-wider">{{ $t('Live Store') }}</span>
-                            </Link>
+                            </a>
                         </li>
                     </ul>
                 </div>

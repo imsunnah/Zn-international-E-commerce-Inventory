@@ -4,7 +4,7 @@
             class="bg-white min-h-screen py-8 font-sans antialiased text-slate-650 selection:bg-[#00a651] selection:text-white"
         >
             <div
-                class="max-w-[1300px] mx-auto px-4 md:px-8 xl:px-12 relative z-10"
+                class="max-w-[1300px] mx-auto px-4 md:px-8 xl:px-8 relative z-10"
             >
                 <!-- Breadcrumbs & Header Section -->
                 <div class="mb-8">
@@ -257,7 +257,7 @@
                             v-if="products.data.length > 0"
                             name="grid-fade"
                             tag="div"
-                            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
+                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"
                         >
                             <ProductCard
                                 v-for="product in products.data"

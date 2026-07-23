@@ -148,27 +148,26 @@
                 </div>
             </div>
         </div>
-
-        <!-- ══════════════════════════════════════════
-             FEATURED CATEGORIES (full-bleed gray bg, centered title)
-        ═══════════════════════════════════════════ -->
-     <section v-if="displayedCategories.length" class="full-bleed-section py-10 bg-[#f3f4f6] border-b border-slate-200/60">
-    <div class="w-full mx-auto px-4 md:px-6">
+<!-- ══════════════════════════════════════════
+     FEATURED CATEGORIES (Full Screen Width, No Border, No Shadow, Bigger Cards)
+═══════════════════════════════════════════ -->
+<section v-if="displayedCategories.length" class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-10 bg-slate-100/90 border-y border-slate-200/50 my-6 overflow-hidden">
+    <div class="w-full max-w-full mx-auto px-4 md:px-8">
         <!-- Centered Header -->
         <div class="text-center mb-8">
-            <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
                 Featured <span class="text-[#00a651]">Categories</span>
             </h2>
-            <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
+            <span class="block w-12 h-1 bg-[#00a651] rounded-full mx-auto mt-2.5"></span>
         </div>
 
         <!-- Centered Items Grid -->
-        <div class="flex flex-wrap justify-center gap-3 md:gap-4">
+        <div class="flex flex-wrap justify-center gap-3 sm:gap-5">
             <Link
                 v-for="cat in displayedCategories"
                 :key="cat.id"
                 :href="`/shop?category=${cat.slug}`"
-                class="group flex flex-col items-center decoration-transparent w-[140px] h-[140px] md:w-[160px] md:h-[160px] bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-[#00a651] transition-all duration-200 p-4 justify-between"
+                class="group flex flex-col items-center decoration-transparent w-[135px] h-[155px] sm:w-[155px] sm:h-[175px] md:w-[175px] md:h-[195px] bg-white hover:bg-[#eaf7f0] border-0 shadow-md hover:shadow-2xl active:shadow-lg active:scale-[0.97] transition-all duration-300 p-3.5 justify-between hover:-translate-y-0.5 cursor-pointer"
             >
                 <!-- Image / Icon Container -->
                 <div class="flex-1 flex items-center justify-center w-full min-h-0">
@@ -176,30 +175,31 @@
                         v-if="cat.image"
                         :src="cat.image"
                         :alt="cat.name"
-                        class="w-20 h-20 md:w-24 md:h-24 object-contain transition-transform duration-200 group-hover:scale-105"
+                        class="w-20 h-20 sm:w-24 sm:h-24 md:w-26 md:h-26 object-contain transition-transform duration-300 group-hover:scale-105"
                     />
                     <component
                         v-else
                         :is="categoryIcon(cat)"
-                        class="w-12 h-12 md:w-14 md:h-14 text-[#00a651] group-hover:scale-105 transition-transform"
+                        class="w-12 h-12 sm:w-14 sm:h-14 text-[#00a651] group-hover:scale-105 transition-transform"
                         stroke-width="1.5"
                     />
                 </div>
 
                 <!-- Text Container inside the Card -->
-                <span class="text-[11px] md:text-[12px] font-bold text-slate-800 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wide block w-full mt-2 truncate">
+                <span class="text-[11px] sm:text-xs font-extrabold text-slate-800 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wide block w-full mt-2 truncate">
                     {{ cat.name }}
                 </span>
             </Link>
         </div>
     </div>
 </section>
+
         <!-- ══════════════════════════════════════════
-             NEW PRODUCTS (full-bleed white, centered title)
+             NEW PRODUCTS (5 in a row on LG screens)
         ═══════════════════════════════════════════ -->
-        <section v-if="latestProducts.length" class=" py-10 bg-white border-b border-slate-200/60">
+        <section v-if="latestProducts.length" class="py-8 bg-white border-b border-slate-100">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-center mb-8">
+                <div class="text-center mb-6">
                     <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
                         New <span class="text-[#00a651]">Products</span>
                     </h2>
@@ -209,7 +209,7 @@
                     <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 p-1">
                     <ProductCard
                         v-for="p in latestProducts"
                         :key="p.id"
@@ -230,11 +230,11 @@
         </section>
 
         <!-- ══════════════════════════════════════════
-             PRINTERS PRODUCTS (full-bleed gray, centered title)
+             PRINTERS PRODUCTS (5 in a row on LG screens)
         ═══════════════════════════════════════════ -->
-        <section v-if="printersProducts && printersProducts.length" class=" py-10  border-b border-slate-200/60">
+        <section v-if="printersProducts && printersProducts.length" class="py-8 border-b border-slate-100">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-center mb-8">
+                <div class="text-center mb-6">
                     <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
                         Enterprise <span class="text-[#00a651]">Printer</span>
                     </h2>
@@ -244,7 +244,7 @@
                     <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 p-1">
                     <ProductCard
                         v-for="p in printersProducts"
                         :key="p.id"
@@ -265,11 +265,11 @@
         </section>
 
         <!-- ══════════════════════════════════════════
-             SCANNERS PRODUCTS (full-bleed white, centered title)
+             SCANNERS PRODUCTS (5 in a row on LG screens)
         ═══════════════════════════════════════════ -->
-        <section v-if="scannersProducts && scannersProducts.length" class=" py-10 bg-white border-b border-slate-200/60">
+        <section v-if="scannersProducts && scannersProducts.length" class="py-8 bg-white border-b border-slate-100">
             <div class="w-full mx-auto px-4 md:px-6">
-                <div class="text-center mb-8">
+                <div class="text-center mb-6">
                     <h2 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
                         Enterprise <span class="text-[#00a651]">Scanner</span>
                     </h2>
@@ -279,7 +279,7 @@
                     <span class="block w-10 h-[3px] bg-[#00a651] rounded-full mx-auto mt-2"></span>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-2.5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 p-1">
                     <ProductCard
                         v-for="p in scannersProducts"
                         :key="p.id"
@@ -514,16 +514,6 @@ const toggleAccordion = (i) => {
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
-
-/* Full-bleed helper: breaks a section out of any centered/padded parent
-   so its background spans the entire viewport width, while the inner
-   content wrapper (.w-full.mx-auto with max width from layout) stays
-   aligned with the rest of the page. */
-.full-bleed-section {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
 }
 
 /* Scrolling notice ticker */

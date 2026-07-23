@@ -2,24 +2,24 @@
     <AdminLayout>
         <!-- Dashboard Header -->
         <div
-            class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-5 rounded-xl shadow-sm border border-slate-100"
+            class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white p-6 rounded-2xl shadow-sm border border-slate-100/80"
         >
             <div>
-                <h1 class="text-xl font-bold text-slate-800">
+                <h1 class="text-2xl font-black text-slate-800 tracking-tight">
                     {{ $t("Strategic Overview") }}
                 </h1>
-                <p class="text-xs text-slate-400 mt-0.5 flex items-center">
+                <p class="text-xs text-slate-400 mt-1 flex items-center font-medium">
                     <span
-                        class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"
+                        class="w-2 h-2 rounded-full bg-[#00a651] mr-2"
                     ></span>
-                    Real-time Performance Metrics & Insights
+                    Real-time Performance Metrics & E-Commerce Insights
                 </p>
             </div>
             <div
-                class="mt-2 sm:mt-0 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center"
+                class="mt-3 sm:mt-0 bg-emerald-50 text-[#00a651] px-4 py-1.5 rounded-full text-xs font-bold flex items-center shadow-xs"
             >
                 <span
-                    class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"
+                    class="w-2 h-2 rounded-full bg-[#00a651] mr-2 animate-pulse"
                 ></span>
                 {{ $t("Operational Status") }}: Active
             </div>
@@ -37,8 +37,8 @@
                                 stats.totalRevenue || 0,
                             ).toLocaleString(),
                         icon: TrendingUp,
-                        color: 'text-green-600',
-                        bg: 'bg-green-50',
+                        color: 'text-[#00a651]',
+                        bg: 'bg-emerald-50',
                     },
                     {
                         label: 'Net Profit',
@@ -47,46 +47,46 @@
                             parseFloat(stats.totalProfit || 0).toLocaleString(),
                         icon: CircleDollarSign,
                         color: 'text-emerald-600',
-                        bg: 'bg-emerald-50',
+                        bg: 'bg-emerald-100/50',
                     },
                     {
                         label: 'Total Orders',
                         value: stats.totalOrders,
                         icon: ShoppingCart,
-                        color: 'text-slate-600',
-                        bg: 'bg-slate-50',
+                        color: 'text-blue-600',
+                        bg: 'bg-blue-50',
                     },
                     {
                         label: 'Inventory Count',
                         value: stats.totalProducts,
                         icon: Package,
-                        color: 'text-slate-600',
-                        bg: 'bg-slate-50',
+                        color: 'text-amber-600',
+                        bg: 'bg-amber-50',
                     },
                     {
                         label: 'Total Customers',
                         value: stats.totalCustomers,
                         icon: Users,
-                        color: 'text-slate-600',
-                        bg: 'bg-slate-50',
+                        color: 'text-indigo-600',
+                        bg: 'bg-indigo-50',
                     },
                 ]"
                 :key="card.label"
-                class="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex items-center gap-3"
+                class="bg-white rounded-2xl p-4.5 shadow-sm hover:shadow-md border border-slate-100/80 flex items-center gap-3.5 hover:-translate-y-0.5 transition-all duration-300"
             >
                 <div
                     :class="[card.bg, card.color]"
-                    class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-xs"
                 >
                     <component :is="card.icon" class="w-5 h-5" />
                 </div>
                 <div class="min-w-0">
                     <span
-                        class="block text-[11px] font-medium text-slate-400 truncate"
+                        class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 truncate"
                         >{{ $t(card.label) }}</span
                     >
                     <span
-                        class="block text-base font-bold text-slate-800 truncate mt-0.5"
+                        class="block text-lg font-black text-slate-800 truncate mt-0.5"
                         >{{ card.value }}</span
                     >
                 </div>
