@@ -214,7 +214,7 @@
         <!-- Home Link -->
         <Link
             href="/"
-            class="px-2 text-[#0fd33a] text-[11px] font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none border-r border-slate-800/40"
+            class="px-2 text-[#0fd33a] text-[13px] font-bold hover:text-white transition-colors flex items-center gap-1 h-full uppercase select-none decoration-none border-r border-slate-800/40"
         >
             Home
         </Link>

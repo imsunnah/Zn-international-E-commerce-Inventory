@@ -1,8 +1,6 @@
 <template>
     <div
-        class="group bg-white shadow-md hover:shadow-2xl active:shadow-lg active:scale-[0.98] transition-all duration-300 flex flex-col min-h-[380px] sm:min-h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"
-        @mouseenter="isHovered = true"
-        @mouseleave="isHovered = false"
+class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_30px_rgba(100,116,139,0.45)] active:shadow-[0_0_12px_rgba(100,116,139,0.3)] active:scale-[0.98] transition-all duration-300 flex flex-col min-h-[380px] sm:min-h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"        @mouseleave="isHovered = false"
     >
         <div
             v-if="product.discount_type"

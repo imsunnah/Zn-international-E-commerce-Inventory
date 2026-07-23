@@ -151,49 +151,48 @@
 <!-- ══════════════════════════════════════════
      FEATURED CATEGORIES (Full Screen Width, No Border, No Shadow, Bigger Cards)
 ═══════════════════════════════════════════ -->
-<section v-if="displayedCategories.length" class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-10 bg-slate-100/90 border-y border-slate-200/50 my-6 overflow-hidden">
+<section v-if="displayedCategories.length" class="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] py-8 bg-slate-100/90 border-y border-slate-200/50 my-6 overflow-hidden">
     <div class="w-full max-w-full mx-auto px-4 md:px-8">
         <!-- Centered Header -->
-        <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <div class="text-center mb-6">
+            <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight">
                 Featured <span class="text-[#00a651]">Categories</span>
             </h2>
-            <span class="block w-12 h-1 bg-[#00a651] rounded-full mx-auto mt-2.5"></span>
+            <span class="block w-10 h-0.5 bg-[#00a651] rounded-full mx-auto mt-2"></span>
         </div>
 
-        <!-- Centered Items Grid -->
-        <div class="flex flex-wrap justify-center gap-3 sm:gap-5">
+        <!-- Square Items Grid -->
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
             <Link
                 v-for="cat in displayedCategories"
                 :key="cat.id"
                 :href="`/shop?category=${cat.slug}`"
-                class="group flex flex-col items-center decoration-transparent w-[135px] h-[155px] sm:w-[155px] sm:h-[175px] md:w-[175px] md:h-[195px] bg-white hover:bg-[#eaf7f0] border-0 shadow-md hover:shadow-2xl active:shadow-lg active:scale-[0.97] transition-all duration-300 p-3.5 justify-between hover:-translate-y-0.5 cursor-pointer"
+                class="group flex flex-col items-center justify-between decoration-transparent w-[140px] h-[140px] sm:w-[170px] sm:h-[170px] md:w-[185px] md:h-[185px] bg-white hover:bg-[#eaf7f0] rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.08)] hover:shadow-[0_0_25px_rgba(0,0,0,0.18)] active:scale-[0.97] transition-all duration-300 p-3 sm:p-4 hover:-translate-y-1 cursor-pointer"
             >
-                <!-- Image / Icon Container -->
+                <!-- Perfectly Centered Image Container -->
                 <div class="flex-1 flex items-center justify-center w-full min-h-0">
                     <img
                         v-if="cat.image"
                         :src="cat.image"
                         :alt="cat.name"
-                        class="w-20 h-20 sm:w-24 sm:h-24 md:w-26 md:h-26 object-contain transition-transform duration-300 group-hover:scale-105"
+                        class="max-w-[80%] max-h-[80%] object-contain transition-transform duration-300 group-hover:scale-105"
                     />
                     <component
                         v-else
                         :is="categoryIcon(cat)"
-                        class="w-12 h-12 sm:w-14 sm:h-14 text-[#00a651] group-hover:scale-105 transition-transform"
+                        class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-[#00a651] group-hover:scale-105 transition-transform"
                         stroke-width="1.5"
                     />
                 </div>
 
-                <!-- Text Container inside the Card -->
-                <span class="text-[11px] sm:text-xs font-extrabold text-slate-800 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wide block w-full mt-2 truncate">
+                <!-- Text Centered at Bottom -->
+                <span class="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#00a651] transition-colors text-center leading-tight uppercase tracking-wider block w-full truncate mt-1">
                     {{ cat.name }}
                 </span>
             </Link>
         </div>
     </div>
 </section>
-
         <!-- ══════════════════════════════════════════
              NEW PRODUCTS (5 in a row on LG screens)
         ═══════════════════════════════════════════ -->
