@@ -1,7 +1,10 @@
 <template>
     <div
-class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_30px_rgba(100,116,139,0.45)] active:shadow-[0_0_12px_rgba(100,116,139,0.3)] active:scale-[0.98] transition-all duration-300 flex flex-col min-h-[380px] sm:min-h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"        @mouseleave="isHovered = false"
+        class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_30px_rgba(100,116,139,0.45)] active:shadow-[0_0_12px_rgba(100,116,139,0.3)] active:scale-[0.98] transition-all duration-300 flex flex-col h-[380px] sm:h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"
+        @mouseenter="isHovered = true"
+        @mouseleave="isHovered = false"
     >
+        <!-- Discount badge -->
         <div
             v-if="product.discount_type"
             class="absolute top-2 left-2 z-20 pointer-events-none"
@@ -17,7 +20,19 @@ class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_
             </span>
         </div>
 
-        <!-- Taller Image Section -->
+        <!-- Wishlist icon (always same size/position on every card) -->
+        <button
+            type="button"
+            @click.stop="handleWishlist"
+            class="absolute top-2 right-2 z-20 h-7 w-7 flex items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.25)] hover:bg-slate-50 transition-colors cursor-pointer border-none"
+        >
+            <Heart
+                class="w-3.5 h-3.5"
+                :class="isWishlisted ? 'text-[#ef4823] fill-[#ef4823]' : 'text-slate-400'"
+            />
+        </button>
+
+        <!-- Fixed-height image section, identical on every card -->
         <div class="h-56 sm:h-64 w-full flex items-center justify-center overflow-hidden mb-2 relative shrink-0 p-2">
             <Link
                 :href="`/products/${product.slug}`"
@@ -35,10 +50,11 @@ class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_
                 />
             </Link>
 
-            <!-- Quick View overlay: slides up from bottom of image on hover, no extra layout space -->
+            <!-- Quick View: identical width/height/shadow on every card, slides up on hover -->
             <button
+                type="button"
                 @click.stop="handleQuickView"
-                class="absolute bottom-0 left-0 right-0 z-20 bg-[#00a651] hover:bg-[#008541] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider py-1.5 transition-all duration-300 cursor-pointer border-none shadow-sm translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                class="absolute bottom-0 left-0 right-0 z-20 h-7 flex items-center justify-center bg-[#e1251b] hover:bg-[#c91f16] text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer border-none shadow-[0_-2px_6px_rgba(0,0,0,0.15)] translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
             >
                 Quick View
             </button>
@@ -60,7 +76,7 @@ class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_
             </div>
 
             <div class="mt-auto flex flex-col items-center">
-                <div class="flex flex-col items-center justify-center mb-2">
+                <div class="flex flex-col items-center justify-center mb-2 min-h-[38px] justify-end">
                     <div class="text-sm font-black text-[#ef4823]">
                         ৳{{ finalPrice.toLocaleString() }}
                     </div>
@@ -75,7 +91,7 @@ class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_
                 <button
                     @click.stop="handleAddToCart"
                     :disabled="product.stock <= 0"
-                    class="inline-flex items-center justify-center gap-1 w-full max-w-[100px] bg-[#00a651] hover:bg-[#008541] active:bg-[#007a3d] border-none text-white text-[9px] font-extrabold py-1.5 px-2 transition-all uppercase tracking-wider cursor-pointer shadow-sm hover:shadow active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed mx-auto"
+                    class="inline-flex items-center justify-center gap-1 w-full max-w-[100px] h-7 bg-[#00a651] hover:bg-[#008541] active:bg-[#007a3d] border-none text-white text-[9px] font-extrabold px-2 transition-all uppercase tracking-wider cursor-pointer shadow-sm hover:shadow active:scale-95 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed mx-auto"
                 >
                     {{ product.stock > 0 ? "Add to cart" : "Stock Out" }}
                 </button>
@@ -87,14 +103,14 @@ class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_
 <script setup>
 import { ref, computed } from "vue";
 import { Link } from "@inertiajs/vue3";
-import { ShoppingCart } from "lucide-vue-next";
+import { Heart } from "lucide-vue-next";
 import { useCart } from "@/Composables/useCart";
 
 const props = defineProps({
     product: Object,
 });
 
-const emit = defineEmits(["quickView"]);
+const emit = defineEmits(["quickView", "wishlist"]);
 
 const handleQuickView = () => {
     emit("quickView", props.product);
@@ -103,6 +119,12 @@ const handleQuickView = () => {
 const { addToCart } = useCart();
 
 const isHovered = ref(false);
+const isWishlisted = ref(false);
+
+const handleWishlist = () => {
+    isWishlisted.value = !isWishlisted.value;
+    emit("wishlist", props.product);
+};
 
 const hoverImage = computed(() => {
     if (props.product.gallery && props.product.gallery.length > 0) {
