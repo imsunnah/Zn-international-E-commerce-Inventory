@@ -1,6 +1,6 @@
 <template>
     <div
-        class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_30px_rgba(100,116,139,0.45)] active:shadow-[0_0_12px_rgba(100,116,139,0.3)] active:scale-[0.98] transition-all duration-300 flex flex-col h-[380px] sm:h-[420px] relative p-3 pb-4 text-center font-sans w-full overflow-hidden hover:-translate-y-1"
+        class="group bg-white shadow-[0_0_20px_rgba(100,116,139,0.3)] hover:shadow-[0_0_30px_rgba(100,116,139,0.45)] active:shadow-[0_0_12px_rgba(100,116,139,0.3)] active:scale-[0.98] transition-all duration-300 flex flex-col h-[380px] sm:h-[420px] relative text-center font-sans w-full overflow-hidden hover:-translate-y-1"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
     >
@@ -20,23 +20,11 @@
             </span>
         </div>
 
-        <!-- Wishlist icon (always same size/position on every card) -->
-        <button
-            type="button"
-            @click.stop="handleWishlist"
-            class="absolute top-2 right-2 z-20 h-7 w-7 flex items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.25)] hover:bg-slate-50 transition-colors cursor-pointer border-none"
-        >
-            <Heart
-                class="w-3.5 h-3.5"
-                :class="isWishlisted ? 'text-[#ef4823] fill-[#ef4823]' : 'text-slate-400'"
-            />
-        </button>
-
-        <!-- Fixed-height image section, identical on every card -->
-        <div class="h-56 sm:h-64 w-full flex items-center justify-center overflow-hidden mb-2 relative shrink-0 p-2">
+        <!-- Image block: no padding/margin, image is exactly this box's size, edge-to-edge -->
+        <div class="h-56 sm:h-64 w-full overflow-hidden relative shrink-0">
             <Link
                 :href="`/products/${product.slug}`"
-                class="block max-h-full max-w-full flex items-center justify-center"
+                class="block w-full h-full"
             >
                 <div v-if="product.stock <= 0" class="absolute inset-0 z-10 bg-white/50 backdrop-blur-[1px] flex items-center justify-center pointer-events-none">
                     <span class="px-2 py-1 bg-slate-800 text-white text-[9px] font-extrabold uppercase tracking-wider">Stock Out</span>
@@ -45,12 +33,24 @@
                 <img
                     :src="displayedImage"
                     loading="lazy"
-                    class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     :alt="product.name"
                 />
             </Link>
 
-            <!-- Quick View: identical width/height/shadow on every card, slides up on hover -->
+            <!-- Wishlist icon: hidden until hover, overlaps the image top-right -->
+            <button
+                type="button"
+                @click.stop="handleWishlist"
+                class="absolute top-2 right-2 z-20 h-7 w-7 flex items-center justify-center rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.25)] hover:bg-slate-50 transition-all duration-300 cursor-pointer border-none opacity-0 group-hover:opacity-100"
+            >
+                <Heart
+                    class="w-3.5 h-3.5"
+                    :class="isWishlisted ? 'text-[#ef4823] fill-[#ef4823]' : 'text-slate-400'"
+                />
+            </button>
+
+            <!-- Quick View: hidden until hover, overlaps bottom of the image, no gap -->
             <button
                 type="button"
                 @click.stop="handleQuickView"
@@ -60,7 +60,7 @@
             </button>
         </div>
 
-        <div class="flex-grow flex flex-col justify-between pt-1">
+        <div class="flex-grow flex flex-col justify-between px-3 pt-2 pb-3">
             <div>
                 <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">
                     {{ product.brand_name || product.category_name || 'Electronics' }}
@@ -76,7 +76,7 @@
             </div>
 
             <div class="mt-auto flex flex-col items-center">
-                <div class="flex flex-col items-center justify-center mb-2 min-h-[38px] justify-end">
+                <div class="flex flex-col items-center justify-end mb-2 min-h-[38px]">
                     <div class="text-sm font-black text-[#ef4823]">
                         ৳{{ finalPrice.toLocaleString() }}
                     </div>
